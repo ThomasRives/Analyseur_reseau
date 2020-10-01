@@ -9,8 +9,8 @@
 #define ERROR_ARGS 1
 
 /**
- * Store the options of the users
- **/
+ * Struct to store the user's options.
+ */
 typedef struct argsOptions
 {
   char *interface;
@@ -20,16 +20,20 @@ typedef struct argsOptions
 } Options;
 
 /**
- * Parse les arguments et vérifie quels
- * options ont été indiquées en ligne de commande.
- * argc : nombre d'arguments en ligne de commande
- * argv : tableau de char* contenant les options
-**/
+ * @brief Parse the arguments given in command line.
+ *
+ * It also check if all the required arguments are given, if not, the programm
+ * will stop and print the help.
+ *
+ * @param argc: the number of arguments.
+ * @param argv: the arguments given by the users.
+ * @param options: the structur that will store the arguments given.
+ */
 void parseArgs(int argc, char **argv, Options *options);
 
 /**
- * Affiche l'aide pour utiliser le programme
-**/
+ * @brief Print help.
+ */
 void printHelp(void);
 
 #endif

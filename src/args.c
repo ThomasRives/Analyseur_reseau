@@ -58,11 +58,12 @@ void parseArgs(int argc, char **argv, Options *options)
 void printHelp(void) {
   fputs(
     "Usage : \n"
-    "  -data DOSSIER         chemin vers le dossier contenant les fichiers\n"
-    "                        RATP\n"
-    "  -req FICHIER          chemin vers le fichier contenant les requetes\n"
-    "  -itinerary            affiche l'itinéraire au format long\n"
-    "  -help                 affiche l'usage\n",
+    "  -i interface_name     the name of the interface that will be listen\n"
+    "  -f filter             the filter that will be used for package search\n"
+    "  -v verbose            the level of details that will be printed\n"
+    "                        (1,2 or 3)\n"
+    "  -o offline_file       the file you want to read in offline mode\n"
+    "  -                     affiche l'usage\n",
     stderr
   );
   exit(ERROR_ARGS);
