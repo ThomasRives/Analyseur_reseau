@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <limits.h>
 
-#define ALLOC_CHECK(op) do{if((op) == NULL) err_n_die(1, #op);}while(0)
+#define NULL_CHECK(op) do{if((op) == NULL) err_n_die(1, #op);}while(0)
 #define CHECK(op) do{if((op) == -1) err_n_die(1, #op);}while(0)
 
 noreturn void err_n_die(int syserr, const char *msg, ...);

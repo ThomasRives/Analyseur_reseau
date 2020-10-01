@@ -6,3 +6,4 @@ pcap_compile
 pcap_loop
 pcap_next
 pcap_close
+pcap_lookupdev
