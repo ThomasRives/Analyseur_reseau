@@ -1,9 +1,5 @@
-# Analyseur_reseau
+# Network analyzer
 
-pcap_open_live
-pcap_open_offline
-pcap_compile
-pcap_loop
-pcap_next
-pcap_close
-pcap_lookupdev
+## How to use it
+
+To launch the programm

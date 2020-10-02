@@ -27,10 +27,10 @@ print_all_interfaces(void)
   int i = 0;
   CHECK(pcap_findalldevs(&interfaces,error));
 
-  printf("\n the interfaces present on the system are:");
+  printf("\nThe interfaces present on the system are:");
   for(temp = interfaces; temp; temp = temp->next)
   {
     printf("\n%d  :  %s",i++,temp->name);
   }
-  printf("\n");
+  printf("\nPlease peak one of those when you run the programm\n");
 }
