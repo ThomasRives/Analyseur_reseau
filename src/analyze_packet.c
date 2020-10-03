@@ -1,37 +1,42 @@
 #include "analyze_packet.h"
-#include <net/ethernet.h>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
 #include <netinet/ip_icmp.h>
+#include <netinet/ether.h>
 #include <arpa/inet.h>
 
 void
 got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 {
   (void)args;
+  printf("%p\n", packet);
   print_packet(header->len, (uint16_t *)packet);
+  printf("%p\n", packet);
   struct ether_header *eth_header = (struct ether_header *)packet;
-  printf("destination: %s\n", eth_header->ether_dhost);
-  printf("source: %s\n", eth_header->ether_shost);
-  printf("type: %i\n", eth_header->ether_type);
 
-  switch(eth_header->ether_type)
+  printf("destination host : %s\n",
+         ether_ntoa((const struct ether_addr *)eth_header->ether_dhost));
+  printf("source host: %s\n",
+         ether_ntoa((const struct ether_addr *)eth_header->ether_shost));
+
+  switch(ntohs(eth_header->ether_type))
   {
     case ETHERTYPE_IPV6:
       printf("protocole IPV6\n");
       break;
     case ETHERTYPE_IP:
-      printf("protocole IPV6\n");
+      printf("protocole IPV4\n");
       break;
     case ETHERTYPE_ARP:
       printf("protocol ARP\n");
       break;
-    // case ETHERTYPE_RARP:
-    //   printf("protocol RARP\n");
-    //   break;
+    case ETHERTYPE_REVARP:
+      printf("protocol RARP\n");
+      break;
+    default:
+      printf("Unknown type...\n");
   }
-
 }
 
 void
@@ -43,7 +48,7 @@ print_packet(uint pack_length, uint16_t *packet)
   printf("___Packet number %i___\n", nb_pack);
   printf("Packet's length: %i\n\n", pack_length);
 
-  for(unsigned int i = 0; i < pack_length; i++, packet++)
+  for(uint i = 0; i < pack_length; i+=2, packet++)
   {
     if(i%8 == 0)
       printf("\n");

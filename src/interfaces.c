@@ -1,5 +1,7 @@
 #include "interfaces.h"
 
+#define ERROR_INTERFACE 2
+
 char error[PCAP_ERRBUF_SIZE];
 
 pcap_if_t *
@@ -15,7 +17,11 @@ get_selected_interface(const char *interface_name)
   if(temp != NULL)
     printf("Interface found %s !\n", temp->name);
   else
-    err_n_die(0, "Interface not found...\n");
+  {
+    fprintf(stderr, "Interface not found...\n");
+    print_all_interfaces();
+    exit(ERROR_INTERFACE);
+  }
   return temp;
 }
 
@@ -32,5 +38,5 @@ print_all_interfaces(void)
   {
     printf("\n%d  :  %s",i++,temp->name);
   }
-  printf("\nPlease peak one of those when you run the programm\n");
+  printf("\nPlease peak one of those when you run the program\n");
 }

@@ -7,6 +7,9 @@
 /**
  * @brief Search the interface chosen by the user.
  *
+ * If the interface provided is not found, the list of all the detected
+ * interfaces will be printed out.
+ *
  * @param interface_name: the name of the interface that the user is looking for
  * @return a pointer to a structure that represent an interface.
  */
