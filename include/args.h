@@ -9,7 +9,7 @@
 #define ERROR_ARGS 1
 
 /**
- * Struct to store the user's options.
+ * @brief Struct to store the user's options.
  */
 typedef struct argsOptions
 {
@@ -32,7 +32,7 @@ typedef struct argsOptions
 void parseArgs(int argc, char **argv, Options *options);
 
 /**
- * @brief Print help.
+ * @brief Print help and all interfaces found on the device.
  */
 void printHelp(void);
 

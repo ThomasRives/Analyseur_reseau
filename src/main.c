@@ -16,20 +16,22 @@ main(int argc, char *argv[])
 {
   Options options;
   pcap_if_t * interface;
-  pcap_t *off_file;
+  pcap_t *read_on;
   parseArgs(argc,argv, &options);
-  print_all_interfaces();
 
   interface = get_selected_interface(options.interface);
 
-  NULL_CHECK(off_file = pcap_open_live(interface->name,
-                                       BUFSIZ,
-                                       0,
-                                       10000,
-                                       error));
+  if(options.offline_file != NULL)
+    NULL_CHECK(read_on = pcap_open_offline(options.offline_file, error));
+  else
+    NULL_CHECK(read_on = pcap_open_live(interface->name,
+                                        BUFSIZ,
+                                        0,
+                                        10000,
+                                        error));
 
-  pcap_loop(off_file, 0, got_packet, NULL);
+  pcap_loop(read_on, 0, got_packet, NULL);
 
-  pcap_close(off_file);
+  pcap_close(read_on);
   return 0;
 }

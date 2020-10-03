@@ -1,4 +1,4 @@
-CC ?=	gcc
+CC ?= gcc
 CFLAGS ?=	-Wall -Wextra -Werror -g
 LDLIBS ?= -lm -lpcap
 INCLUDE_PATH = ./include

@@ -1,11 +1,12 @@
+#include <stdnoreturn.h>
 #include "args.h"
 #include "utilities.h"
+#include "interfaces.h"
 
 void parseArgs(int argc, char **argv, Options *options)
 {
   if(argc < 7)
-    err_n_die(0, "Usage: %s: -i <interface name> -v <int> -o <offline file>"
-    " (-f <filter>)", argv[0]);
+    printHelp();
 
   int opt= 0;
   options->interface = NULL;
@@ -55,16 +56,19 @@ void parseArgs(int argc, char **argv, Options *options)
   }
 }
 
-void printHelp(void) {
+noreturn void
+printHelp(void) {
   fputs(
-    "Usage : \n"
+    "Usage:\n"
+    "  ./bin/main: -i <interface> -v <int> -o <offline file> (-f <filter>)\n"
     "  -i interface_name     the name of the interface that will be listen\n"
     "  -f filter             the filter that will be used for package search\n"
     "  -v verbose            the level of details that will be printed\n"
     "                        (1,2 or 3)\n"
     "  -o offline_file       the file you want to read in offline mode\n"
-    "  -                     affiche l'usage\n",
+    "  -h                    print help\n",
     stderr
   );
+  print_all_interfaces();
   exit(ERROR_ARGS);
 }
