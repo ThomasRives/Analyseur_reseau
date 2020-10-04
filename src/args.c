@@ -48,7 +48,6 @@ void parseArgs(int argc, char **argv, Options *options)
   }
 
   if(options->interface == NULL ||
-     options->offline_file == NULL ||
      options->verbose == 0)
   {
     printHelp();
@@ -60,7 +59,7 @@ noreturn void
 printHelp(void) {
   fputs(
     "Usage:\n"
-    "  ./bin/main: -i <interface> -v <int> -o <offline file> (-f <filter>)\n"
+    "  ./bin/main: -i <interface> -v <int> (-o <offline file> -f <filter>)\n"
     "  -i interface_name     the name of the interface that will be listen\n"
     "  -f filter             the filter that will be used for package search\n"
     "  -v verbose            the level of details that will be printed\n"

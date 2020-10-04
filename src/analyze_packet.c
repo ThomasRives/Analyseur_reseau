@@ -1,10 +1,5 @@
 #include "analyze_packet.h"
-#include <netinet/ip.h>
-#include <netinet/tcp.h>
-#include <netinet/udp.h>
-#include <netinet/ip_icmp.h>
-#include <netinet/ether.h>
-#include <arpa/inet.h>
+#include "ip_analyzer.h"
 
 void
 got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
@@ -27,6 +22,7 @@ got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
       break;
     case ETHERTYPE_IP:
       printf("protocole IPV4\n");
+      ipv4_header_analyze(packet + sizeof(struct ether_header));
       break;
     case ETHERTYPE_ARP:
       printf("protocol ARP\n");

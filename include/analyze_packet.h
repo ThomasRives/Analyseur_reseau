@@ -1,6 +1,12 @@
 #ifndef H_ANALYZE_PACK
 #define H_ANALYZE_PACK
 #include <pcap.h>
+#include <netinet/ip.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <netinet/ip_icmp.h>
+#include <netinet/ether.h>
+#include <arpa/inet.h>
 
 /**
  * @brief When a packet is detected, this function is called.
