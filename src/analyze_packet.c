@@ -5,9 +5,7 @@ void
 got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 {
   (void)args;
-  printf("%p\n", packet);
   print_packet(header->len, (uint16_t *)packet);
-  printf("%p\n", packet);
   struct ether_header *eth_header = (struct ether_header *)packet;
 
   printf("destination host : %s\n",
