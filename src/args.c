@@ -5,61 +5,61 @@
 
 void parseArgs(int argc, char **argv, Options *options)
 {
-  int opt= 0;
-  options->interface = NULL;
-  options->offline_file = NULL;
-  options->filter_exp = NULL;
-  options->verbose = 0;
+	int opt= 0;
+	options->interface = NULL;
+	options->offline_file = NULL;
+	options->filter_exp = NULL;
+	options->verbose = 0;
 
-  static struct option long_options[] =
-  {
-	{"interface",    required_argument, 0,  'i' },
-	{"offline_file", required_argument, 0,  'o' },
-	{"filter",       no_argument, 0,  'f' },
-	{"verbose",      required_argument, 0,  'v' },
-	{"usable",   no_argument, 0,  'u' },
-	{"help",         no_argument, 0,  'h' },
-	{0, 0, 0, 0}
-  };
-
-  int long_index = 0;
-  while ((opt = getopt_long_only(argc, argv,"",
-				long_options, &long_index )) != -1)
-	switch (opt)
+	static struct option long_options[] =
 	{
-		case 'i':
-			options->interface = optarg;
-			break;
-		case 'o':
-			options->offline_file = optarg;
-			break;
-		case 'f':
-			options->filter_exp = optarg;
-			break;
-		case 'v':
-			options->verbose = atoi(optarg);
-			break;
-		case 'u':
-			print_all_interfaces();
-			exit(ERROR_ARGS);
-		case 'h':
-		default:
-			printHelp();
-			exit(ERROR_ARGS);
-	}
+		{"interface",    required_argument, 0,  'i' },
+		{"offline_file", required_argument, 0,  'o' },
+		{"filter",       no_argument, 0,  'f' },
+		{"verbose",      required_argument, 0,  'v' },
+		{"usable",   no_argument, 0,  'u' },
+		{"help",         no_argument, 0,  'h' },
+		{0, 0, 0, 0}
+	};
 
-  if (argc < 7 ||
-  	  options->interface == NULL ||
-	  options->verbose < 1 || options->verbose > 3)
-  {
-	printHelp();
-	exit(ERROR_ARGS);
-  }
+	int long_index = 0;
+	while ((opt = getopt_long_only(argc, argv,"",
+				long_options, &long_index )) != -1)
+		switch (opt)
+		{
+			case 'i':
+				options->interface = optarg;
+				break;
+			case 'o':
+				options->offline_file = optarg;
+				break;
+			case 'f':
+				options->filter_exp = optarg;
+				break;
+			case 'v':
+				options->verbose = atoi(optarg);
+				break;
+			case 'u':
+				print_all_interfaces();
+				exit(ERROR_ARGS);
+			case 'h':
+			default:
+				printHelp();
+				exit(ERROR_ARGS);
+		}
+
+	if (argc < 7 ||
+  		options->interface == NULL ||
+		options->verbose < 1 || options->verbose > 3)
+	{
+		printHelp();
+		exit(ERROR_ARGS);
+	}
 }
 
 noreturn void
 printHelp(void) {
-  fputs(
+	fputs(
 	"Usage:\n"
 	"  ./bin/main: -i <interface> -v <int> (-o <offline file> -f <filter>)\n"
 	"  -i interface_name     the name of the interface that will be listen\n"
@@ -69,6 +69,6 @@ printHelp(void) {
 	"  -o offline_file       the file you want to read in offline mode\n"
 	"  -h                    print help\n",
 	stderr
-  );
-  exit(ERROR_ARGS);
+	);
+	exit(ERROR_ARGS);
 }

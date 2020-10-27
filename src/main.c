@@ -27,7 +27,8 @@ main(int argc, char *argv[])
 											BUFSIZ,
 											0,
 											10000,
-											error));
+											error)
+				  );
 											
 	pcap_loop(read_on, 0, got_packet, NULL);
 
