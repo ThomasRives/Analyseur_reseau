@@ -13,5 +13,9 @@ Notice that the `-o` is optional. If you launch the program with invalid argumen
 
 ## Supported packet
 
+## Things to not forget
+
+DHCP: magic-cookie `0x6382 5363`
+
 ## Contributors
 - Thomas Rives
