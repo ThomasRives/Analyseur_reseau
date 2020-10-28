@@ -1,5 +1,5 @@
 #include "analyze_packet.h"
-#include "ip_analyzer.h"
+#include "network_layout.h"
 
 void
 got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
@@ -13,21 +13,23 @@ got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 	printf("source host: %s\n",
 		ether_ntoa((const struct ether_addr *)eth_header->ether_shost));
 
+	printf("Protocole: ");
 	switch(ntohs(eth_header->ether_type))
 	{
 		case ETHERTYPE_IPV6:
-			puts("protocole IPV6");
+			puts("IPV6");
 			ipv6_header_analyze(packet + sizeof(struct ether_header));
 			break;
 		case ETHERTYPE_IP:
-			puts("protocole IPV4");
+			puts("IPV4");
 			ipv4_header_analyze(packet + sizeof(struct ether_header));
 			break;
 		case ETHERTYPE_ARP:
-			puts("protocol ARP");
+			puts("ARP");
+			arp_header_analyze(packet + sizeof(struct ether_header));
 			break;
 		case ETHERTYPE_REVARP:
-			puts("protocol RARP");
+			puts("RARP");
 			break;
 		default:
 			puts("Unknown type...");
