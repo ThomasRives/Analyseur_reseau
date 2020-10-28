@@ -13,6 +13,11 @@ Notice that the `-o` is optional. If you launch the program with invalid argumen
 
 ## Supported packet
 
+## Header done
+- Ethernet
+- IPv4
+- IPv6
+
 ## Things to not forget
 
 DHCP: magic-cookie `0x6382 5363`

@@ -16,21 +16,21 @@ got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 	switch(ntohs(eth_header->ether_type))
 	{
 		case ETHERTYPE_IPV6:
-			printf("protocole IPV6\n");
+			puts("protocole IPV6");
 			ipv6_header_analyze(packet + sizeof(struct ether_header));
 			break;
 		case ETHERTYPE_IP:
-			printf("protocole IPV4\n");
+			puts("protocole IPV4");
 			ipv4_header_analyze(packet + sizeof(struct ether_header));
 			break;
 		case ETHERTYPE_ARP:
-			printf("protocol ARP\n");
+			puts("protocol ARP");
 			break;
 		case ETHERTYPE_REVARP:
-			printf("protocol RARP\n");
+			puts("protocol RARP");
 			break;
 		default:
-			printf("Unknown type...\n");
+			puts("Unknown type...");
 	}
 }
 
