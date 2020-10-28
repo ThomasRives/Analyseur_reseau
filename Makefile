@@ -23,6 +23,10 @@ $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 obj/test.o: src/test.c
 	$(CC) -o $@ -c $< $(CFLAGS) -I$(INCLUDE_PATH)
 
+test:
+	make clean
+	make
+	valgrind -q ./bin/main -i any -v 1 -o pcap_files/IPV4.pcapng
 
 .PHONY: clean test
 clean:

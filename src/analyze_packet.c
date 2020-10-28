@@ -17,6 +17,7 @@ got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 	{
 		case ETHERTYPE_IPV6:
 			printf("protocole IPV6\n");
+			ipv6_header_analyze(packet + sizeof(struct ether_header));
 			break;
 		case ETHERTYPE_IP:
 			printf("protocole IPV4\n");

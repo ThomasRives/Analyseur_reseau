@@ -20,7 +20,11 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header,
 
 /**
  * @brief Print the received packet.
+ * 
+ * @param pack_length: the length of the packet.
+ * @param packet: the packet himself.
  */
-void print_packet(uint pack_length, uint16_t *packet);
+    void
+    print_packet(uint pack_length, uint16_t *packet);
 
 #endif
