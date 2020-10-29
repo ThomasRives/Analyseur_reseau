@@ -30,6 +30,7 @@ got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 			break;
 		case ETHERTYPE_REVARP:
 			puts("RARP");
+			rarp_header_analyze(packet + sizeof(struct ether_header));
 			break;
 		default:
 			puts("Unknown type...");

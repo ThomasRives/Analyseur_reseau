@@ -184,7 +184,13 @@ arp_header_analyze(const u_char *packet)
 	print_arp_pro_addr(arp_hdr->ar_pln * 8, (uint32_t *)(packet + 8 + 2 * arp_hdr->ar_hln + arp_hdr->ar_pln), 0);
 }
 
-void
+void 
+rarp_header_analyze(const u_char *packet)
+{
+	arp_header_analyze(packet);
+}
+
+void 
 print_arp_hard_addr(unsigned int hlen, uint32_t *beg_addr, short sender)
 {
 	if(sender)

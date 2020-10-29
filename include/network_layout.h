@@ -51,6 +51,16 @@ struct ipv6_f32_parse parse_f32_ipv6(uint32_t first32_bits);
 void arp_header_analyze(const u_char *packet);
 
 /**
+ * @brief analyze the RARP header of the packet.
+ * 
+ * It's the same function as arp_header_analyze.
+ * It's just named differently to clarify the code.
+ * 
+ * @param packet: the packet that will be analyzed.
+ */
+void rarp_header_analyze(const u_char *packet);
+
+/**
  * @brief Print the hardware address in an ARP header.
  * 
  * @param hlen: the hardware address length.
