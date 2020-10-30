@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
-//TCP
+#include <netinet/udp.h>
+
 //UDP
 //ICMP
 //ICMPv6
@@ -21,3 +22,10 @@ void tcp_header_analyze(const u_char *packet);
  * @param tcp_options: a pointer to the beginning of the options.
  */
 void print_tcp_options(uint8_t read_header, uint8_t off, uint8_t *tcp_options);
+
+/**
+ * @brief Analyze the UDP header of the packet.
+ * 
+ * @param packet: the packet himself.
+ */
+void udp_header_analyze(const u_char *packet);
