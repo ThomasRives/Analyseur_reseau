@@ -63,7 +63,7 @@ ipv6_header_analyze(const u_char *packet)
 			break;
 		case 6:
 			puts("TCP (6)");
-			tcp_header_analyze(packet + ntohs(ipv6_header->ip6_plen));
+			tcp_header_analyze(packet + sizeof(struct ip6_hdr));
 			break;
 		case 17:
 			puts("UDP (17)");

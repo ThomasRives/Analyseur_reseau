@@ -12,3 +12,12 @@
  * @param packet: the packet himself.
  */
 void tcp_header_analyze(const u_char *packet);
+
+/**
+ * @brief Print TCP options.
+ * 
+ * @param read_header: the number of bytes already read.
+ * @param off: the data offset.
+ * @param tcp_options: a pointer to the beginning of the options.
+ */
+void print_tcp_options(uint8_t read_header, uint8_t off, uint8_t *tcp_options);

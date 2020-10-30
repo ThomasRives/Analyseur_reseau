@@ -24,4 +24,20 @@ struct tlv {
  */
 struct tlv tlv_translate(uint8_t *packet);
 
+/**
+ * @brief Print the value if it's an integer.
+ * 
+ * @param length: the length of the value.
+ * @param value: the value that will be printed as an integer.
+ */
+void print_value_nb(uint length, u_char *value);
+
+/**
+ * @brief Print the value if it's an string.
+ * 
+ * @param length: the length of the value.
+ * @param value: the value that will be printed as an integer.
+ */
+void print_value_str(uint length, u_char *value);
+
 #endif //TLV_ANALYZER_H
