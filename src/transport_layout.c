@@ -77,3 +77,13 @@ print_tcp_options(uint8_t read_header, uint8_t off, uint8_t *tcp_options)
 		tcp_options += next_tlv.length;
 	}
 }
+
+void 
+udp_header_analyze(const u_char *packet)
+{
+	struct udphdr *udp_header = (struct udphdr *)packet;
+	printf("Source port: %u\n", ntohs(udp_header->uh_sport));
+	printf("Destination port: %u\n", ntohs(udp_header->uh_dport));
+	printf("Length: %u\n", ntohs(udp_header->uh_ulen));
+	printf("Checksum: 0x%x\n", ntohs(udp_header->uh_sum));
+}

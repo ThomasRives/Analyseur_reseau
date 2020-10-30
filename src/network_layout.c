@@ -26,6 +26,7 @@ ipv4_header_analyze(const u_char *packet)
 			break;
 		case IPPROTO_UDP:
 			puts("UDP");
+			udp_header_analyze(packet + ip_header->ihl * 4);
 			break;
 		case IPPROTO_ICMP:
 			puts("ICMP");
@@ -67,6 +68,7 @@ ipv6_header_analyze(const u_char *packet)
 			break;
 		case 17:
 			puts("UDP (17)");
+			udp_header_analyze(packet + sizeof(struct ip6_hdr));
 			break;
 		case 41:
 			puts("Encapsulated IPv6 Header (41)");
