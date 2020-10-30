@@ -6,6 +6,7 @@
 #include <netinet/ip6.h>
 #include <net/if_arp.h>
 #include <netinet/ether.h>
+#include "transport_layout.h"
 
 /**
  * @brief A structure that contains the parsed first 32 bits

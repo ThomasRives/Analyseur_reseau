@@ -22,13 +22,13 @@ ipv4_header_analyze(const u_char *packet)
 	{
 		case IPPROTO_TCP:
 			puts("TCP");
+			tcp_header_analyze(packet + ip_header->ihl * 4);
 			break;
 		case IPPROTO_UDP:
 			puts("UDP");
 			break;
 		case IPPROTO_ICMP:
 			puts("ICMP");
-			//Rien après
 			break;
 		case IPPROTO_IPV6:
 			puts("IPv6");
@@ -63,6 +63,7 @@ ipv6_header_analyze(const u_char *packet)
 			break;
 		case 6:
 			puts("TCP (6)");
+			tcp_header_analyze(packet + ntohs(ipv6_header->ip6_plen));
 			break;
 		case 17:
 			puts("UDP (17)");

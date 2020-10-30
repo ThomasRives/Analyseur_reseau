@@ -26,7 +26,7 @@ obj/test.o: src/test.c
 test:
 	make clean
 	make
-	valgrind -q ./bin/main -i any -v 1 -o pcap_files/IPV4.pcapng
+	valgrind -q ./bin/main -i any -v 1 -o pcap_files/TCP.pcapng
 
 .PHONY: clean test
 clean:
