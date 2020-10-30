@@ -28,6 +28,7 @@ ipv4_header_analyze(const u_char *packet)
 			break;
 		case IPPROTO_ICMP:
 			puts("ICMP");
+			//Rien après
 			break;
 		case IPPROTO_IPV6:
 			puts("IPv6");

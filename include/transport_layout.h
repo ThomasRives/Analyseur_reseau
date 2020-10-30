@@ -1,6 +1,5 @@
+//Après UDP/TCP
 //DNS
-//ICMP
-//ICMPv6
 //SMTP
 //FTP
 //HTTP

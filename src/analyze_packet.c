@@ -1,10 +1,12 @@
 #include "analyze_packet.h"
 #include "network_layout.h"
+#include "args.h"
 
 void
 got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 {
-	(void)args;
+	Options options = *(Options *)args;
+	(void)options;
 	print_packet(header->len, (uint16_t *)packet);
 	struct ether_header *eth_header = (struct ether_header *)packet;
 
@@ -50,7 +52,8 @@ print_packet(uint pack_length, uint16_t *packet)
 	{
     	if(i%8 == 0)
     		printf("\n");
-    	printf("%.4x ", *packet);
+    	printf("%.4x ", ntohs(*packet));
+		//TODO Si v6 faut pas
  	}
 
 	printf("\n\n");

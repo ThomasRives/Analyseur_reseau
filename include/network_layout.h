@@ -7,11 +7,6 @@
 #include <net/if_arp.h>
 #include <netinet/ether.h>
 
-//IPv6 OK
-//IPv4 OK
-//ARP
-//RARP
-
 /**
  * @brief A structure that contains the parsed first 32 bits
  * of an IPv6 header.
