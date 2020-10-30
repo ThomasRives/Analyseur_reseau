@@ -87,3 +87,113 @@ udp_header_analyze(const u_char *packet)
 	printf("Length: %u\n", ntohs(udp_header->uh_ulen));
 	printf("Checksum: 0x%x\n", ntohs(udp_header->uh_sum));
 }
+
+void
+icmp_header_analyze(const u_char *packet)
+{
+	struct icmphdr *icmp_header = (struct icmphdr *)packet;
+	printf("Type: ");
+	switch (icmp_header->type)
+	{
+		case ICMP_ECHOREPLY:
+			puts("Echo Reply");
+			break;
+		case ICMP_DEST_UNREACH:
+			puts("Destination Unreachable");
+			break;
+		case ICMP_SOURCE_QUENCH:
+			puts("Source Quench");
+			break;
+		case ICMP_REDIRECT:
+			puts("Redirect (change route)");
+			break;
+		case ICMP_ECHO:
+			puts("Echo Request");
+			break;
+		case ICMP_TIME_EXCEEDED:
+			puts("Time Exceeded");
+			break;
+		case ICMP_PARAMETERPROB:
+			puts("Parameter Problem");
+			break;
+		case ICMP_TIMESTAMP:
+			puts("Timestamp Request");
+			break;
+		case ICMP_TIMESTAMPREPLY:
+			puts("Timestamp Reply");
+			break;
+		case ICMP_INFO_REQUEST:
+			puts("Information Request");
+			break;
+		case ICMP_INFO_REPLY:
+			puts("Information Reply");
+			break;
+		case ICMP_ADDRESS:
+			puts("Address Mask Request");
+			break;
+		case ICMP_ADDRESSREPLY:
+			puts("Address Mask Reply");
+			break;
+		default:
+			puts("Unknown...");
+	}
+	printf("Code: ");
+	switch(icmp_header->code)
+	{
+		case ICMP_NET_UNREACH:
+			puts("Network Unreachable");
+			break;
+		case ICMP_HOST_UNREACH:
+			puts("Host Unreachable");
+			break;
+		case ICMP_PROT_UNREACH:
+			puts("Protocol Unreachable");
+			break;
+		case ICMP_PORT_UNREACH:
+			puts("Port Unreachable");
+			break;
+		case ICMP_FRAG_NEEDED:
+			puts("Fragmentation Needed");
+			break;
+		case ICMP_SR_FAILED:
+			puts("Source Route failed");
+			break;
+		case ICMP_NET_UNKNOWN:
+			puts("Destination Network Unknown");
+			break;
+		case ICMP_HOST_UNKNOWN:
+			puts("Destination Host Unknown");
+			break;
+		case ICMP_HOST_ISOLATED:
+			puts("Source Host Isolated");
+			break;
+		case ICMP_NET_ANO:
+			puts("Communication with Destination Network is"
+				" Administratively Prohibited");
+			break;
+		case ICMP_HOST_ANO:
+			puts("Communication with Destination Host is"
+				" Administratively Prohibited");
+			break;
+		case ICMP_NET_UNR_TOS:
+			puts("Destination Network Unreachable for Type of Service");
+			break;
+		case ICMP_HOST_UNR_TOS:
+			puts("Destination Host Unreachable for Type of Service");
+			break;
+		case ICMP_PKT_FILTERED:
+			puts("Communication Administratively Prohibited");
+			break;
+		case ICMP_PREC_VIOLATION:
+			puts("Host Precedence Violation");
+			break;
+		case ICMP_PREC_CUTOFF:
+			puts("Precedence cutoff in effect");
+			break;
+		default:
+			puts("Unknown...");
+	}
+	printf("Checksum: 0x%x\n", ntohs(icmp_header->checksum));
+	printf("Identifier: 0x%x\n", ntohs(icmp_header->un.echo.id));
+	printf("Sequence number: %i\n", ntohs(icmp_header->un.echo.sequence));
+}

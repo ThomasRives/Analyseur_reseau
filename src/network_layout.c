@@ -30,6 +30,7 @@ ipv4_header_analyze(const u_char *packet)
 			break;
 		case IPPROTO_ICMP:
 			puts("ICMP");
+			icmp_header_analyze(packet + ip_header->ihl * 4);
 			break;
 		case IPPROTO_IPV6:
 			puts("IPv6");
