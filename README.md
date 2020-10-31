@@ -1,5 +1,7 @@
 # Network Analyzer
 
+TODO: Clean up ICMP and ICMPv6 because switches are TOO HUGE.
+
 ## How to use it
 
 To launch the program, you can type the commands:
