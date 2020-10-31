@@ -1,3 +1,6 @@
+#ifndef NETWORK_LAYOUT_H
+#define NETWORK_LAYOUT_H
+
 #include <stdio.h>
 #include <netinet/ip.h>
 #include <sys/socket.h>
@@ -73,3 +76,5 @@ void print_arp_hard_addr(unsigned int hlen, uint32_t *beg_addr, short sender);
  * @param sender: indicates if it's the sender address or the receiver address.
  */
 void print_arp_pro_addr(unsigned int hlen, uint32_t *beg_addr, short sender);
+
+#endif //NETWORK_LAYOUT_H

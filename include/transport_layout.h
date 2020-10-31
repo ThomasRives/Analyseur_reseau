@@ -1,3 +1,6 @@
+#ifndef TRANSPORT_LAYOUT_H
+#define TRANSPORT_LAYOUT_H
+
 #include <stdio.h>
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
@@ -43,3 +46,5 @@ void icmp_header_analyze(const u_char *packet);
  * @param packet: the packet himself.
  */
 void icmpv6_header_analyze(const u_char *packet);
+
+#endif //TRANSPORT_LAYOUT_H
