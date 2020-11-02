@@ -8,8 +8,6 @@
 #include <netinet/ip_icmp.h>
 #include <netinet/icmp6.h>
 
-//ICMPv6
-
 /**
  * @brief Analyze the TCP header of the packet.
  * 
@@ -131,5 +129,12 @@ void print_icmpv6_par_prob_code(uint8_t code);
  * @param code: the code of the icmp packet.
  */
 void print_icmpv6_rout_rem_code(uint8_t code);
+
+/**
+ * @brief Demultiplex the port used.
+ * 
+ * @param port: the port used in the communication.
+ */
+void demult_port(uint16_t port);
 
 #endif //TRANSPORT_LAYOUT_H

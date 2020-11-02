@@ -548,3 +548,14 @@ print_icmpv6_rout_rem_code(uint8_t code)
 			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
 	}
 }
+
+void
+demult_port(uint16_t port)
+{
+	printf("Protocole: ");
+	switch(port)
+	{
+		default:
+			puts("Unknown...");
+	}
+}

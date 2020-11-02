@@ -1,5 +1,9 @@
 #ifndef APPLICATION_LAYOUT_H
 #define APPLICATION_LAYOUT_H
+#include <stdio.h>
+#include <stdint.h>
+#include "bootp.h"
+
 
 /*
 Port|UDP|TCP|decription
