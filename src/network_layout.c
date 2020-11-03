@@ -91,6 +91,7 @@ ipv6_header_analyze(const u_char *packet)
 			break;
 		case 58:
 			puts("ICMPv6 (58)");
+			icmpv6_header_analyze(packet + sizeof(struct ip6_hdr));
 			break;
 		case 59:
 			puts("No next header (59)");

@@ -3,8 +3,8 @@
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
 #include <netinet/ip_icmp.h>
+#include <netinet/icmp6.h>
 
-//ICMP
 //ICMPv6
 
 /**
@@ -36,3 +36,10 @@ void udp_header_analyze(const u_char *packet);
  * @param packet: the packet himself.
  */
 void icmp_header_analyze(const u_char *packet);
+
+/**
+ * @brief Analyze the ICMPv6 header of the packet.
+ * 
+ * @param packet: the packet himself.
+ */
+void icmpv6_header_analyze(const u_char *packet);
