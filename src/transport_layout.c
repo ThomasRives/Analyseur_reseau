@@ -550,12 +550,16 @@ print_icmpv6_rout_rem_code(uint8_t code)
 }
 
 void
-demult_port(uint16_t port)
+demult_port(uint16_t port, const u_char *packet)
 {
 	printf("Protocole: ");
 	switch(port)
 	{
-		default:
-			puts("Unknown...");
+	case IPPORT_BOOTPS:
+	case IPPORT_BOOTPC:
+		bootp_header_analyze(packet);
+		break;
+	default:
+		puts("Unknown...");
 	}
 }

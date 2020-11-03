@@ -7,6 +7,7 @@
 #include <netinet/udp.h>
 #include <netinet/ip_icmp.h>
 #include <netinet/icmp6.h>
+#include "application_layout.h"
 
 /**
  * @brief Analyze the TCP header of the packet.
@@ -134,7 +135,8 @@ void print_icmpv6_rout_rem_code(uint8_t code);
  * @brief Demultiplex the port used.
  * 
  * @param port: the port used in the communication.
+ * @param packet: the packet himself.
  */
-void demult_port(uint16_t port);
+void demult_port(uint16_t port, const u_char *packet);
 
 #endif //TRANSPORT_LAYOUT_H

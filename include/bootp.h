@@ -4,7 +4,7 @@
 #include <netinet/in.h>
 #include <netinet/ether.h>
 
-struct bootp
+struct bootphdr
 {
 	uint8_t op;	/* packet opcode type */
 	uint8_t htype; /* hardware addr type */
@@ -37,9 +37,6 @@ struct bootp
  */
 #define HTYPE_ETHERNET 1
 #define HTYPE_EXP_ETHERNET 2
-#define HTYPE_AX25 3
-#define HTYPE_PRONET 4
-#define HTYPE_CHAOS 5
 #define HTYPE_IEEE802 6
 #define HTYPE_ARCNET 7
 

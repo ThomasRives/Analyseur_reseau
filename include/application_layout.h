@@ -4,6 +4,66 @@
 #include <stdint.h>
 #include "bootp.h"
 
+/**
+ * @brief Analyze the bootp header of the packet.
+ * 
+ * @param packet: the packet himself.
+ */
+void bootp_header_analyze(const u_char *packet);
+
+/**
+ * @brief Print the operation of a bootp packet.
+ * 
+ * @param op: the operation of the bootp packet.
+ */
+void print_bootp_op(uint8_t op);
+
+/**
+ * @brief Print the harware type of a bootp packet.
+ * 
+ * @param htype: the code of the hardware type.
+ */
+void print_bootp_htype(uint8_t htype);
+
+/**
+ * @brief Print the harware address length of a bootp packet.
+ * 
+ * @param htype: the length of the hardware address.
+ */
+void print_bootp_hlen(uint8_t hlen);
+
+
+/**
+ * @brief Print the client hardware address.
+ * 
+ * @param chaddr: the hardware address of the client.
+ */
+void
+print_bootp_chaddr(u_char *chaddr);
+
+/**
+ * @brief Print the serveur host name.
+ * 
+ * @param sname: the serveur host name.
+ */
+void
+print_bootp_sname(u_char *sname);
+
+/**
+ * @brief Print the file name given in the packet.
+ * 
+ * @param file: the file name given in the packet.
+ */
+void
+print_bootp_file(u_char *file);
+
+/**
+ * @brief Print the vendor of a bootp packet
+ * 
+ * @param vend: a pointer to the beginning of the vendor.
+ */
+void
+print_bootp_vendor(u_char *vend);
 
 /*
 Port|UDP|TCP|decription
