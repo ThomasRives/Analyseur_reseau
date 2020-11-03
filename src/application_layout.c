@@ -23,7 +23,7 @@ bootp_header_analyze(const u_char *packet)
 void
 print_bootp_op(uint8_t op)
 {
-	print("Opération: ");
+	printf("Opération: ");
 	switch (op)
 	{
 		case BOOTREQUEST:
@@ -40,7 +40,7 @@ print_bootp_op(uint8_t op)
 void
 print_bootp_htype(uint8_t htype)
 {
-	print("Hardware type: ");
+	printf("Hardware type: ");
 	switch (htype)
 	{
 	case HTYPE_ETHERNET:
@@ -73,23 +73,23 @@ print_bootp_hlen(uint8_t hlen)
 void
 print_bootp_chaddr(u_char *chaddr)
 {
-	
+	(void)chaddr;
 }
 
 void
 print_bootp_sname(u_char *sname)
 {
-	
+	(void)sname;
 }
 
 void
 print_bootp_file(u_char *file)
 {
-	
+	(void)file;
 }
 
 void
 print_bootp_vendor(u_char *vend)
 {
-	
+	(void)vend;
 }

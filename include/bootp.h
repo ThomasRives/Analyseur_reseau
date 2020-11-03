@@ -69,7 +69,6 @@ struct bootphdr
 #define MSG_RELEASE 7
 
 /* Parameters request list */
-#define NETBIOS_SCOPE 46
 #define SUBNET_MASK 1
 #define ROUTER 3
 #define DNS 6

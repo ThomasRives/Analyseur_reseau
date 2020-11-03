@@ -2,6 +2,9 @@
 #define APPLICATION_LAYOUT_H
 #include <stdio.h>
 #include <stdint.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "bootp.h"
 
 /**
