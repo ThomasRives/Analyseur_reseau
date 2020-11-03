@@ -5,8 +5,8 @@ void
 tcp_header_analyze(const u_char *packet)
 {
 	struct tcphdr *tcp_header = (struct tcphdr *)packet;
-	printf("Source port: %hu\n", ntohs(tcp_header->th_sport));
-	printf("Destination port: %hu\n", ntohs(tcp_header->th_dport));
+	printf("Source port: %u\n", ntohs(tcp_header->th_sport));
+	printf("Destination port: %u\n", ntohs(tcp_header->th_dport));
 	printf("Sequence number: %u\n", ntohl(tcp_header->th_seq));
 	printf("Acknowledge: %u\n", ntohl(tcp_header->th_ack));
 	printf("Data offset: %u octets\n", tcp_header->th_off * 4);
@@ -26,12 +26,13 @@ tcp_header_analyze(const u_char *packet)
 		printf(" Urgent");
 	puts("");
 
-	printf("Window: %hu\n", tcp_header->th_win);
+	printf("Window: %u\n", tcp_header->th_win);
 	printf("Checksum: 0x%x\n", ntohs(tcp_header->th_sum));
-	printf("Urgent pointer: %hu\n", tcp_header->th_urp);
+	printf("Urgent pointer: %u\n", tcp_header->th_urp);
 	uint8_t read_header = sizeof(struct tcphdr);
 	uint8_t *tcp_options = (uint8_t *)(packet + read_header);
 	print_tcp_options(read_header, tcp_header->th_off, tcp_options);
+	demult_port(ntohs(tcp_header->th_dport), packet + tcp_header->th_off * 4);
 }
 
 void
@@ -86,6 +87,7 @@ udp_header_analyze(const u_char *packet)
 	printf("Destination port: %u\n", ntohs(udp_header->uh_dport));
 	printf("Length: %u\n", ntohs(udp_header->uh_ulen));
 	printf("Checksum: 0x%x\n", ntohs(udp_header->uh_sum));
+	demult_port(ntohs(udp_header->uh_dport), packet + sizeof(struct udphdr));
 }
 
 void
@@ -555,11 +557,12 @@ demult_port(uint16_t port, const u_char *packet)
 	printf("Protocole: ");
 	switch(port)
 	{
-	case IPPORT_BOOTPS:
-	case IPPORT_BOOTPC:
-		bootp_header_analyze(packet);
-		break;
-	default:
-		puts("Unknown...");
+		case IPPORT_BOOTPS:
+		case IPPORT_BOOTPC:
+			puts("Bootp");
+			bootp_header_analyze(packet);
+			break;
+		default:
+			puts("Unknown...");
 	}
 }

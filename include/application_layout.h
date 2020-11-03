@@ -40,25 +40,19 @@ void print_bootp_hlen(uint8_t hlen);
  * @brief Print the client hardware address.
  * 
  * @param chaddr: the hardware address of the client.
+ * @param hlen: the length of the address.
  */
 void
-print_bootp_chaddr(u_char *chaddr);
+print_bootp_chaddr(u_char *chaddr, uint8_t hlen);
 
 /**
- * @brief Print the serveur host name.
+ * @brief Print the content of a data as a string.
  * 
- * @param sname: the serveur host name.
+ * @param str: the data to print as a string.
+ * @param length: the length of the string.
  */
 void
-print_bootp_sname(u_char *sname);
-
-/**
- * @brief Print the file name given in the packet.
- * 
- * @param file: the file name given in the packet.
- */
-void
-print_bootp_file(u_char *file);
+print_bootp_str(u_char *str, uint length);
 
 /**
  * @brief Print the vendor of a bootp packet
