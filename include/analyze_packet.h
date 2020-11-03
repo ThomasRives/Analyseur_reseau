@@ -1,5 +1,6 @@
 #ifndef H_ANALYZE_PACK
 #define H_ANALYZE_PACK
+
 #include <pcap.h>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>

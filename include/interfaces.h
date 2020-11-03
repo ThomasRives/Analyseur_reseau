@@ -1,5 +1,6 @@
-#ifndef H_INTERFACES
-#define H_INTERFACES
+#ifndef INTERFACES_H
+#define INTERFACES_H
+
 #include <pcap.h>
 #include <string.h>
 #include "utilities.h"
@@ -20,4 +21,4 @@ pcap_if_t *get_selected_interface(const char *interface_name);
  */
 void print_all_interfaces(void);
 
-#endif
+#endif //INTERFACES_H

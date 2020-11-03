@@ -1,5 +1,6 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdnoreturn.h>
@@ -19,4 +20,4 @@
  */
 noreturn void err_n_die(int syserr, const char *msg, ...);
 
-#endif
+#endif //UTILITIES_H
