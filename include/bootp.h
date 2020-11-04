@@ -46,7 +46,9 @@ struct bootphdr
 #define OPT_SUBNET_MASK 1
 #define OPT_TIME_OFFSET 2
 #define OPT_GATEWAY 3
+#define OPT_TIME_SERVER 4
 #define OPT_DOMAIN_SERVER 6
+#define OPT_HOSTNAME 12
 #define OPT_DOMAIN_NAME 15
 #define OPT_MTU_INT 26
 #define OPT_BROADCAST_ADDR 28

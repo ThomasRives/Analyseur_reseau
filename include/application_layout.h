@@ -74,7 +74,7 @@ void print_bootp_vendor(u_char *vend);
  * @param value: the value containing the domain servers.
  * @param length: the length of the option.
  */
-void print_bootp_opt_ds(u_char *value, uint length);
+void print_bootp_opt_lip(u_char *value, uint length);
 
 /**
  * @brief Print the dhcp type of a bootp packet.
@@ -82,6 +82,14 @@ void print_bootp_opt_ds(u_char *value, uint length);
  * @param type: the type of the dhcp message.
  */
 void print_bootp_dhcp_type(uint type);
+
+/**
+ * @brief Print the dhcp type of a bootp packet.
+ * 
+ * @param length: the length of the value.
+ * @param value: a pointer to the value.
+ */
+void print_bootp_par_list(uint length, u_char *value);
 
 
 

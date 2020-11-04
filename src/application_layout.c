@@ -156,12 +156,19 @@ print_bootp_vendor(u_char *vend)
 				printf("Gateway: %s\n",
 					inet_ntoa(*(struct in_addr *)next_opt.value));
 				break;
-			//time server
-			case OPT_DOMAIN_SERVER:
-				puts("List of Domain Name System:");
-				print_bootp_opt_ds(next_opt.value, next_opt.length);
+			case OPT_TIME_SERVER:
+				puts("Time server:");
+				print_bootp_opt_lip(next_opt.value, next_opt.length);
 				break;
-			//host name
+			case OPT_DOMAIN_SERVER : puts("List of Domain Name System:");
+				print_bootp_opt_lip(next_opt.value, next_opt.length);
+				break;
+			case OPT_HOSTNAME:
+				printf("Hostname: ");
+				for(uint i = 0; i < next_opt.length; i++)
+					printf("%c", next_opt.value[i]);
+				puts("");
+				break;
 			case OPT_DOMAIN_NAME:
 				puts("Domain name: ");
 				for(uint i = 0; i < next_opt.length; i++)
@@ -200,10 +207,11 @@ print_bootp_vendor(u_char *vend)
 				print_bootp_dhcp_type(*(uint8_t *)next_opt.value);
 				break;
 			case OPT_SERV_ID:
-				puts("");
+				printf("Server ID: %s\n",
+					inet_ntoa(*(struct in_addr *)next_opt.value));
 				break;
 			case OPT_PARAM_REQ_LIST:
-				puts("");
+				print_bootp_par_list(next_opt.length, next_opt.value);
 				break;
 			case OPT_MAX_MSG_SIZE:
 				printf("DHCP Max message size: ");
@@ -221,7 +229,8 @@ print_bootp_vendor(u_char *vend)
 				puts("");
 				break;
 			case OPT_CLIENT_ID:
-				puts("");
+				printf("client ID : %s\n",
+					ether_ntoa((const struct ether_addr *)next_opt.value));
 				break;
 			case OPT_CLIENT_FQDN:
 				printf("Client FQDN: ");
@@ -238,7 +247,7 @@ print_bootp_vendor(u_char *vend)
 }
 
 void
-print_bootp_opt_ds(u_char *value, uint length)
+print_bootp_opt_lip(u_char *value, uint length)
 {
 	for (uint i = 0; i < length; i += sizeof(struct in_addr), value += sizeof(struct in_addr))
 		printf("\t%s\n",
@@ -274,5 +283,86 @@ print_bootp_dhcp_type(uint type)
 			break;
 		default:
 			puts("Unknown...");
+	}
+}
+
+void
+print_bootp_par_list(uint length, u_char *value)
+{
+	printf("Parameters Request list:\n\t");
+	for (uint i = 0; i < length; i++)
+	{
+		switch (value[i])
+		{
+			case OPT_PAD:
+				printf("Option pad");
+				break;
+			case OPT_SUBNET_MASK:
+				printf("Netmask");
+				break;
+			case OPT_TIME_OFFSET:
+				printf("Time offset");
+				break;
+			case OPT_GATEWAY:
+				printf("Gateway");
+				break;
+			case OPT_TIME_SERVER:
+				printf("Time server");
+				break;
+			case OPT_DOMAIN_SERVER:
+				printf("List of Domain Name System");
+				break;
+			case OPT_HOSTNAME:
+				printf("Hostname");
+				break;
+			case OPT_DOMAIN_NAME:
+				puts("Domain name");
+				break;
+			case OPT_BROADCAST_ADDR:
+				printf("Broadcast address");
+				break;
+			case OPT_MTU_INT:
+				printf("MTU Interface");
+				break;
+			case OPT_NETBIOS_NS:
+				printf("Netbios Name server");
+				break;
+			case OPT_NETBIOS_SCOPE:
+				printf("Netbios Scope");
+				break;
+			case OPT_REQ_IP_ADDR:
+				printf("Request IP address");
+				break;
+			case OPT_LEASE_TIME:
+				printf("IP lease time");
+				break;
+			case OPT_DHCP_TYPE:
+				printf("DHCP type");
+				break;
+			case OPT_SERV_ID:
+				printf("Server ID");
+				break;
+			case OPT_PARAM_REQ_LIST:
+				printf("Parameters request list");
+				break;
+			case OPT_MAX_MSG_SIZE:
+				printf("DHCP Max message size");
+				break;
+			case OPT_RENEWAL_TIME:
+				printf("Renwal time");
+				break;
+			case OPT_REBINDING_TIME:
+				printf("Rebinding time");
+				break;
+			case OPT_CLIENT_ID:
+				puts("Client ID");
+				break;
+			case OPT_CLIENT_FQDN:
+				printf("Client FQDN");
+				break;
+			default:
+				puts("Unknown...");
+		}
+		printf(" (%u)", i);
 	}
 }
