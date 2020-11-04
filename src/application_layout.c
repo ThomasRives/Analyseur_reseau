@@ -289,8 +289,8 @@ print_bootp_dhcp_type(uint type)
 void
 print_bootp_par_list(uint length, u_char *value)
 {
-	printf("Parameters Request list:\n\t");
-	for (uint i = 0; i < length; i++)
+	printf("Parameters Request list:\n\t\t");
+	for(uint i = 0; i < length; i++)
 	{
 		switch (value[i])
 		{
@@ -361,8 +361,8 @@ print_bootp_par_list(uint length, u_char *value)
 				printf("Client FQDN");
 				break;
 			default:
-				puts("Unknown...");
+				printf("Unknown...");
 		}
-		printf(" (%u)", i);
+		printf(" (%u)\n\t\t", i);
 	}
 }
