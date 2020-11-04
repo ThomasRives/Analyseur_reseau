@@ -4,6 +4,10 @@ void
 bootp_header_analyze(const u_char *packet)
 {
 	struct bootphdr *btphdr = (struct bootphdr *)packet;
+	uint options_size = bootp_option_length(packet + sizeof(struct bootphdr));
+	u_char *vend = malloc(options_size * sizeof(u_char));
+	memcpy(vend, packet + sizeof(struct bootphdr), options_size);
+	printf("OPT LENGTH: %i\n", options_size);
 	print_bootp_op(btphdr->op);
 	print_bootp_htype(btphdr->htype);
 	print_bootp_hlen(btphdr->hlen);
@@ -19,7 +23,23 @@ bootp_header_analyze(const u_char *packet)
 	print_bootp_str(btphdr->sname, sizeof(btphdr->sname));
 	printf("File name: ");
 	print_bootp_str(btphdr->file, sizeof(btphdr->file));
-	print_bootp_vendor(btphdr->vend);
+	print_bootp_vendor(vend);
+	free(vend);
+}
+
+uint
+bootp_option_length(const u_char *vend)
+{
+	uint opt_size = 0;
+	uint size_cook = sizeof(uint32_t);
+	while ((vend + size_cook + opt_size)[0] != OPT_END)
+	{
+		if ((vend + size_cook + opt_size)[0] == OPT_PAD)
+			opt_size++;
+		else
+			opt_size += sizeof(uint16_t) + (vend + size_cook + opt_size)[1];
+	}
+	return opt_size + size_cook + 1;//+1: do not forget the end !
 }
 
 void
@@ -92,19 +112,99 @@ print_bootp_chaddr(u_char *chaddr, uint8_t hlen)
 void
 print_bootp_str(u_char *str, uint length)
 {
-	if(*str == '\0')
-	{
-		puts("Unknown...");
-		return;
-	}
-	
-	for(uint i = 0; *str != '\0' && i < length; i++, str++)
+	uint i;
+	for (i = 0; *str != '\0' && i < length; i++, str++)
 		printf("%c", *str);
+
+	if(i == 0)
+		printf("Unknown");
 	puts("");
 }
 
 void
 print_bootp_vendor(u_char *vend)
 {
-	(void)vend;
+	if(ntohl(*(uint64_t *)vend) != MAGIC_COOKIE)
+		return;
+
+	vend += sizeof(uint32_t);
+	puts("Options:");
+	for (;;)
+	{
+		struct tlv next_opt = tlv_translate_bootp(vend);
+		printf("Type: %i\n", next_opt.type);
+		if (next_opt.type == OPT_END)
+		{
+			puts("End of options");
+			return;
+		}
+		printf("\tLength: %i\n\t", next_opt.length);
+		switch (next_opt.type)
+		{
+			case OPT_PAD:
+				puts("Option pad");
+				break;
+			case OPT_SUBNET_MASK:
+				printf("Subnet Mask: %s\n", inet_ntoa(*(struct in_addr *)next_opt.value));
+				break;
+			case OPT_TIME_OFFSET:
+				printf("Time offset: ");
+				print_value_nb(next_opt.length, next_opt.value);
+				printf("s\n");
+				break;
+			case OPT_GATEWAY:
+				printf("Gateway: %s\n",
+					inet_ntoa(*(struct in_addr *)next_opt.value));
+				break;
+			case OPT_DOMAIN_SERVER:
+				puts("List of Domain Name System:");
+				print_bootp_opt_ds(next_opt.value, next_opt.length);
+				break;
+			case OPT_DOMAIN_NAME:
+				puts("Domaine name: ");
+				for(int i = 0; i < next_opt.length; i++)
+					printf("%c", next_opt.value[i]);
+				puts("");
+				break;
+			case OPT_BROADCAST_ADDR:
+				puts("");
+				break;
+			case OPT_NETBIOS_NS:
+				puts("");
+				break;
+			case OPT_NETBIOS_SCOPE:
+				puts("");
+				break;
+			case OPT_REQ_IP_ADDR:
+				puts("");
+				break;
+			case OPT_LEASE_TIME:
+				puts("");
+				break;
+			case OPT_DHCP_TYPE:
+				puts("");
+				break;
+			case OPT_SERV_ID:
+				puts("");
+				break;
+			case OPT_PARAM_REQ_LIST:
+				puts("");
+				break;
+			case OPT_CLIENT_ID:
+				puts("");
+				break;
+			default:
+				puts("Unknown...");
+		}
+		vend += next_opt.length + 2;
+		free(next_opt.value);
+	}
+}
+
+void
+print_bootp_opt_ds(u_char *value, uint length)
+{
+	for (uint i = 0; i < length; i += sizeof(struct in_addr), value += sizeof(struct in_addr))
+		printf("\t%s\n",
+			   inet_ntoa(*(struct in_addr *)value));
 }

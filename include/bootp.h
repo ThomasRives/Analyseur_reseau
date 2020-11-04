@@ -20,7 +20,6 @@ struct bootphdr
 	u_char chaddr[16]; /* client hardware address */
 	u_char sname[64];	 /* server host name */
 	u_char file[128];	 /* boot file name */
-	u_char vend[64];	 /* vendor-specific area */
 };
 
 /*
@@ -58,6 +57,7 @@ struct bootphdr
 #define OPT_SERV_ID 54
 #define OPT_PARAM_REQ_LIST 55
 #define OPT_CLIENT_ID 61
+#define OPT_TFTP_SERV_NAME 66
 
 /* Different DHCP message possible */
 #define MSG_DISCOVER 1

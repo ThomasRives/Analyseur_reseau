@@ -6,6 +6,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "bootp.h"
+#include "tlv_analyzer.h"
 
 /**
  * @brief Analyze the bootp header of the packet.
@@ -13,6 +14,14 @@
  * @param packet: the packet himself.
  */
 void bootp_header_analyze(const u_char *packet);
+
+/**
+ * @brief Determinate the vendor length.
+ * 
+ * @param vend: a pointer to the vendor.
+ * @return the length of bootp options.
+ */
+uint bootp_option_length(const u_char *vend);
 
 /**
  * @brief Print the operation of a bootp packet.
@@ -61,6 +70,17 @@ print_bootp_str(u_char *str, uint length);
  */
 void
 print_bootp_vendor(u_char *vend);
+
+/**
+ * @brief Print the Domain servers.
+ * 
+ * @param value: the value containing the domain servers.
+ * @param length: the length of the option.
+ */
+void
+print_bootp_opt_ds(u_char *value, uint length);
+
+
 
 /*
 Port|UDP|TCP|decription

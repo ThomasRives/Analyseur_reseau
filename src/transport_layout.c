@@ -40,7 +40,7 @@ print_tcp_options(uint8_t read_header, uint8_t off, uint8_t *tcp_options)
 {
 	while (read_header < off * 4)
 	{
-		struct tlv next_tlv = tlv_translate(tcp_options);
+		struct tlv next_tlv = tlv_translate_tcp(tcp_options);
 		if (next_tlv.type == TCPOPT_EOL || next_tlv.type == TCPOPT_NOP)
 		{
 			read_header++;
