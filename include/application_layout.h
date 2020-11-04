@@ -51,8 +51,7 @@ void print_bootp_hlen(uint8_t hlen);
  * @param chaddr: the hardware address of the client.
  * @param hlen: the length of the address.
  */
-void
-print_bootp_chaddr(u_char *chaddr, uint8_t hlen);
+void print_bootp_chaddr(u_char *chaddr, uint8_t hlen);
 
 /**
  * @brief Print the content of a data as a string.
@@ -60,16 +59,14 @@ print_bootp_chaddr(u_char *chaddr, uint8_t hlen);
  * @param str: the data to print as a string.
  * @param length: the length of the string.
  */
-void
-print_bootp_str(u_char *str, uint length);
+void print_bootp_str(u_char *str, uint length);
 
 /**
  * @brief Print the vendor of a bootp packet
  * 
  * @param vend: a pointer to the beginning of the vendor.
  */
-void
-print_bootp_vendor(u_char *vend);
+void print_bootp_vendor(u_char *vend);
 
 /**
  * @brief Print the Domain servers.
@@ -77,8 +74,14 @@ print_bootp_vendor(u_char *vend);
  * @param value: the value containing the domain servers.
  * @param length: the length of the option.
  */
-void
-print_bootp_opt_ds(u_char *value, uint length);
+void print_bootp_opt_ds(u_char *value, uint length);
+
+/**
+ * @brief Print the dhcp type of a bootp packet.
+ * 
+ * @param type: the type of the dhcp message.
+ */
+void print_bootp_dhcp_type(uint type);
 
 
 

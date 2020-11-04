@@ -18,7 +18,6 @@ struct tlv
 tlv_translate_bootp(uint8_t *packet)
 {
 	struct tlv next_tlv;
-	fflush(stdout);
 	next_tlv.type = packet[0];
 	if (next_tlv.type == 255)
 		return next_tlv;
@@ -31,13 +30,14 @@ tlv_translate_bootp(uint8_t *packet)
 
 void print_value_nb(uint length, u_char *value)
 {
-	u_char *value_nb = malloc(sizeof(unsigned long long));
+	u_char value_nb[sizeof(uint64_t)] = {0};
+	//u_char *value_nb = calloc(1, sizeof(unsigned long long));
 	//Invert bytes order
 	for(uint i = 0; i < length; i++)
 		value_nb[i] = value[length - i - 1];
 
 	printf("%llu", *(unsigned long long *)value_nb);
-	free(value_nb);
+	//free(value_nb);
 }
 
 void

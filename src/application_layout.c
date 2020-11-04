@@ -156,33 +156,48 @@ print_bootp_vendor(u_char *vend)
 				printf("Gateway: %s\n",
 					inet_ntoa(*(struct in_addr *)next_opt.value));
 				break;
+			//time server
 			case OPT_DOMAIN_SERVER:
 				puts("List of Domain Name System:");
 				print_bootp_opt_ds(next_opt.value, next_opt.length);
 				break;
+			//host name
 			case OPT_DOMAIN_NAME:
-				puts("Domaine name: ");
-				for(int i = 0; i < next_opt.length; i++)
+				puts("Domain name: ");
+				for(uint i = 0; i < next_opt.length; i++)
 					printf("%c", next_opt.value[i]);
 				puts("");
 				break;
 			case OPT_BROADCAST_ADDR:
+				printf("Broadcast address: %s\n",
+					   inet_ntoa(*(struct in_addr *)next_opt.value));
+				break;
+			case OPT_MTU_INT:
+				printf("MTU Interface: ");
+				print_value_nb(next_opt.length, next_opt.value);
 				puts("");
 				break;
 			case OPT_NETBIOS_NS:
-				puts("");
+				printf("Netbios Name server: %s\n",
+					   inet_ntoa(*(struct in_addr *)next_opt.value));
 				break;
 			case OPT_NETBIOS_SCOPE:
+				printf("Netbios Scope: ");
+				for(uint i = 0; i < next_opt.length; i++)
+					printf("%c", next_opt.value[i]);
 				puts("");
 				break;
 			case OPT_REQ_IP_ADDR:
-				puts("");
+				printf("Request IP address: %s\n",
+					inet_ntoa(*(struct in_addr *)next_opt.value));
 				break;
 			case OPT_LEASE_TIME:
+				printf("IP lease time: ");
+				print_value_nb(next_opt.length, next_opt.value);
 				puts("");
 				break;
 			case OPT_DHCP_TYPE:
-				puts("");
+				print_bootp_dhcp_type(*(uint8_t *)next_opt.value);
 				break;
 			case OPT_SERV_ID:
 				puts("");
@@ -190,7 +205,28 @@ print_bootp_vendor(u_char *vend)
 			case OPT_PARAM_REQ_LIST:
 				puts("");
 				break;
+			case OPT_MAX_MSG_SIZE:
+				printf("DHCP Max message size: ");
+				print_value_nb(next_opt.length, next_opt.value);
+				puts("");
+				break;
+			case OPT_RENEWAL_TIME:
+				printf("Renwal time: ");
+				print_value_nb(next_opt.length, next_opt.value);
+				puts("");
+				break;
+			case OPT_REBINDING_TIME:
+				printf("Rebinding time: ");
+				print_value_nb(next_opt.length, next_opt.value);
+				puts("");
+				break;
 			case OPT_CLIENT_ID:
+				puts("");
+				break;
+			case OPT_CLIENT_FQDN:
+				printf("Client FQDN: ");
+				for(uint i = 0; i < next_opt.length; i++)
+					printf("%c", next_opt.value[i]);
 				puts("");
 				break;
 			default:
@@ -207,4 +243,36 @@ print_bootp_opt_ds(u_char *value, uint length)
 	for (uint i = 0; i < length; i += sizeof(struct in_addr), value += sizeof(struct in_addr))
 		printf("\t%s\n",
 			   inet_ntoa(*(struct in_addr *)value));
+}
+
+void
+print_bootp_dhcp_type(uint type)
+{
+	printf("DHCP message type: ");
+	switch (type)
+	{
+		case MSG_DISCOVER:
+			puts("Discover (1)");
+			break;
+		case MSG_OFFER:
+			puts("Offer (2)");
+			break;
+		case MSG_REQUEST:
+			puts("Request (3)");
+			break;
+		case MSG_DECLINE:
+			puts("Decline (4)");
+			break;
+		case MSG_ACK:
+			puts("Ack (5)");
+			break;
+		case MSG_NACK:
+			puts("Nack (6)");
+			break;
+		case MSG_RELEASE:
+			puts("Release (7)");
+			break;
+		default:
+			puts("Unknown...");
+	}
 }

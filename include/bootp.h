@@ -48,6 +48,7 @@ struct bootphdr
 #define OPT_GATEWAY 3
 #define OPT_DOMAIN_SERVER 6
 #define OPT_DOMAIN_NAME 15
+#define OPT_MTU_INT 26
 #define OPT_BROADCAST_ADDR 28
 #define OPT_NETBIOS_NS 44
 #define OPT_NETBIOS_SCOPE 47
@@ -56,8 +57,12 @@ struct bootphdr
 #define OPT_DHCP_TYPE 53
 #define OPT_SERV_ID 54
 #define OPT_PARAM_REQ_LIST 55
+#define OPT_MAX_MSG_SIZE 57
+#define OPT_RENEWAL_TIME 58
+#define OPT_REBINDING_TIME 59
 #define OPT_CLIENT_ID 61
 #define OPT_TFTP_SERV_NAME 66
+#define OPT_CLIENT_FQDN 81
 
 /* Different DHCP message possible */
 #define MSG_DISCOVER 1
