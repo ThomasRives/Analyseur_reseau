@@ -61,6 +61,7 @@ struct bootphdr
 #define OPT_PARAM_REQ_LIST 55
 #define OPT_MAX_MSG_SIZE 57
 #define OPT_RENEWAL_TIME 58
+#define OPT_TFTP_SN 66
 #define OPT_REBINDING_TIME 59
 #define OPT_CLIENT_ID 61
 #define OPT_TFTP_SERV_NAME 66

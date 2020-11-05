@@ -201,7 +201,7 @@ print_bootp_vendor(u_char *vend)
 			case OPT_LEASE_TIME:
 				printf("IP lease time: ");
 				print_value_nb(next_opt.length, next_opt.value);
-				puts("");
+				puts("s");
 				break;
 			case OPT_DHCP_TYPE:
 				print_bootp_dhcp_type(*(uint8_t *)next_opt.value);
@@ -229,8 +229,14 @@ print_bootp_vendor(u_char *vend)
 				puts("");
 				break;
 			case OPT_CLIENT_ID:
-				printf("client ID : %s\n",
-					ether_ntoa((const struct ether_addr *)next_opt.value));
+				printf("client ID : ");
+				for(uint i = 0; i < next_opt.length; i++)
+					printf("%c", next_opt.value[i]);
+				puts("");
+				break;
+			case OPT_TFTP_SN:
+				printf("TFTP Serveur name: %s\n",
+					inet_ntoa(*(struct in_addr *)next_opt.value));
 				break;
 			case OPT_CLIENT_FQDN:
 				printf("Client FQDN: ");

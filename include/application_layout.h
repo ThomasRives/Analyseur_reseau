@@ -97,7 +97,7 @@ void print_bootp_par_list(uint length, u_char *value);
 Port|UDP|TCP|decription
 -----------------------
 9   | 1 | 1 | Disar
- 21  | 1 | 1 | ftp TODO
+21  | 1 | 1 | ftp TODO
 22  | 1 | 1 | ssh
 23  | 0 | 1 | telnet TODO
 25  | 0 | 1 | smtp TODO
