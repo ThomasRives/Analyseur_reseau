@@ -17,12 +17,20 @@ struct tlv {
 };
 
 /**
- * @brief Get the next TLV structure in the packet
+ * @brief Get the next TLV structure in the tcp packet
  * 
  * @param packet: the packet to analyze
  * @return a structure with all the informations given by the packet
  */
-struct tlv tlv_translate(uint8_t *packet);
+struct tlv tlv_translate_tcp(uint8_t *packet);
+
+/**
+ * @brief Get the next TLV structure in the bootp packet
+ * 
+ * @param packet: the packet to analyze
+ * @return a structure with all the informations given by the packet
+ */
+struct tlv tlv_translate_bootp(uint8_t *packet);
 
 /**
  * @brief Print the value if it's an integer.

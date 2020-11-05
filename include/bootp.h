@@ -4,7 +4,7 @@
 #include <netinet/in.h>
 #include <netinet/ether.h>
 
-struct bootp
+struct bootphdr
 {
 	uint8_t op;	/* packet opcode type */
 	uint8_t htype; /* hardware addr type */
@@ -20,7 +20,6 @@ struct bootp
 	u_char chaddr[16]; /* client hardware address */
 	u_char sname[64];	 /* server host name */
 	u_char file[128];	 /* boot file name */
-	u_char vend[64];	 /* vendor-specific area */
 };
 
 /*
@@ -37,9 +36,6 @@ struct bootp
  */
 #define HTYPE_ETHERNET 1
 #define HTYPE_EXP_ETHERNET 2
-#define HTYPE_AX25 3
-#define HTYPE_PRONET 4
-#define HTYPE_CHAOS 5
 #define HTYPE_IEEE802 6
 #define HTYPE_ARCNET 7
 
@@ -50,8 +46,11 @@ struct bootp
 #define OPT_SUBNET_MASK 1
 #define OPT_TIME_OFFSET 2
 #define OPT_GATEWAY 3
+#define OPT_TIME_SERVER 4
 #define OPT_DOMAIN_SERVER 6
+#define OPT_HOSTNAME 12
 #define OPT_DOMAIN_NAME 15
+#define OPT_MTU_INT 26
 #define OPT_BROADCAST_ADDR 28
 #define OPT_NETBIOS_NS 44
 #define OPT_NETBIOS_SCOPE 47
@@ -60,7 +59,13 @@ struct bootp
 #define OPT_DHCP_TYPE 53
 #define OPT_SERV_ID 54
 #define OPT_PARAM_REQ_LIST 55
+#define OPT_MAX_MSG_SIZE 57
+#define OPT_RENEWAL_TIME 58
+#define OPT_TFTP_SN 66
+#define OPT_REBINDING_TIME 59
 #define OPT_CLIENT_ID 61
+#define OPT_TFTP_SERV_NAME 66
+#define OPT_CLIENT_FQDN 81
 
 /* Different DHCP message possible */
 #define MSG_DISCOVER 1
@@ -72,7 +77,6 @@ struct bootp
 #define MSG_RELEASE 7
 
 /* Parameters request list */
-#define NETBIOS_SCOPE 46
 #define SUBNET_MASK 1
 #define ROUTER 3
 #define DNS 6
