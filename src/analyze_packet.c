@@ -20,11 +20,13 @@ got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 	{
 		case ETHERTYPE_IPV6:
 			puts("IPV6");
-			ipv6_header_analyze(packet + sizeof(struct ether_header));
+			ipv6_header_analyze(packet + sizeof(struct ether_header),
+				header->len - sizeof(struct ether_header));
 			break;
 		case ETHERTYPE_IP:
 			puts("IPV4");
-			ipv4_header_analyze(packet + sizeof(struct ether_header));
+			ipv4_header_analyze(packet + sizeof(struct ether_header),
+				header->len - sizeof(struct ether_header));
 			break;
 		case ETHERTYPE_ARP:
 			puts("ARP");
@@ -40,21 +42,27 @@ got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 }
 
 void
-print_packet(uint pack_length, uint16_t *packet)
+print_packet(uint pack_length, const uint16_t *packet)
 {
 	static int nb_pack = 0;
 	nb_pack++;
+	uint i = 0;
 
 	printf("___Packet number %i___\n", nb_pack);
 	printf("Packet's length: %i\n\n", pack_length);
-
-	for(uint i = 0; i < pack_length; i+=2, packet++)
+	
+	while(i < pack_length)
 	{
-    	if(i%8 == 0)
-    		printf("\n");
-    	printf("%.4x ", ntohs(*packet));
-		//TODO Si v6 faut pas
- 	}
+		if(i%8 == 0)
+			puts("");
+			
+		if(i%2 == 0)
+			printf("%.2x", ntohs(*(packet + i/2)) >> 8);
+		else
+			printf("%.2x ", ntohs(*(packet + (i - 1)/2)) & 0x00ff);
+
+		i++;
+	}
 
 	printf("\n\n");
 	fflush(stdout);

@@ -25,15 +25,17 @@ struct ipv6_f32_parse {
  * @brief analyze the IPV4 header of a packet.
  *
  * @param packet: the packet you want to analyze.
+ * @param length: the packet length.
  */
-void ipv4_header_analyze(const u_char *packet);
+void ipv4_header_analyze(const u_char *packet, uint length);
 
 /**
  * @brief analyze the IPV6 header of a packet.
  *
  * @param packet: the packet you want to analyze.
+ * @param length: the packet length.
  */
-void ipv6_header_analyze(const u_char *packet);
+void ipv6_header_analyze(const u_char *packet, uint length);
 
 /**
  * @brief Parse the first 32 bits of IPv6 header.
