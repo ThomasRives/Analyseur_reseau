@@ -31,7 +31,6 @@ Port|UDP|TCP|decription
 21  | 1 | 1 | ftp TODO
 22  | 1 | 1 | ssh
 23  | 0 | 1 | telnet TODO
-25  | 0 | 1 | smtp TODO
 42  | 1 | 1 | Service de noms
 50  | 1 | 1 | Remote Mail Checking 
 53  | 1 | 1 | Résolution de nom par DNS TODO

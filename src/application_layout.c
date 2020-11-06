@@ -30,6 +30,10 @@ bootp_analyze(const u_char *packet)
 void
 smtp_analyze(const u_char *packet, uint length)
 {
-	for(uint i = 0; i < length; i++)
-		printf("%c", *(packet + i));
+	u_char *content = malloc(sizeof(u_char) * (length + 1));
+	NULL_CHECK(content);
+	NULL_CHECK(memcpy(content, packet, length));
+	content[length] = '\0';
+	printf("%s", content);
+	free(content);
 }
