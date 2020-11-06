@@ -1,7 +1,7 @@
 #include "application_layout.h"
 
 void
-bootp_header_analyze(const u_char *packet)
+bootp_analyze(const u_char *packet)
 {
 	struct bootphdr *btphdr = (struct bootphdr *)packet;
 	uint options_size = bootp_option_length(packet + sizeof(struct bootphdr));
@@ -27,3 +27,13 @@ bootp_header_analyze(const u_char *packet)
 	free(vend);
 }
 
+void
+smtp_analyze(const u_char *packet, uint length)
+{
+	u_char *content = malloc(sizeof(u_char) * (length + 1));
+	NULL_CHECK(content);
+	NULL_CHECK(memcpy(content, packet, length));
+	content[length] = '\0';
+	printf("%s", content);
+	free(content);
+}

@@ -6,6 +6,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "bootp.h"
+#include "smtp.h"
 #include "tlv_analyzer.h"
 
 /**
@@ -13,9 +14,15 @@
  * 
  * @param packet: the packet himself.
  */
-void bootp_header_analyze(const u_char *packet);
+void bootp_analyze(const u_char *packet);
 
-
+/**
+ * @brief Print the content of an SMTP packet.
+ * 
+ * @param packet: the packet himself.
+ * @param length: the packet length.
+ */
+void smtp_analyze(const u_char *packet, uint length);
 
 /*
 Port|UDP|TCP|decription
@@ -24,7 +31,6 @@ Port|UDP|TCP|decription
 21  | 1 | 1 | ftp TODO
 22  | 1 | 1 | ssh
 23  | 0 | 1 | telnet TODO
-25  | 0 | 1 | smtp TODO
 42  | 1 | 1 | Service de noms
 50  | 1 | 1 | Remote Mail Checking 
 53  | 1 | 1 | Résolution de nom par DNS TODO

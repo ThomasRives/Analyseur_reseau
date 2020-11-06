@@ -2,7 +2,7 @@
 #include "tlv_analyzer.h"
 
 void
-tcp_header_analyze(const u_char *packet)
+tcp_header_analyze(const u_char *packet, uint length)
 {
 	struct tcphdr *tcp_header = (struct tcphdr *)packet;
 	printf("Source port: %u\n", ntohs(tcp_header->th_sport));
@@ -32,7 +32,8 @@ tcp_header_analyze(const u_char *packet)
 	uint8_t read_header = sizeof(struct tcphdr);
 	uint8_t *tcp_options = (uint8_t *)(packet + read_header);
 	print_tcp_options(read_header, tcp_header->th_off, tcp_options);
-	demult_port(ntohs(tcp_header->th_dport), packet + tcp_header->th_off * 4);
+	demult_port(ntohs(tcp_header->th_sport), ntohs(tcp_header->th_dport),
+		packet + tcp_header->th_off * 4, length - tcp_header->th_off * 4);
 }
 
 void
@@ -54,7 +55,7 @@ print_tcp_options(uint8_t read_header, uint8_t off, uint8_t *tcp_options)
 				printf("Maximum segment size: %i\n", *(uint8_t *)(next_tlv.value));
 				break;
 			case TCPOPT_WINDOW:
-				printf("Window scale: %i\n", *(uint16_t *)(next_tlv.value));
+				printf("Window scale: %i\n", *(uint16_t *)(next_tlv.value) & 0x00ff);
 				break;
 			case TCPOPT_SACK_PERMITTED:
 				puts("Segment ACK Permitted");
@@ -80,14 +81,15 @@ print_tcp_options(uint8_t read_header, uint8_t off, uint8_t *tcp_options)
 }
 
 void 
-udp_header_analyze(const u_char *packet)
+udp_header_analyze(const u_char *packet, uint length)
 {
 	struct udphdr *udp_header = (struct udphdr *)packet;
 	printf("Source port: %u\n", ntohs(udp_header->uh_sport));
 	printf("Destination port: %u\n", ntohs(udp_header->uh_dport));
 	printf("Length: %u\n", ntohs(udp_header->uh_ulen));
 	printf("Checksum: 0x%x\n", ntohs(udp_header->uh_sum));
-	demult_port(ntohs(udp_header->uh_dport), packet + sizeof(struct udphdr));
+	demult_port(ntohs(udp_header->uh_sport), ntohs(udp_header->uh_dport),
+		packet + sizeof(struct udphdr), length - sizeof(struct udphdr));
 }
 
 void
@@ -552,17 +554,22 @@ print_icmpv6_rout_rem_code(uint8_t code)
 }
 
 void
-demult_port(uint16_t port, const u_char *packet)
+demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint length)
 {
+	uint16_t port = port_src;
 	printf("Protocole: ");
-	switch(port)
-	{
-		case IPPORT_BOOTPS:
-		case IPPORT_BOOTPC:
-			puts("Bootp");
-			bootp_header_analyze(packet);
-			break;
-		default:
-			puts("Unknown...");
-	}
+	for(;;port = port_dst)
+		switch (port)
+		{
+			case PORT_BOOTPS:
+			case PORT_BOOTPC:
+				puts("Bootp");
+				bootp_analyze(packet);
+				return;
+			case PORT_SMTP:
+				puts("SMTP");
+				smtp_analyze(packet, length);
+				return;
+		}
+	puts("Unknown...");
 }

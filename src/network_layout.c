@@ -2,7 +2,7 @@
 
 
 void
-ipv4_header_analyze(const u_char *packet)
+ipv4_header_analyze(const u_char *packet, uint length)
 {
 	struct iphdr *ip_header = (struct iphdr *)packet;
 	printf("IHL: %u bytes\n", ip_header->ihl*4);
@@ -22,11 +22,13 @@ ipv4_header_analyze(const u_char *packet)
 	{
 		case IPPROTO_TCP:
 			puts("TCP");
-			tcp_header_analyze(packet + ip_header->ihl * 4);
+			tcp_header_analyze(packet + ip_header->ihl * 4,
+				length - ip_header->ihl * 4);
 			break;
 		case IPPROTO_UDP:
 			puts("UDP");
-			udp_header_analyze(packet + ip_header->ihl * 4);
+			udp_header_analyze(packet + ip_header->ihl * 4,
+				length - ip_header->ihl * 4);
 			break;
 		case IPPROTO_ICMP:
 			puts("ICMP");
@@ -41,7 +43,7 @@ ipv4_header_analyze(const u_char *packet)
 }
 
 void 
-ipv6_header_analyze(const u_char *packet)
+ipv6_header_analyze(const u_char *packet, uint length)
 {
 	struct ip6_hdr *ipv6_header = (struct ip6_hdr *)packet;
 	struct ipv6_f32_parse f32_bits = parse_f32_ipv6(ntohl(ipv6_header->ip6_flow));
@@ -65,11 +67,13 @@ ipv6_header_analyze(const u_char *packet)
 			break;
 		case 6:
 			puts("TCP (6)");
-			tcp_header_analyze(packet + sizeof(struct ip6_hdr));
+			tcp_header_analyze(packet + sizeof(struct ip6_hdr),
+				length - sizeof(struct ip6_hdr));
 			break;
 		case 17:
 			puts("UDP (17)");
-			udp_header_analyze(packet + sizeof(struct ip6_hdr));
+			udp_header_analyze(packet + sizeof(struct ip6_hdr),
+				length - sizeof(struct ip6_hdr));
 			break;
 		case 41:
 			puts("Encapsulated IPv6 Header (41)");

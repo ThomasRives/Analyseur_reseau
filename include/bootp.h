@@ -25,8 +25,8 @@ struct bootphdr
 /*
  * UDP port numbers, server and client.
  */
-#define IPPORT_BOOTPS 67
-#define IPPORT_BOOTPC 68
+#define PORT_BOOTPS 67
+#define PORT_BOOTPC 68
 
 #define BOOTREQUEST 1
 #define BOOTREPLY 2

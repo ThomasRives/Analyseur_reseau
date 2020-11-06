@@ -13,8 +13,9 @@
  * @brief Analyze the TCP header of the packet.
  * 
  * @param packet: the packet himself.
+ * @param length: the packet length.
  */
-void tcp_header_analyze(const u_char *packet);
+void tcp_header_analyze(const u_char *packet, uint length);
 
 /**
  * @brief Print TCP options.
@@ -29,8 +30,9 @@ void print_tcp_options(uint8_t read_header, uint8_t off, uint8_t *tcp_options);
  * @brief Analyze the UDP header of the packet.
  * 
  * @param packet: the packet himself.
+ * @param length: the packet length.
  */
-void udp_header_analyze(const u_char *packet);
+void udp_header_analyze(const u_char *packet, uint length);
 
 /**
  * @brief Analyze the ICMP header of the packet.
@@ -134,9 +136,11 @@ void print_icmpv6_rout_rem_code(uint8_t code);
 /**
  * @brief Demultiplex the port used.
  * 
- * @param port: the port used in the communication.
+ * @param port_src: the source port used in the communication.
+ * @param port: the destination port used in the communication.
  * @param packet: the packet himself.
+ * @param length: the length of the packet.
  */
-void demult_port(uint16_t port, const u_char *packet);
+void demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint length);
 
 #endif //TRANSPORT_LAYOUT_H
