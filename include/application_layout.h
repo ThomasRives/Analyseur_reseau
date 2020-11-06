@@ -8,6 +8,7 @@
 #include "bootp.h"
 #include "smtp.h"
 #include "tlv_analyzer.h"
+#include "telnet.h"
 
 /**
  * @brief Analyze the bootp header of the packet.
@@ -23,6 +24,14 @@ void bootp_analyze(const u_char *packet);
  * @param length: the packet length.
  */
 void smtp_analyze(const u_char *packet, uint length);
+
+/**
+ * @brief Print the content of an telnet packet.
+ * 
+ * @param packet: the packet himself.
+ * @param length: the packet length.
+ */
+void telnet_analyze(const u_char *packet, uint length);
 
 /*
 Port|UDP|TCP|decription
