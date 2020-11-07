@@ -5,10 +5,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <arpa/telnet.h>
 #include "bootp.h"
-#include "smtp.h"
 #include "tlv_analyzer.h"
-#include "telnet.h"
 
 /**
  * @brief Analyze the bootp header of the packet.

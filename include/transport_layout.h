@@ -9,6 +9,8 @@
 #include <netinet/icmp6.h>
 #include "application_layout.h"
 
+#define PORT_SMTP 25
+#define PORT_TELNET 23
 /**
  * @brief Analyze the TCP header of the packet.
  * 

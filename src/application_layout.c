@@ -41,178 +41,223 @@ smtp_analyze(const u_char *packet, uint length)
 void
 telnet_analyze(const u_char *packet, uint length)
 {
-	for(uint i = 0; i < length; i++)
+	uint i = 0;
+	printf("%x\n", ntohs(*(uint16_t *)packet));
+	if (packet[0] != IAC)
 	{
-		if(packet[i] != 0xff)//data
-		{
-			//TODO
-			continue;
-		}
+		printf("Option data: ");
+		for (; i < length && packet[i] != IAC; i++)
+			printf("%.2x", packet[i]);
 
-		switch(packet[i])//INSTR
+		puts("");
+	}
+	i++;
+
+	for (; i < length; i++)
+	{
+		printf("Suboption ");
+		switch(packet[i])
 		{
-			case OPT_EOL:
-				puts("");
-				break;//!!!!
-			case OPT_BIN_TRANS:
-				puts("");
-				break;//!!!!!!
-			case OPT_ECHO:
-				puts("");
-				break;//!!!!!
-			case OPT_RECONNEXION:
-				puts("");
-				break;//!!!
-			case OPT_SUP_GO_AHEAD:
-				puts("");
-				break;//!!!!
-			case OPT_MSG_SIZE_NEG:
-				puts("");
+			case IAC:
+				printf("Interpret as command");
 				break;
-			case OPT_STATUS:
-				puts("");
-				break;//!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			case OPT_TIMING_MASK:
-				puts("");
-				break;//!!!!!!!!!!!!!!!!!
-			case OPT_REMOTE_CTR:
-				puts("");
+			case DONT:
+				printf("You are not to use option");
 				break;
-			case OPT_OUT_LINE_W:
-				puts("");
+			case DO:
+				printf("Please, you use option");
 				break;
-			case OPT_OUT_PG_SIZE:
-				puts("");
+			case WONT:
+				printf("I won't use option");
 				break;
-			case OPT_OUT_CARR_RET_DISP:
-				puts("");
+			case WILL:
+				printf("I will use option");
 				break;
-			case OPT_OUT_HOR_TAB_STOP:
-				puts("");
+			case SB:
+				printf("Interpret as subnegotiation");
 				break;
-			case OPT_OUT_HOR_TAB_DISP:
-				puts("");
+			case GA:
+				printf("You may reverse the line");
 				break;
-			case OPT_OUT_FORMFEED:
-				puts("");
+			case EL:
+				printf("Erase the current line");
 				break;
-			case OPT_OUT_VERT_TAB_STOP:
-				puts("");
+			case EC:
+				printf("Erase the current character");
 				break;
-			case OPT_OUT_VERT_TAB_DISP:
-				puts("");
+			case AYT:
+				printf("Are you there");
 				break;
-			case OPT_OUT_LINEFEED_DISP:
-				puts("");
+			case AO:
+				printf("Abort output--but let prog finish");
 				break;
-			case OPT_EXTENDED_ASCII:
-				puts("");
+			case IP:
+				printf("Interrupt process--permanently");
 				break;
-			case OPT_LOGOUT:
-				puts("");
+			case BREAK:
+				printf("Break");
 				break;
-			case OPT_BYTE_MACR:
-				puts("");
+			case DM:
+				printf("Data mark--for connect");
 				break;
-			case OPT_DATA_ENT_TERM:
-				puts("");
+			case NOP:
+				printf("Nop");
 				break;
-			case OPT_SUPDUP:
-				puts("");
+			case SE:
+				printf("End sub negotiation");
 				break;
-			case OPT_SUPDUP_OUT:
-				puts("");
+			case EOR:
+				printf("End of record");
 				break;
-			case OPT_SEND_LOC:
-				puts("");
+			case ABORT:
+				printf("Abort process");
 				break;
-			case OPT_TERM_TYPE:
-				puts("");
+			case SUSP :
+				printf("Suspend process");
 				break;
-			case OPT_END_REC:
-				puts("");
-				break;
-			case OPT_TACACS:
-				puts("");
-				break;
-			case OPT_OUT_MARK:
-				puts("");
-				break;
-			case OPT_TERM_LOC_NB:
-				puts("");
-				break;
-			case OPT_TELNET_3270:
-				puts("");
-				break;
-			case OPT_X3_PAD:
-				puts("");
-				break;
-			case OPT_NEG_WIN_SIZE:
-				puts("");
-				break;
-			case OPT_TERM_SPEED:
-				puts("");
-				break;
-			case OPT_REM_FLOW_CTRL:
-				puts("");
-				break;
-			case OPT_LINEMODE:
-				puts("");
-				break;//!!!!!!!!!!!
-			case OPT_X_DISP_LOC:
-				puts("");
-				break;
-			case OPT_ENV_OPT:
-				puts("");
-				break;
-			case OPT_AUTH_OPT:
-				puts("");
-				break;
-			case OPT_ENC_OPT:
-				puts("");
-				break;
-			case OPT_NEW_ENV_OPT:
-				puts("");
-				break;
-			case OPT_TN3270E:
-				puts("");
-				break;
-			case OPT_XAUTH:
-				puts("");
-				break;
-			case OPT_CHARSET:
-				puts("");
-				break;
-			case OPT_TRSP:
-				puts("");
-				break;
-			case OPT_CPCO:
-				puts("");
-				break;
-			case OPT_TSLE:
-				puts("");
-				break;
-			case OPT_TSTLS:
-				puts("");
-				break;
-			case OPT_KERMIT:
-				puts("");
-				break;
-			case OPT_SEND_URL:
-				puts("");
-				break;
-			case OPT_FORWARD_X:
-				puts("");
-				break;
-			case OPT_TPL:
-				puts("");
-				break;
-			case OPT_TSSPIL:
-				puts("");
-				break;
-			case OPT_TPRAGMAH:
-				puts("");
+			case xEOF:
+				printf("End of file: EOF is already used...");
 				break;
 		}
+		printf("\t");
+		i++;
+		switch(packet[i])
+		{
+			case TELOPT_BINARY:
+				printf("8-bit data path");
+				break;
+			case TELOPT_ECHO:
+				printf("Echo");
+				break;
+			case TELOPT_RCP:
+				printf("Prepare to reconnect");
+				break;
+			case TELOPT_SGA:
+				printf("Suppress go ahead");
+				break;
+			case TELOPT_NAMS:
+				printf("Approximate message size");
+				break;
+			case TELOPT_STATUS:
+				printf("Give status");
+				break;
+			case TELOPT_TM :
+				printf("Timing mark");
+				break;
+			case TELOPT_RCTE:
+				printf("Remote controlled transmission and echo");
+				break;
+			case TELOPT_NAOL:
+				printf("Negotiate about output line width");
+				break;
+			case TELOPT_NAOP:
+				printf("Negotiate about output page size");
+				break;
+			case TELOPT_NAOCRD:
+				printf("Negotiate about CR disposition");
+				break;
+			case TELOPT_NAOHTS:
+				printf("Negotiate about horizontal tabstops");
+				break;
+			case TELOPT_NAOHTD:
+				printf("Negotiate about horizontal tab disposition");
+				break;
+			case TELOPT_NAOFFD:
+				printf("Negotiate about formfeed disposition");
+				break;
+			case TELOPT_NAOVTS:
+				printf("Negotiate about vertical tab stops");
+				break;
+			case TELOPT_NAOVTD:
+				printf("Negotiate about vertical tab disposition");
+				break;
+			case TELOPT_NAOLFD:
+				printf("Negotiate about output LF disposition");
+				break;
+			case TELOPT_XASCII:
+				printf("Extended ascii character set");
+				break;
+			case TELOPT_LOGOUT:
+				printf("Force logout");
+				break;
+			case TELOPT_BM:
+				printf("Byte macro");
+				break;
+			case TELOPT_DET:
+				printf("Data entry terminal");
+				break;
+			case TELOPT_SUPDUP:
+				printf("Supdup protocol");
+				break;
+			case TELOPT_SUPDUPOUTPUT:
+				printf("Supdup output");
+				break;
+			case TELOPT_SNDLOC:
+				printf("Send location");
+				break;
+			case TELOPT_TTYPE:
+				printf("Terminal type");
+				break;
+			case TELOPT_EOR:
+				printf("End or record");
+				break;
+			case TELOPT_TUID:
+				printf("TACACS user identification");
+				break;
+			case TELOPT_OUTMRK:
+				printf("Output marking");
+				break;
+			case TELOPT_TTYLOC:
+				printf("Terminal location number");
+				break;
+			case TELOPT_3270REGIME:
+				printf("3270 regime");
+				break;
+			case TELOPT_X3PAD:
+				printf("X.3 PAD");
+				break;
+			case TELOPT_NAWS:
+				printf("Window size");
+				break;
+			case TELOPT_TSPEED:
+				printf("Terminal speed");
+				break;
+			case TELOPT_LFLOW:
+				printf("Remote flow control");
+				break;
+			case TELOPT_LINEMODE:
+				printf("Linemode option");
+				break;
+			case TELOPT_XDISPLOC:
+				printf("X Display Location");
+				break;
+			case TELOPT_OLD_ENVIRON:
+				printf("Old - Environment variables");
+				break;
+			case TELOPT_AUTHENTICATION:
+				printf("Authenticate");
+				break;
+			case TELOPT_ENCRYPT:
+				printf("Encryption option");
+				break;
+			case TELOPT_NEW_ENVIRON:
+				printf("New - Environment variables");
+				break;
+			case TELOPT_EXOPL:
+				printf("Extended-options-list");
+				break;
+		}
+		
+		printf(" (%i)\n", packet[i]);
+		i++;
+
+		if(packet[i] == IAC)
+			continue;
+
+		printf("\tOption data: ");
+		for (; i < length && packet[i] != IAC; i++)
+			printf("%2.x",packet[i]);
+
+		puts("");
 	}
 }

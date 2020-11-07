@@ -26,7 +26,7 @@ obj/test.o: src/test.c
 test:
 	make clean
 	make
-	valgrind -q ./bin/main -i any -v 1 -o pcap_files/ipv4-smtp.cap
+	valgrind -q ./bin/main -i any -v 1 -o pcap_files/telnet.cap
 
 .PHONY: clean test
 clean:

@@ -558,7 +558,7 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint len
 {
 	uint16_t port = port_src;
 	printf("Protocole: ");
-	for(;;port = port_dst)
+	for(uint i = 0; i < 2;port = port_dst, i++)
 		switch (port)
 		{
 			case PORT_BOOTPS:
@@ -569,6 +569,10 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint len
 			case PORT_SMTP:
 				puts("SMTP");
 				smtp_analyze(packet, length);
+				return;
+			case PORT_TELNET:
+				puts("Telnet");
+				telnet_analyze(packet, length);
 				return;
 		}
 	puts("Unknown...");
