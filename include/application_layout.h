@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <arpa/telnet.h>
 #include "bootp.h"
+#include "telnet.h"
 #include "tlv_analyzer.h"
 
 /**
