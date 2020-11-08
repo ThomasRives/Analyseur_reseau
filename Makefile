@@ -26,7 +26,7 @@ obj/test.o: src/test.c
 test:
 	make clean
 	make
-	valgrind -q ./bin/main -i any -v 1 -o pcap_files/telnet.cap
+	valgrind -q ./bin/main -i any -v 1 -o pcap_files/bootp.cap
 
 .PHONY: clean test
 clean:

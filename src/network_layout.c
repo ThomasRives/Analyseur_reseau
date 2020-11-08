@@ -192,6 +192,14 @@ arp_header_analyze(const u_char *packet)
 	print_arp_pro_addr(arp_hdr->ar_pln * 8, (uint32_t *)(packet + 8 + arp_hdr->ar_hln), 1);
 	print_arp_hard_addr(arp_hdr->ar_hln * 8, (uint32_t *)(packet + 8 + arp_hdr->ar_hln + arp_hdr->ar_pln), 0);
 	print_arp_pro_addr(arp_hdr->ar_pln * 8, (uint32_t *)(packet + 8 + 2 * arp_hdr->ar_hln + arp_hdr->ar_pln), 0);
+	// struct ether_arp
+	// {
+	// 	struct arphdr ea_hdr;			/* fixed-size header */
+	// 	u_char arp_sha[ETHER_ADDR_LEN]; /* sender hardware address */
+	// 	u_char arp_spa[4];				/* sender protocol address */
+	// 	u_char arp_tha[ETHER_ADDR_LEN]; /* target hardware address */
+	// 	u_char arp_tpa[4];				/* target protocol address */
+	// };
 }
 
 void 
