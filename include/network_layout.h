@@ -67,7 +67,7 @@ void rarp_header_analyze(const u_char *packet);
  * @param beg_addr: the pointer to the beginning of the address.
  * @param sender: indicates if it's the sender address or the receiver address.
  */
-void print_arp_hard_addr(unsigned int hlen, uint32_t *beg_addr, short sender);
+void print_arp_hard_addr(unsigned int hlen, uint8_t *beg_addr, short sender);
 
 /**
  * @brief Print the protocol address in an ARP header.
@@ -76,6 +76,6 @@ void print_arp_hard_addr(unsigned int hlen, uint32_t *beg_addr, short sender);
  * @param beg_addr: the pointer to the beginning of the address.
  * @param sender: indicates if it's the sender address or the receiver address.
  */
-void print_arp_pro_addr(unsigned int hlen, uint32_t *beg_addr, short sender);
+void print_arp_pro_addr(unsigned int hlen, uint8_t *beg_addr, short sender);
 
 #endif //NETWORK_LAYOUT_H
