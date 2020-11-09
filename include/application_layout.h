@@ -9,6 +9,8 @@
 #include "bootp.h"
 #include "telnet.h"
 #include "tlv_analyzer.h"
+#include "ftp.h"
+#include "utilities.h"
 
 /**
  * @brief Analyze the bootp header of the packet.
@@ -33,16 +35,26 @@ void smtp_analyze(const u_char *packet, uint length);
  */
 void telnet_analyze(const u_char *packet, uint length);
 
+/**
+ * @brief Print the content of a ftp packet.
+ * 
+ * @param packet: the packet himself.
+ * @param length: the packet length.
+ */
+void ftp_analyze(const u_char *packet, uint length);
+
 /*
 Port|UDP|TCP|decription
 -----------------------
 9   | 1 | 1 | Disar
 21  | 1 | 1 | ftp TODO
 22  | 1 | 1 | ssh
+23  | 0 | 1 | telnet DONE
+25  | 0 | 1 | smtp DONE
 42  | 1 | 1 | Service de noms
 50  | 1 | 1 | Remote Mail Checking 
 53  | 1 | 1 | Résolution de nom par DNS TODO
-67  | 1 | 0 | Service Bootp Protocol TODO
+67  | 1 | 0 | Service Bootp Protocol DONE
 68  | 1 | 0 | Bootstrap Client 
 69  | 1 | 0 | TFTP 
 80  | 0 | 1 | HTTP TODO
@@ -58,6 +70,8 @@ Port|UDP|TCP|decription
 //IMAP
 //POP
 
+
+Use destination port to know the protocol
 */
 
 #endif //APPLICATION_LAYOUT_H

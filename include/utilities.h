@@ -8,6 +8,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <limits.h>
+#include <string.h>
 
 #define NULL_CHECK(op) do{if((op) == NULL) err_n_die(1, #op);}while(0)
 #define CHECK(op) do{if((op) == -1) err_n_die(1, #op);}while(0)
@@ -19,5 +20,13 @@
  * @param msg: the message that will be printed.
  */
 noreturn void err_n_die(int syserr, const char *msg, ...);
+
+/**
+ * @brief print the datas as a string.
+ * 
+ * @param data: the data to print.
+ * @param length: the length of the data to print.
+ */
+void printf_as_str(const u_char *data, uint length);
 
 #endif //UTILITIES_H
