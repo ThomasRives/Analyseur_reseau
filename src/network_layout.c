@@ -124,9 +124,9 @@ parse_f32_ipv6(uint32_t first32_bits)
 void
 arp_header_analyze(const u_char *packet)
 {
-	struct arphdr *arp_hdr = (struct arphdr *)packet;
+	struct ether_arp *arp_hdr = (struct ether_arp *)packet;
 	printf("Hardware type: ");
-	switch (ntohs(arp_hdr->ar_hrd))
+	switch (ntohs(arp_hdr->ea_hdr.ar_hrd))
 	{
 		case ARPHRD_ETHER:
 			puts("Ethernet (1)");
@@ -141,7 +141,7 @@ arp_header_analyze(const u_char *packet)
 			puts("Not supported...");
 	}
 	printf("Protocol type: ");
-	switch(ntohs(arp_hdr->ar_pro))
+	switch(ntohs(arp_hdr->ea_hdr.ar_pro))
 	{
 		case ETHERTYPE_IPV6:
 			puts("IPV6");
@@ -159,10 +159,10 @@ arp_header_analyze(const u_char *packet)
 			puts("Unknown type...");
 	}
 
-	printf("Hardware Address Length: %i\n", arp_hdr->ar_hln * 8);
-	printf("Protocol Address Length: %i\n", arp_hdr->ar_pln * 8);
+	printf("Hardware Address Length: %i\n", arp_hdr->ea_hdr.ar_hln);
+	printf("Protocol Address Length: %i\n", arp_hdr->ea_hdr.ar_pln);
 	printf("Operation: ");
-	switch (ntohs(arp_hdr->ar_op))
+	switch (ntohs(arp_hdr->ea_hdr.ar_op))
 	{
 		case ARPOP_REQUEST:
 			puts("ARP Request (1)");
@@ -188,18 +188,10 @@ arp_header_analyze(const u_char *packet)
 		default:
 			puts("Unknown...");
 	}
-	print_arp_hard_addr(arp_hdr->ar_hln * 8, (uint32_t *)(packet + 8) , 1);
-	print_arp_pro_addr(arp_hdr->ar_pln * 8, (uint32_t *)(packet + 8 + arp_hdr->ar_hln), 1);
-	print_arp_hard_addr(arp_hdr->ar_hln * 8, (uint32_t *)(packet + 8 + arp_hdr->ar_hln + arp_hdr->ar_pln), 0);
-	print_arp_pro_addr(arp_hdr->ar_pln * 8, (uint32_t *)(packet + 8 + 2 * arp_hdr->ar_hln + arp_hdr->ar_pln), 0);
-	// struct ether_arp
-	// {
-	// 	struct arphdr ea_hdr;			/* fixed-size header */
-	// 	u_char arp_sha[ETHER_ADDR_LEN]; /* sender hardware address */
-	// 	u_char arp_spa[4];				/* sender protocol address */
-	// 	u_char arp_tha[ETHER_ADDR_LEN]; /* target hardware address */
-	// 	u_char arp_tpa[4];				/* target protocol address */
-	// };
+	print_arp_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_sha, 1);
+	print_arp_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_spa, 1);
+	print_arp_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_tha, 0);
+	print_arp_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_tpa, 0);
 }
 
 void 
@@ -209,7 +201,7 @@ rarp_header_analyze(const u_char *packet)
 }
 
 void 
-print_arp_hard_addr(unsigned int hlen, uint32_t *beg_addr, short sender)
+print_arp_hard_addr(unsigned int hlen, uint8_t *beg_addr, short sender)
 {
 	if(sender)
 		printf("Sender hardware address: ");
@@ -224,7 +216,7 @@ print_arp_hard_addr(unsigned int hlen, uint32_t *beg_addr, short sender)
 
 
 void
-print_arp_pro_addr(unsigned int hlen, uint32_t *beg_addr, short sender)
+print_arp_pro_addr(unsigned int hlen, uint8_t *beg_addr, short sender)
 {
 	if(sender)
 		printf("Sender protocol address: ");
