@@ -66,9 +66,7 @@ int print_until_rn(const uint8_t *str);
  * @brief printf the command associated to the code for ftp.
  * 
  * @param command: the code of the command.
- * @return 3 (the size of a command) to make it easier to incremente i in
- * ftp_analyze.
  */
-int printf_ftp_command(const uint8_t *command);
+void printf_ftp_command(const uint8_t *command);
 
 #endif //FTP_H

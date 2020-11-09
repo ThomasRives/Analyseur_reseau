@@ -53,7 +53,8 @@ ftp_analyze(const u_char *packet, uint length)
 			continue;
 		}
 
-		i += printf_ftp_command(&packet[i]);
+		printf_ftp_command(&packet[i]);
+		i += print_until_rn(&packet[i]);
 	}
 }
 

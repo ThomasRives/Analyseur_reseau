@@ -18,7 +18,8 @@ print_until_rn(const uint8_t *str)
 	return i+1;
 }
 
-int printf_ftp_command(const uint8_t *command)
+void
+printf_ftp_command(const uint8_t *command)
 {
 	uint32_t command_int = ntohl((*(uint32_t *)command)) >> 8;
 	printf("Command: ");
@@ -103,7 +104,6 @@ int printf_ftp_command(const uint8_t *command)
 		case REP_COD_PASSIVE_MOD:
 			printf("Entering Passive Mode (h1,h2,h3,h4,p1,p2).");
 			break;
-
 		case REP_COD_USER_LOGGEDIN:
 			printf("User logged in, proceed.");
 			break;
@@ -161,5 +161,4 @@ int printf_ftp_command(const uint8_t *command)
 			break;
 	}
 	printf(" (%c%c%c)\n", command[0], command[1], command[2]);
-	return 3; // Size in bytes for
 }
