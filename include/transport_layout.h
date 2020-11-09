@@ -11,6 +11,8 @@
 
 #define PORT_SMTP 25
 #define PORT_TELNET 23
+#define PORT_FTP 21
+
 /**
  * @brief Analyze the TCP header of the packet.
  * 

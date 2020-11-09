@@ -30,12 +30,31 @@ bootp_analyze(const u_char *packet)
 void
 smtp_analyze(const u_char *packet, uint length)
 {
-	u_char *content = malloc(sizeof(u_char) * (length + 1));
-	NULL_CHECK(content);
-	NULL_CHECK(memcpy(content, packet, length));
-	content[length] = '\0';
-	printf("%s", content);
-	free(content);
+	printf_as_str(packet, length);
+}
+
+void
+ftp_analyze(const u_char *packet, uint length)
+{
+	for(uint i = 0; i < length;)
+	{
+		if( i >= length - 3)
+		{
+			printf("%c%c", packet[i], packet[i + 1]);
+			break;
+		}
+
+		if(!is_digit(packet[i]) ||
+			(i + 1 < length && !is_digit(packet[i + 1])) ||
+			(i + 2 < length && !is_digit(packet[i + 2]))
+		)
+		{
+			i += print_until_rn(&packet[i]);
+			continue;
+		}
+
+		i += printf_ftp_command(&packet[i]);
+	}
 }
 
 void
