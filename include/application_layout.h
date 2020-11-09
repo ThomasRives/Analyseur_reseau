@@ -43,11 +43,19 @@ void telnet_analyze(const u_char *packet, uint length);
  */
 void ftp_analyze(const u_char *packet, uint length);
 
+/**
+ * @brief Print the content of a http packet.
+ * 
+ * @param packet: the packet himself.
+ * @param length: the packet length.
+ */
+void http_analyze(const u_char *packet, uint length);
+
 /*
 Port|UDP|TCP|decription
 -----------------------
 9   | 1 | 1 | Disar
-21  | 1 | 1 | ftp TODO
+21  | 1 | 1 | ftp DONE
 22  | 1 | 1 | ssh
 23  | 0 | 1 | telnet DONE
 25  | 0 | 1 | smtp DONE

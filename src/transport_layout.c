@@ -578,6 +578,10 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint len
 				puts("FTP");
 				ftp_analyze(packet, length);
 				return;
+			case PORT_HTTP:
+				puts("HTTP");
+				http_analyze(packet, length);
+				return;
 		}
 	puts("Unknown...");
 }
