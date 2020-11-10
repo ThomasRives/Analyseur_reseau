@@ -65,7 +65,7 @@ Port|UDP|TCP|decription
 67  | 1 | 0 | Service Bootp Protocol DONE
 68  | 1 | 0 | Bootstrap Client 
 69  | 1 | 0 | TFTP 
-80  | 0 | 1 | HTTP TODO
+80  | 0 | 1 | HTTP DONE
 101 | 0 | 1 | NIC Host Name 
 115 | 0 | 1 | SFTP
 443 | 0 | 1 | HTTPS
@@ -74,9 +74,10 @@ Port|UDP|TCP|decription
 521 | 1 | 0 | Routing Info Protocol for IPv6
 992 | 1 | 1 | Telnets via SSL/TLS
 
-//LDAP
-//IMAP
-//POP
+//LDAP TODO
+//IMAP TODO
+//POP TODO
+//SCTP TODO
 
 
 Use destination port to know the protocol
