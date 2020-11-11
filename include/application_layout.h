@@ -51,6 +51,14 @@ void ftp_analyze(const u_char *packet, uint length);
  */
 void http_analyze(const u_char *packet, uint length);
 
+/**
+ * @brief Print the content of a DNS packet.
+ * 
+ * @param packet: the packet himself.
+ * @param length: the packet length.
+ */
+void dns_analyze(const u_char *packet, uint length);
+
 /*
 Port|UDP|TCP|decription
 -----------------------

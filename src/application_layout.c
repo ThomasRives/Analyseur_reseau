@@ -101,3 +101,11 @@ http_analyze(const u_char *packet, uint length)
 	printf_as_str(packet, length);
 	puts("");
 }
+
+void
+dns_analyze(const u_char *packet, uint length)
+{
+	(void)packet;
+	(void)length;
+	puts("TODO");
+}
