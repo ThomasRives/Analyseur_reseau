@@ -15,6 +15,7 @@
 #define PORT_HTTP 80
 #define PORT_DNS 53
 #define PORT_POP 110
+#define PORT_IMAP 143
 
 /**
  * @brief Analyze the TCP header of the packet.

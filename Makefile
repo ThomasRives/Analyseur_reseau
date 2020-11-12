@@ -36,7 +36,7 @@ obj/test.o: src/test.c
 test:
 	@make clean 1>/dev/null
 	@make 1>/dev/null
-	@valgrind -q ./bin/main -i any -v 1 -o pcap_files/pop-ssl.pcapng
+	@valgrind -q ./bin/main -i any -v 1 -o pcap_files/imap.cap
 
 .PHONY: clean test
 clean:
