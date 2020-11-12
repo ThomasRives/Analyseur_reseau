@@ -67,6 +67,14 @@ void dns_analyze(const u_char *packet, uint length);
  */
 void pop_analyze(const u_char *packet, uint length);
 
+/**
+ * @brief Print the content of a IMAP packet.
+ * 
+ * @param packet: the packet himself.
+ * @param length: the packet length.
+ */
+void imap_analyze(const u_char *packet, uint length);
+
 /*
 Port|UDP|TCP|decription
 -----------------------
