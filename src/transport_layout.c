@@ -586,6 +586,10 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint len
 				puts("DNS");
 				dns_analyze(packet, length);
 				return;
+			case PORT_POP:
+				puts("POP3");
+				pop_analyze(packet, length);
+				return;
 		}
 	puts("Unknown...");
 }
