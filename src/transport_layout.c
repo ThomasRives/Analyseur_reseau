@@ -556,7 +556,8 @@ print_icmpv6_rout_rem_code(uint8_t code)
 }
 
 void
-demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint length)
+demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
+	uint length)
 {
 	uint16_t port = port_src;
 	printf("Protocole: ");
