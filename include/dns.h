@@ -49,7 +49,7 @@
 #define T_MD 3 /* Mail destination */
 #define T_MF 4 /* Mail forwarder */
 #define T_CNAME 5 /* Canonical name */
-#define T_SOA 6	  /* Start of a zone of authority */
+#define T_SOA 6	/* Start of a zone of authority */
 #define T_MB 7 /* Mailbox domain name */
 #define T_MG 8 /* Mail group member */
 #define T_MR 9 /* Mail rename domain name */
@@ -156,6 +156,17 @@ struct query {
 	uint8_t *query_name; /**< The name of the query */
 	uint16_t type; /**< Type of the query */
 	uint16_t classe; /**< Classe of the query */
+};
+
+/**
+ * @brief Struct of a primal server.
+ */
+struct soa {
+	uint32_t serial;
+	uint32_t refresh;
+	uint32_t retry;
+	uint32_t expire;
+	uint32_t validity;
 };
 
 
