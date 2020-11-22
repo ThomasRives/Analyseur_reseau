@@ -85,7 +85,7 @@ Port|UDP|TCP|decription
 25  | 0 | 1 | smtp DONE
 42  | 1 | 1 | Service de noms
 50  | 1 | 1 | Remote Mail Checking 
-53  | 1 | 1 | Résolution de nom par DNS TODO
+53  | 1 | 1 | Résolution de nom par DNS WIP
 67  | 1 | 0 | Service Bootp Protocol DONE
 68  | 1 | 0 | Bootstrap Client 
 69  | 1 | 0 | TFTP 
@@ -99,10 +99,9 @@ Port|UDP|TCP|decription
 992 | 1 | 1 | Telnets via SSL/TLS
 
 //LDAP TODO
-//IMAP TODO
-//POP TODO
+//IMAP DONE
+//POP DONE
 //SCTP TODO
-
 
 Use destination port to know the protocol
 */
