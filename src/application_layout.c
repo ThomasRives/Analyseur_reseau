@@ -105,7 +105,14 @@ http_analyze(const u_char *packet, uint length)
 void
 dns_analyze(const u_char *packet, uint length)
 {
-	(void)packet;
 	(void)length;
-	puts("TODO");
+	struct dnshdr *dns_hdr = (struct dnshdr *)packet;
+	printf("Id: %x\n", noths(dns_hdr->id));
+	printf_dns_ctrl(dns_hdr->ctrl);
+	printf("Number of question entries: %d\n", ntohs(dns_hdr->qst_count));
+	printf("Number of answer entries: %d\n", ntohs(dns_hdr->answ_count));
+	printf("Number of \"Authority\" entries: %d\n", ntohs(dns_hdr->auth_count));
+	printf("Number of \"additional\" entries: %d\n", ntohs(dns_hdr->add_count));
+
+
 }

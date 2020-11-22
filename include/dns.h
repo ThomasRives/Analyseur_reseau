@@ -2,6 +2,7 @@
 #define DNS_H
 
 #include <stdint.h>
+#include <arpa/inet.h>
 
 /* QR */
 #define QR_QUERY 0
@@ -13,14 +14,15 @@
 #define OP_STATUS 2
 #define OP_NOTIFY 4
 #define OP_UPDATE 5
+#define OP_DSO 6
 
-#define AA 1 /* Authoritative Answer */
-#define TC 1 /* Truncated */
-#define RD 1 /* Recursion Desired */
-#define RA 1 /* Recursion Available */
-#define Z 1 /* Zeros */
-#define AD 1 /* Authenticated data */
-#define CD 1 /* Checking Disabled */
+#define AA_ 1 /* Authoritative Answer */
+#define TC_ 1 /* Truncated */
+#define RD_ 1 /* Recursion Desired */
+#define RA_ 1 /* Recursion Available */
+#define Z_ 1 /* Zeros */
+#define AD_ 1 /* Authenticated data */
+#define CD_ 1 /* Checking Disabled */
 
 /* Return Code */
 #define RC_NE 0 /* No error */
@@ -35,7 +37,6 @@
 #define RC_NA 9 /* Not Auth */
 #define RC_NZ 10 /* Not Zone */
 #define RC_BADVERS 16
-#define RC_BADSIG 16
 #define RC_BADKEY 17
 #define RC_BADTIME 18
 #define RC_BADMODE 19
@@ -124,6 +125,16 @@
 #define CL_HS 4 /* Hesiod */
 #define CL_ANY 255 /* QCLASS only */
 
+/* Flags */
+#define QR 0x8000
+#define OPCODE 0x7800
+#define AA 0x0400
+#define TC 0x0200
+#define RD 0x0100
+#define RA 0x0080
+#define Z 0x0070
+#define RCODE 0x000f
+
 
 /**
  * @brief Describe the header of DNS packet.
@@ -158,5 +169,10 @@ struct query {
 	uint16_t classe; /**< Classe of the query */
 };
 
+// struct soa {
+// 	uint8_t ;
+// };
+
+void printf_dns_ctrl(uint16_t id);
 
 #endif //DNS_H
