@@ -1,20 +1,17 @@
 #include "dns.h"
 
-/**
- * Lire certains flags si request et autre si response
- * Check AA si 1 pas de lecture de nom (juste 2 octets)
- */ 
+
 void
-printf_dns_ctrl(uint16_t id)
+printf_dns_ctrl(uint16_t ctrl)
 {
-	id = ntohs(id);
-	if((id & QR) == QR_QUERY)
+	ctrl = ntohs(ctrl);
+	if((ctrl & QR) == QR_QUERY)
 		puts("Type: Query");
 	else
 		puts("Type: Response");
 	
 	printf("Type of request: ");
-	switch(id & OPCODE)
+	switch(ctrl & OPCODE)
 	{
 		case OP_QUERY:
 			puts("Standard request");
@@ -37,17 +34,20 @@ printf_dns_ctrl(uint16_t id)
 		default:
 			puts("Unknown...");
 	}
-	if((id & AA) == AA_)
+	if ((ctrl & QR) != QR_QUERY && (ctrl & AA) == AA_)
 		puts("Authoritative Answer");
-	if((id & TC) == TC_)
+	if((ctrl & TC) == TC_)
 		puts("Troncated message");
-	if((id & RD) == RD_)
+	if((ctrl & RD) == RD_)
 		puts("Ask recursivity");
-	if((id & RA) == RA_)
+	if ((ctrl & QR) != QR_QUERY && (ctrl & RA) == RA_)
 		puts("Recursivity authorized");
-	
+
+	if((ctrl & QR) == QR_QUERY)
+		return;
+
 	printf("RCode: ");
-	switch(id & RCODE)
+	switch(ctrl & RCODE)
 	{
 		case RC_NE:
 			puts("No Error");

@@ -173,6 +173,11 @@ struct query {
 // 	uint8_t ;
 // };
 
-void printf_dns_ctrl(uint16_t id);
+/**
+ * @brief Print the control informations of a DNS packet.
+ * 
+ * @param ctrl: the control bits.
+ */
+void printf_dns_ctrl(uint16_t ctrl);
 
 #endif //DNS_H
