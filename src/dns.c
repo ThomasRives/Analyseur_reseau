@@ -380,17 +380,20 @@ print_dns_ans_data(uint16_t type, const u_char *data, uint16_t data_len, const u
 			ipv4_addr = ntohl(*(uint32_t *)data);
 			printf("\tIPv4 address: ");
 			for(uint i = 0; i < 4; i++)
-				printf("%ui.", (ipv4_addr >> (8* (3 - i))) & 0xff);
-			puts("");
+				printf("%u.", (ipv4_addr >> (8* (3 - i))) & 0xff);
+			printf("\b \n");
 			break;
 		case T_NS:
 			printf("\tName server: ");
 			complete_dns_name(data, data_len, packet);
 			break;
 		case T_CNAME:
-
+			printf("\tCNAME: ");
+			complete_dns_name(data, data_len, packet);
 			break;
 		case T_PTR:
+			printf("\tDomain name: ");
+			complete_dns_name(data, data_len, packet);
 			break;
 		case T_MX:
 			printf("\tPreference: %u\n", ntohs(*(uint16_t *)data));
@@ -406,7 +409,7 @@ print_dns_ans_data(uint16_t type, const u_char *data, uint16_t data_len, const u
 				printf("%c", *(data + i + sizeof(uint8_t)));
 			puts("");
 			break;
-		case T_A6:
+		case T_AAAA:
 			inet_ntop(AF_INET6, (void *)(data), buf_adr, INET6_ADDRSTRLEN);
 			printf("\tIPv6 Address: %s\n", buf_adr);
 			break;
