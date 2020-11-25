@@ -125,6 +125,7 @@
 
 /* Pointer name */
 #define PT_N 0xc000
+#define PT_N2 0xc0
 #define N_DECL 0x3fff
 
 
@@ -177,7 +178,7 @@ struct soa {
  * 
  * @param ctrl: the control bits.
  */
-void printf_dns_ctrl(uint16_t ctrl);
+void print_dns_ctrl(uint16_t ctrl);
 
 /**
  * @brief Print a name in a dns packet.
@@ -212,5 +213,22 @@ int print_dns_answer(const u_char *query, const u_char *packet);
  * @param type: the type to print.
  */
 void print_dns_type(uint16_t type);
+
+/**
+ * @brief Print the class as a DNS class.
+ * 
+ * @param class: the class to print.
+ */
+void print_dns_class(uint16_t class);
+
+/**
+ * @brief Print the DNS data (depends of type).
+ * 
+ * @param type: the type of the answer.
+ * @param data: a pointer to the data to print.
+ * @param data_len: the length of the data.
+ * @param packet: the DNS packet.
+ */
+void print_dns_ans_data(uint16_t type, const u_char *data, uint16_t data_len, const u_char *packet);
 
 #endif //DNS_H

@@ -2,7 +2,7 @@
 
 
 void
-printf_dns_ctrl(uint16_t ctrl)
+print_dns_ctrl(uint16_t ctrl)
 {
 	ctrl = ntohs(ctrl);
 	if((ctrl & QR) == QR_QUERY)
@@ -113,17 +113,22 @@ printf_dns_ctrl(uint16_t ctrl)
 int print_dns_name(const u_char *query, const u_char *packet)
 {
 	uint byte_read = 0;
-	uint16_t is_ptr = *(uint16_t *)query;
+	uint16_t is_ptr = ntohs(*(uint16_t *)query);
 	printf("%x\n", is_ptr);
 	printf("\tName: ");
 	if ((is_ptr & PT_N) == PT_N)
 	{
-		uint16_t shift = (*((uint16_t *)query) & N_DECL);
+		uint16_t shift = (is_ptr & N_DECL);
 		byte_read += 2;
 		shift++;
 		while (packet[shift] != '\0')
 		{
-			printf("%c", packet[shift]);
+			if ((packet[shift] <= 'z' && packet[shift] >= 'a') ||
+				(packet[shift] <= 'Z' && packet[shift] >= 'A'))
+				printf("%c", packet[shift]);
+			else
+				printf(".");
+
 			shift++;
 		}
 		puts("");
@@ -133,8 +138,7 @@ int print_dns_name(const u_char *query, const u_char *packet)
 		byte_read++;
 		while (query[byte_read] != '\0')
 		{
-			if ((query[byte_read] <= 'z' && query[byte_read] >= 'a') ||
-				(query[byte_read] <= 'Z' && query[byte_read] >= 'A'))
+			if (query[byte_read] & 0xf0)
 				printf("%c", query[byte_read]);
 			else
 				printf(".");
@@ -150,6 +154,7 @@ int print_dns_name(const u_char *query, const u_char *packet)
 void
 print_dns_type(uint16_t type)
 {
+	printf("\tType: ");
 	switch(type)
 	{
 		case T_A:
@@ -334,18 +339,11 @@ print_dns_type(uint16_t type)
 	}
 }
 
-int
-print_dns_query(const u_char *query, const u_char *packet)
+void
+print_dns_class(uint16_t class)
 {
-	printf("Query:\n");
-	uint byte_read = print_dns_name(query, packet);
-	printf("\tType: ");
-	print_dns_type(ntohs(*(uint16_t *)(query + byte_read)));
-
-	byte_read += sizeof(uint16_t);
-
 	printf("\tClass: ");
-	switch (ntohs(*(uint16_t *)(query + byte_read)))
+	switch (class)
 	{
 		case CL_RESERVED:
 			puts("Reserved");
@@ -365,7 +363,71 @@ print_dns_query(const u_char *query, const u_char *packet)
 		default:
 			puts("Unknown...");
 	}
+}
+
+int
+print_dns_query(const u_char *query, const u_char *packet)
+{
+	printf("Query:\n");
+	uint byte_read = print_dns_name(query, packet);
+	print_dns_type(ntohs(*(uint16_t *)(query + byte_read)));
+
+	byte_read += sizeof(uint16_t);
+
+	printf("\tClass: ");
+	print_dns_class(ntohs(*(uint16_t *)(query + byte_read)));
+
 	return byte_read + sizeof(uint16_t);
+}
+
+void
+print_dns_ans_data(uint16_t type, const u_char *data, uint16_t data_len, const u_char *packet)
+{
+	uint16_t txt_len;
+	char buf_adr[INET6_ADDRSTRLEN];
+	uint32_t ipv4_addr;
+	switch (type)
+	{
+		case T_A:
+			ipv4_addr = ntohl(*(uint32_t *)data);
+			for(uint i = 0; i < 4; i++)
+				printf("%ui.", (ipv4_addr >> (8* (3 - i))) & 0xff);
+			puts("");
+			break;
+		case T_CNAME:
+			break;
+		case T_PTR:
+			break;
+		case T_MX:
+			printf("\tPreference: %ui\n", ntohs(*(uint16_t *)data));
+			for (uint i = sizeof(uint16_t); i < data_len; i++)
+			{
+				if (data[i] & 0xf0)
+				{
+					printf("%c", data[i]);
+				}
+				else if((data[i] & PT_N2) == PT_N2)
+				{
+					printf(".");
+					print_dns_name(&data[i], packet);
+					break;
+				}
+				else
+					printf(".");
+			}
+			break;
+		case T_TXT:
+			txt_len = ntohs(*(uint16_t *)data);
+			printf("\tTXT length: %i\n", txt_len);
+			for (uint i = 0; i < txt_len; i++)
+				printf("%c", *(data + i + sizeof(uint16_t)));
+			puts("");
+			break;
+		case T_A6:
+			inet_ntop(AF_INET6, (void *)(data), buf_adr, INET6_ADDRSTRLEN);
+			printf("\tIPv6 Address: %s\n", buf_adr);
+			break;
+	}
 }
 
 
@@ -374,22 +436,17 @@ print_dns_answer(const u_char *query, const u_char *packet)
 {
 	printf("Answers:\n");
 	uint byte_read = print_dns_name(query, packet);
-	print_dns_type(ntohs(*(uint16_t *)(query + byte_read)));
+	uint16_t type = ntohs(*(uint16_t *)(query + byte_read));
+	print_dns_type(type);
+	byte_read += sizeof(uint16_t);
+	print_dns_class(ntohs(*(uint16_t *)(query + byte_read)));
 	byte_read += sizeof(uint16_t);
 	printf("\tTTL: %i\n", ntohl(*(uint32_t *)(query + byte_read)));
 	byte_read += sizeof(uint32_t);
 	uint data_len = ntohs(*(uint16_t *)(query + byte_read));
 	printf("\tData length: %i\n", data_len);
 	byte_read += sizeof(uint16_t);
-
-	if(data_len == 16)
-	{
-		char buf_adr[INET6_ADDRSTRLEN];
-		inet_ntop(AF_INET6, (void *)(query + byte_read), buf_adr, INET6_ADDRSTRLEN);
-		printf("\tAAAA Address: %s", buf_adr);
-	}
-	// else
-	// 	printf("A Address: %s\n", inet_ntoa(*(void *)(query + byte_read)));
+	print_dns_ans_data(type, packet + byte_read, data_len, packet);
 	
 	return byte_read + data_len;
 }

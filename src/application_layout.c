@@ -109,7 +109,7 @@ dns_analyze(const u_char *packet, uint length)
 	uint index = 0;
 	struct dnshdr *dns_hdr = (struct dnshdr *)packet;
 	printf("Id: %x\n", ntohs(dns_hdr->id));
-	printf_dns_ctrl(dns_hdr->ctrl);
+	print_dns_ctrl(dns_hdr->ctrl);
 	uint nb_quest = ntohs(dns_hdr->qst_count);
 	uint nb_answ = ntohs(dns_hdr->answ_count);
 	uint nb_auth = ntohs(dns_hdr->auth_count);
