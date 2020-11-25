@@ -26,7 +26,7 @@ obj/test.o: src/test.c
 test:
 	@make clean 1>/dev/null
 	@make 1>/dev/null
-	@valgrind -q ./bin/main -i any -v 1 -o pcap_files/RARP__.pcapng
+	@valgrind -q ./bin/main -i any -v 1 -o pcap_files/dns.cap
 
 .PHONY: clean test
 clean:

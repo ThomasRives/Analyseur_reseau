@@ -2,6 +2,7 @@
 #define DNS_H
 
 #include <stdint.h>
+#include <stdio.h>
 #include <arpa/inet.h>
 
 /* QR */
@@ -80,40 +81,27 @@
 #define T_ATMA 34 /* ATM Address */
 #define T_NAPTR 35 /* Naming Authority Pointer */
 #define T_KX 36 /* Key Exchanger */
-#define T_CERT 37
 #define T_A6 38
 #define T_DNAME 39
-#define T_SINK 40
 #define T_OPT 41
-#define T_APL 42
 #define T_DS 43 /* Delegation Signer */
 #define T_SSHFP 44 /* SSH Key Fingerprint */
-#define T_IPSECKEY 45
 #define T_RRSIG 46
 #define T_NSEC 47 /* Next SECure */
 #define T_DNSKEY 48
 #define T_DHCID 49 /* DHCP id */
 #define T_NSEC3 50
 #define T_NSEC3PARAM 51
-#define T_TLSA 52
 #define T_HIP 55 /* Host Id Protocol */
-#define T_NINFO 56
-#define T_RKEY 57
 #define T_TALINK 58 /* Trust Anchor LINK */
 #define T_CDS 59 /* Child DS */
 #define T_SPF 99 /* Sender Policy Framework */
-#define T_UINFO 100
-#define T_UID 101
-#define T_GID 102
-#define T_UNSPEC 103
-#define T_TKEY 249
 #define T_TSIG 250 /* Transaction Signature */
 #define T_IXFR 251 /* Incremental transfer */
 #define T_AXFR 252 /* A request for a transfer of an entire zone */
 #define T_MAILB 253 /* A request for mailbox-related records */
 #define T_MAILA 254 /* A request for mail agent RRs */
 #define T_ALL 255 /* A request for all records */
-#define T_URI 256
 #define T_CAA 257 /* Certification Authority Authorization */
 #define T_DNSSECTA 32768 /* Trust Authorities */
 #define T_DNSSECLV 32769 /* Lookaside Validation */
@@ -121,7 +109,7 @@
 /* Class */
 #define CL_RESERVED 0
 #define CL_IN 1 /* Internet */
-#define CL_IN 3 /* Chaos */
+#define CL_CH 3 /* Chaos */
 #define CL_HS 4 /* Hesiod */
 #define CL_ANY 255 /* QCLASS only */
 
@@ -134,6 +122,10 @@
 #define RA 0x0080
 #define Z 0x0070
 #define RCODE 0x000f
+
+/* Pointer name */
+#define PT_N 0xc000
+#define N_DECL 0x3fff
 
 
 /**
@@ -169,9 +161,16 @@ struct query {
 	uint16_t classe; /**< Classe of the query */
 };
 
-// struct soa {
-// 	uint8_t ;
-// };
+/**
+ * @brief Describe a SOA
+ */
+struct soa {
+	uint32_t serial; /**< The serial number */
+	uint32_t refresh;
+	uint32_t retry;
+	uint32_t expire;
+	uint32_t min_ttl;
+};
 
 /**
  * @brief Print the control informations of a DNS packet.
@@ -179,5 +178,39 @@ struct query {
  * @param ctrl: the control bits.
  */
 void printf_dns_ctrl(uint16_t ctrl);
+
+/**
+ * @brief Print a name in a dns packet.
+ * 
+ * @param query: the query to read.
+ * @param packet: the packet.
+ * @return length read.
+ */
+int print_dns_name(const u_char *query, const u_char *packet);
+
+/**
+ * @brief Print a query in a dns packet.
+ * 
+ * @param query: the query to read.
+ * @param packet: the packet.
+ * @return lentgh of the query.
+ */
+int print_dns_query(const u_char *query, const u_char *packet);
+
+/**
+ * @brief Print an answer in a dns packet.
+ * 
+ * @param query: the query to read.
+ * @param packet: the packet.
+ * @return the length of the answer.
+ */
+int print_dns_answer(const u_char *query, const u_char *packet);
+
+/**
+ * @brief Print the type as a DNS type.
+ * 
+ * @param type: the type to print.
+ */
+void print_dns_type(uint16_t type);
 
 #endif //DNS_H
