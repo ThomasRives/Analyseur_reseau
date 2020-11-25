@@ -125,7 +125,6 @@
 
 /* Pointer name */
 #define PT_N 0xc000
-#define PT_N2 0xc0
 #define N_DECL 0x3fff
 
 
@@ -181,15 +180,6 @@ struct soa {
 void print_dns_ctrl(uint16_t ctrl);
 
 /**
- * @brief Print a name in a dns packet.
- * 
- * @param query: the query to read.
- * @param packet: the packet.
- * @return length read.
- */
-int print_dns_name(const u_char *query, const u_char *packet);
-
-/**
  * @brief Print a query in a dns packet.
  * 
  * @param query: the query to read.
@@ -220,6 +210,17 @@ void print_dns_type(uint16_t type);
  * @param class: the class to print.
  */
 void print_dns_class(uint16_t class);
+
+/**
+ * @brief Complete a DNS name if it is not complete
+ * 
+ * @param data: the name to complete.
+ * @param name_len: the length of the name (not including the extension).
+ * @param packet: the DNS packet.
+ * 
+ * @result an integer corresponding to the number of byte read (not including extensions)
+ */
+uint complete_dns_name(const u_char *name, uint name_len, const u_char *packet);
 
 /**
  * @brief Print the DNS data (depends of type).

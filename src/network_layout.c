@@ -112,12 +112,9 @@ struct ipv6_f32_parse
 parse_f32_ipv6(uint32_t first32_bits)
 {
 	struct ipv6_f32_parse parsed;
-	uint32_t vers_mask = 0xf0000000;
-	uint32_t traf_class_mask = 0x0ff00000;
-	uint32_t id_mask = 0x000fffff;
-	parsed.version = (first32_bits & vers_mask) >> 28;
-	parsed.tc = (first32_bits & traf_class_mask) >> 20;
-	parsed.id = (first32_bits & id_mask);
+	parsed.version = (first32_bits & VERS_MASK) >> 28;
+	parsed.tc = (first32_bits & TRAF_CLASS_MASK) >> 20;
+	parsed.id = (first32_bits & ID_MASK);
 	return parsed;
 }
 
