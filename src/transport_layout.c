@@ -93,9 +93,8 @@ udp_header_analyze(const u_char *packet, uint length)
 }
 
 void
-icmp_header_analyze(const u_char *packet, uint length)
+icmp_header_analyze(const u_char *packet)
 {
-	(void)length;
 	struct icmphdr *icmp_header = (struct icmphdr *)packet;
 
 	print_icmp_type_code(icmp_header->type, icmp_header->code);
@@ -109,12 +108,6 @@ icmp_header_analyze(const u_char *packet, uint length)
 	ts = *localtime(&time);
 	strftime(buf, sizeof(buf), "%Y %m %d %H:%M:%S %Z", &ts);
 	printf("Timestamps: %s\n", buf);
-
-	// printf("Data: ");
-	// for (uint i = sizeof(struct icmphdr) + sizeof(uint64_t); i < length; 
-	// 	i += sizeof(uint16_t))
-	// 	printf("%x", ntohs(*(uint16_t *)(packet + i)));
-	// puts("");
 }
 
 void

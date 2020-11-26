@@ -47,7 +47,7 @@ void udp_header_analyze(const u_char *packet, uint length);
  * @param packet: the packet himself.
  * @param length: the packet length.
  */
-void icmp_header_analyze(const u_char *packet, uint length);
+void icmp_header_analyze(const u_char *packet);
 
 /**
  * @brief Print the type/code informations for icmp.
