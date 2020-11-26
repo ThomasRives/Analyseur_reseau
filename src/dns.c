@@ -344,7 +344,8 @@ uint
 complete_dns_name(const u_char *name, uint name_len, const u_char *packet)
 {
 	uint byte_r;
-	for(byte_r = 0; byte_r < name_len && name[byte_r] != '\0'; byte_r++)
+	uint next_point;
+	for(byte_r = 0; byte_r < name_len && name[byte_r] != '\0';)
 	{
 		if (name_len - byte_r >= 2)
 		{
@@ -356,15 +357,15 @@ complete_dns_name(const u_char *name, uint name_len, const u_char *packet)
 				return byte_r + sizeof(uint16_t);
 			}
 		}
-		if(byte_r == 0)
-			byte_r++;
 
-		if (name[byte_r] & 0xf0)
-			printf("%c", name[byte_r]);
-		else
-			printf(".");
+		next_point = name[byte_r];
+
+		printf("%.*s", next_point, name + byte_r + sizeof(uint8_t));
+
+		byte_r += sizeof(uint8_t) + next_point;
+		printf(".");
 	}
-	puts("");
+	puts("\b ");
 	return byte_r + 1;
 }
 
