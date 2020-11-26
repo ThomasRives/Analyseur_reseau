@@ -93,14 +93,28 @@ udp_header_analyze(const u_char *packet, uint length)
 }
 
 void
-icmp_header_analyze(const u_char *packet)
+icmp_header_analyze(const u_char *packet, uint length)
 {
+	(void)length;
 	struct icmphdr *icmp_header = (struct icmphdr *)packet;
 
 	print_icmp_type_code(icmp_header->type, icmp_header->code);
 	printf("Checksum: 0x%x\n", ntohs(icmp_header->checksum));
-	printf("Identifier: 0x%x\n", ntohs(icmp_header->un.echo.id));
+	printf("Identifier: 0x%x\n", icmp_header->un.echo.id);
 	printf("Sequence number: %i\n", ntohs(icmp_header->un.echo.sequence));
+
+	char buf[100] = {0};
+	struct tm ts;
+	time_t time = *(uint32_t *)(packet + sizeof(struct icmphdr));
+	ts = *localtime(&time);
+	strftime(buf, sizeof(buf), "%Y %m %d %H:%M:%S %Z", &ts);
+	printf("Timestamps: %s\n", buf);
+
+	// printf("Data: ");
+	// for (uint i = sizeof(struct icmphdr) + sizeof(uint64_t); i < length; 
+	// 	i += sizeof(uint16_t))
+	// 	printf("%x", ntohs(*(uint16_t *)(packet + i)));
+	// puts("");
 }
 
 void

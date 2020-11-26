@@ -6,6 +6,7 @@
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
 #include <netinet/ip_icmp.h>
+#include <time.h>
 #include <netinet/icmp6.h>
 #include "application_layout.h"
 
@@ -44,8 +45,9 @@ void udp_header_analyze(const u_char *packet, uint length);
  * @brief Analyze the ICMP header of the packet.
  * 
  * @param packet: the packet himself.
+ * @param length: the packet length.
  */
-void icmp_header_analyze(const u_char *packet);
+void icmp_header_analyze(const u_char *packet, uint length);
 
 /**
  * @brief Print the type/code informations for icmp.
