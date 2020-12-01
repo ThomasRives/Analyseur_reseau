@@ -125,4 +125,7 @@ dns_analyze(const u_char *packet, uint length)
 		
 	for(uint i = 0; i < nb_answ; i++)
 		index += print_dns_answer(packet + index, packet);
+	
+	for(uint i = 0; i < nb_auth; i++)
+		index += print_aut_answ(packet + index, packet);
 }

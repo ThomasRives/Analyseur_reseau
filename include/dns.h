@@ -191,11 +191,20 @@ int print_dns_query(const u_char *query, const u_char *packet);
 /**
  * @brief Print an answer in a dns packet.
  * 
- * @param query: the query to read.
+ * @param answ: the answ to read.
  * @param packet: the packet.
  * @return the length of the answer.
  */
-int print_dns_answer(const u_char *query, const u_char *packet);
+int print_dns_answer(const u_char *answ, const u_char *packet);
+
+/**
+ * @brief Print an authoritative answer in a dns packet.
+ * 
+ * @param answ: the answ to read.
+ * @param packet: the packet.
+ * @return the length of the authoritative answer.
+ */
+int print_aut_answ(const u_char *answ, const u_char *packet);
 
 /**
  * @brief Print the type as a DNS type.

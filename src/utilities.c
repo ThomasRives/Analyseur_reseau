@@ -19,8 +19,14 @@ err_n_die(int syserr, const char *msg, ...)
 void
 printf_as_str(const u_char *data, uint length)
 {
-	u_char content[length + 1];
-	NULL_CHECK(memcpy(content, data, length));
-	content[length] = '\0';
-	printf("%s", content);
+	printf("%.*s", length, data);
+}
+
+void
+print_with_s(int numb, char* str)
+{
+	if(numb > 1)
+		printf(" (%u %ss)\n", numb, str);
+	else
+		printf(" (%u %s)\n", numb, str);
 }
