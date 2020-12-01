@@ -39,20 +39,20 @@ void print_bootp_htype(uint8_t htype)
 	printf("Hardware type: ");
 	switch (htype)
 	{
-	case HTYPE_ETHERNET:
-		puts("Ethernet (1)");
-		break;
-	case HTYPE_EXP_ETHERNET:
-		puts("Experimental Ethernet (2)");
-		break;
-	case HTYPE_IEEE802:
-		puts("IEEE802 (6)");
-		break;
-	case HTYPE_ARCNET:
-		puts("ARCnet (6)");
-		break;
-	default:
-		puts("Unknown...");
+		case HTYPE_ETHERNET:
+			puts("Ethernet (1)");
+			break;
+		case HTYPE_EXP_ETHERNET:
+			puts("Experimental Ethernet (2)");
+			break;
+		case HTYPE_IEEE802:
+			puts("IEEE802 (6)");
+			break;
+		case HTYPE_ARCNET:
+			puts("ARCnet (7)");
+			break;
+		default:
+			puts("Unknown...");
 	}
 }
 

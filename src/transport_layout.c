@@ -101,8 +101,15 @@ icmp_header_analyze(const u_char *packet)
 
 	print_icmp_type_code(icmp_header->type, icmp_header->code);
 	printf("Checksum: 0x%x\n", ntohs(icmp_header->checksum));
-	printf("Identifier: 0x%x\n", ntohs(icmp_header->un.echo.id));
+	printf("Identifier: 0x%x\n", icmp_header->un.echo.id);
 	printf("Sequence number: %i\n", ntohs(icmp_header->un.echo.sequence));
+
+	char buf[100] = {0};
+	struct tm ts;
+	time_t time = *(uint32_t *)(packet + sizeof(struct icmphdr));
+	ts = *localtime(&time);
+	strftime(buf, sizeof(buf), "%Y %m %d %H:%M:%S %Z", &ts);
+	printf("Timestamps: %s\n", buf);
 }
 
 void
@@ -374,7 +381,7 @@ print_icmp_ext_ech_rep_code(uint8_t code)
 }
 
 void
-icmpv6_header_analyze(const u_char *packet)
+icmpv6_header_analyze(const u_char *packet, uint length)
 {
 	struct icmp6_hdr *icmp6_header = (struct icmp6_hdr *)packet;
 	printf("Type: ");
@@ -395,9 +402,6 @@ icmpv6_header_analyze(const u_char *packet)
 		case ICMP6_PARAM_PROB:
 			puts("Parameter Problem");
 			print_icmpv6_par_prob_code(icmp6_header->icmp6_code);
-			break;
-		case ICMP6_INFOMSG_MASK:
-			puts("Echo Request");
 			break;
 		case ICMP6_ECHO_REPLY:
 			puts("Echo Reply");
@@ -434,6 +438,14 @@ icmpv6_header_analyze(const u_char *packet)
 			puts("Unknown...");
 	}
 	printf("Checksum: 0x%x\n", ntohs(icmp6_header->icmp6_cksum));
+	char buf_adr[INET6_ADDRSTRLEN];
+	inet_ntop(AF_INET6, packet + sizeof(struct icmp6_hdr), 
+		buf_adr, INET6_ADDRSTRLEN);
+	printf("Target address: %s\n", buf_adr);
+	uint bytes_read = sizeof(struct icmp6_hdr) + 16;
+	printf("%x\n", ntohl(*(uint32_t *)packet + bytes_read));
+	(void)length;
+	// print_icmpv6_option(packet + bytes_read, length - bytes_read);
 }
 
 void
@@ -556,8 +568,43 @@ print_icmpv6_rout_rem_code(uint8_t code)
 }
 
 void
-demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
-	uint length)
+print_icmpv6_option(const u_char *packet, uint length)
+{
+	puts("ICMPv6 options:");
+	for(uint i = 0; i < length;)
+	{
+		struct tlv next_tlv = tlv_translate_icmpv6(packet + i);
+		switch (next_tlv.type)
+		{
+			case ND_OPT_SOURCE_LINKADDR:
+				// puts("");
+				break;
+			case ND_OPT_TARGET_LINKADDR:
+				// puts("");
+				break;
+			case ND_OPT_PREFIX_INFORMATION:
+				// puts("");
+				break;
+			case ND_OPT_REDIRECTED_HEADER:
+				// puts("");
+				break;
+			case ND_OPT_MTU:
+				// puts("");
+				break;
+			case ND_OPT_RTR_ADV_INTERVAL:
+				// puts("");
+				break;
+			case ND_OPT_HOME_AGENT_INFO:
+				// puts("");
+				break;
+		}
+		i += next_tlv.length;
+		free(next_tlv.value);
+	}
+}
+
+void
+demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint length)
 {
 	uint16_t port = port_src;
 	printf("Protocole: ");
@@ -598,5 +645,6 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
 				imap_analyze(packet, length);
 				return;
 		}
+		
 	puts("Unknown...");
 }

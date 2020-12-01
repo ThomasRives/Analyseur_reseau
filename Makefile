@@ -36,7 +36,7 @@ obj/test.o: src/test.c
 test:
 	@make clean 1>/dev/null
 	@make 1>/dev/null
-	@valgrind -q ./bin/main -i any -v 1 -o pcap_files/imap.cap
+	@valgrind -q --leak-check=full ./bin/main -i any -v 1 -o pcap_files/dns2.cap
 
 .PHONY: clean test
 clean:

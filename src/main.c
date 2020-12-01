@@ -39,5 +39,6 @@ main(int argc, char *argv[])
 	pcap_loop(read_on, 0, got_packet, (u_char *)&options);
 
 	pcap_close(read_on);
+	free(interface);
 	return 0;
 }

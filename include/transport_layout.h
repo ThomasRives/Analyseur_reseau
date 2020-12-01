@@ -6,8 +6,10 @@
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
 #include <netinet/ip_icmp.h>
+#include <time.h>
 #include <netinet/icmp6.h>
 #include "application_layout.h"
+#include "tlv_analyzer.h"
 
 #define PORT_SMTP 25
 #define PORT_TELNET 23
@@ -46,6 +48,7 @@ void udp_header_analyze(const u_char *packet, uint length);
  * @brief Analyze the ICMP header of the packet.
  * 
  * @param packet: the packet himself.
+ * @param length: the packet length.
  */
 void icmp_header_analyze(const u_char *packet);
 
@@ -111,7 +114,7 @@ void print_icmp_ext_ech_rep_code(uint8_t code);
  * 
  * @param packet: the packet himself.
  */
-void icmpv6_header_analyze(const u_char *packet);
+void icmpv6_header_analyze(const u_char *packet, uint length);
 
 /**
  * @brief Print the icmpv6 code if the type is "Destination Unreachable"
@@ -140,6 +143,13 @@ void print_icmpv6_par_prob_code(uint8_t code);
  * @param code: the code of the icmp packet.
  */
 void print_icmpv6_rout_rem_code(uint8_t code);
+
+/**
+ * @brief Print the icmpv6 options.
+ * 
+ * @param code: the code of the icmp packet.
+ */
+void print_icmpv6_option(const u_char *packet, uint length);
 
 /**
  * @brief Demultiplex the port used.

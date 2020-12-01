@@ -10,6 +10,10 @@
 #include <netinet/ether.h>
 #include "transport_layout.h"
 
+#define VERS_MASK 0xf0000000
+#define TRAF_CLASS_MASK 0x0ff00000
+#define ID_MASK 0x000fffff
+
 /**
  * @brief A structure that contains the parsed first 32 bits
  * of an IPv6 header.

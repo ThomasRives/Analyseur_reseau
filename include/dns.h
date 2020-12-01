@@ -2,6 +2,8 @@
 #define DNS_H
 
 #include <stdint.h>
+#include <stdio.h>
+#include <arpa/inet.h>
 
 /* QR */
 #define QR_QUERY 0
@@ -13,14 +15,15 @@
 #define OP_STATUS 2
 #define OP_NOTIFY 4
 #define OP_UPDATE 5
+#define OP_DSO 6
 
-#define AA 1 /* Authoritative Answer */
-#define TC 1 /* Truncated */
-#define RD 1 /* Recursion Desired */
-#define RA 1 /* Recursion Available */
-#define Z 1 /* Zeros */
-#define AD 1 /* Authenticated data */
-#define CD 1 /* Checking Disabled */
+#define AA_ 1 /* Authoritative Answer */
+#define TC_ 1 /* Truncated */
+#define RD_ 1 /* Recursion Desired */
+#define RA_ 1 /* Recursion Available */
+#define Z_ 1 /* Zeros */
+#define AD_ 1 /* Authenticated data */
+#define CD_ 1 /* Checking Disabled */
 
 /* Return Code */
 #define RC_NE 0 /* No error */
@@ -35,7 +38,6 @@
 #define RC_NA 9 /* Not Auth */
 #define RC_NZ 10 /* Not Zone */
 #define RC_BADVERS 16
-#define RC_BADSIG 16
 #define RC_BADKEY 17
 #define RC_BADTIME 18
 #define RC_BADMODE 19
@@ -79,40 +81,27 @@
 #define T_ATMA 34 /* ATM Address */
 #define T_NAPTR 35 /* Naming Authority Pointer */
 #define T_KX 36 /* Key Exchanger */
-#define T_CERT 37
 #define T_A6 38
 #define T_DNAME 39
-#define T_SINK 40
 #define T_OPT 41
-#define T_APL 42
 #define T_DS 43 /* Delegation Signer */
 #define T_SSHFP 44 /* SSH Key Fingerprint */
-#define T_IPSECKEY 45
 #define T_RRSIG 46
 #define T_NSEC 47 /* Next SECure */
 #define T_DNSKEY 48
 #define T_DHCID 49 /* DHCP id */
 #define T_NSEC3 50
 #define T_NSEC3PARAM 51
-#define T_TLSA 52
 #define T_HIP 55 /* Host Id Protocol */
-#define T_NINFO 56
-#define T_RKEY 57
 #define T_TALINK 58 /* Trust Anchor LINK */
 #define T_CDS 59 /* Child DS */
 #define T_SPF 99 /* Sender Policy Framework */
-#define T_UINFO 100
-#define T_UID 101
-#define T_GID 102
-#define T_UNSPEC 103
-#define T_TKEY 249
 #define T_TSIG 250 /* Transaction Signature */
 #define T_IXFR 251 /* Incremental transfer */
 #define T_AXFR 252 /* A request for a transfer of an entire zone */
 #define T_MAILB 253 /* A request for mailbox-related records */
 #define T_MAILA 254 /* A request for mail agent RRs */
 #define T_ALL 255 /* A request for all records */
-#define T_URI 256
 #define T_CAA 257 /* Certification Authority Authorization */
 #define T_DNSSECTA 32768 /* Trust Authorities */
 #define T_DNSSECLV 32769 /* Lookaside Validation */
@@ -120,9 +109,23 @@
 /* Class */
 #define CL_RESERVED 0
 #define CL_IN 1 /* Internet */
-#define CL_IN 3 /* Chaos */
+#define CL_CH 3 /* Chaos */
 #define CL_HS 4 /* Hesiod */
 #define CL_ANY 255 /* QCLASS only */
+
+/* Flags */
+#define QR 0x8000
+#define OPCODE 0x7800
+#define AA 0x0400
+#define TC 0x0200
+#define RD 0x0100
+#define RA 0x0080
+#define Z 0x0070
+#define RCODE 0x000f
+
+/* Pointer name */
+#define PT_N 0xc000
+#define N_DECL 0x3fff
 
 
 /**
@@ -159,15 +162,83 @@ struct query {
 };
 
 /**
- * @brief Struct of a primal server.
+ * @brief Describe a SOA
  */
 struct soa {
-	uint32_t serial;
+	uint32_t serial; /**< The serial number */
 	uint32_t refresh;
 	uint32_t retry;
 	uint32_t expire;
-	uint32_t validity;
+	uint32_t min_ttl;
 };
 
+/**
+ * @brief Print the control informations of a DNS packet.
+ * 
+ * @param ctrl: the control bits.
+ */
+void print_dns_ctrl(uint16_t ctrl);
+
+/**
+ * @brief Print a query in a dns packet.
+ * 
+ * @param query: the query to read.
+ * @param packet: the packet.
+ * @return lentgh of the query.
+ */
+int print_dns_query(const u_char *query, const u_char *packet);
+
+/**
+ * @brief Print an answer in a dns packet.
+ * 
+ * @param answ: the answ to read.
+ * @param packet: the packet.
+ * @return the length of the answer.
+ */
+int print_dns_answer(const u_char *answ, const u_char *packet);
+
+/**
+ * @brief Print an authoritative answer in a dns packet.
+ * 
+ * @param answ: the answ to read.
+ * @param packet: the packet.
+ * @return the length of the authoritative answer.
+ */
+int print_aut_answ(const u_char *answ, const u_char *packet);
+
+/**
+ * @brief Print the type as a DNS type.
+ * 
+ * @param type: the type to print.
+ */
+void print_dns_type(uint16_t type);
+
+/**
+ * @brief Print the class as a DNS class.
+ * 
+ * @param class: the class to print.
+ */
+void print_dns_class(uint16_t class);
+
+/**
+ * @brief Complete a DNS name if it is not complete
+ * 
+ * @param data: the name to complete.
+ * @param name_len: the length of the name (not including the extension).
+ * @param packet: the DNS packet.
+ * 
+ * @result an integer corresponding to the number of byte read (not including extensions)
+ */
+uint complete_dns_name(const u_char *name, uint name_len, const u_char *packet);
+
+/**
+ * @brief Print the DNS data (depends of type).
+ * 
+ * @param type: the type of the answer.
+ * @param data: a pointer to the data to print.
+ * @param data_len: the length of the data.
+ * @param packet: the DNS packet.
+ */
+void print_dns_ans_data(uint16_t type, const u_char *data, uint16_t data_len, const u_char *packet);
 
 #endif //DNS_H

@@ -33,3 +33,11 @@ printf_as_str(const u_char *data, uint length)
 				break;
 		}
 }
+void
+print_with_s(int numb, char* str)
+{
+	if(numb > 1)
+		printf(" (%u %ss)\n", numb, str);
+	else
+		printf(" (%u %s)\n", numb, str);
+}

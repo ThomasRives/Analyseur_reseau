@@ -29,4 +29,12 @@ noreturn void err_n_die(int syserr, const char *msg, ...);
  */
 void printf_as_str(const u_char *data, uint length);
 
+/**
+ * @brief print a message with or without an "s" depending on the number given.
+ * 
+ * @param numb: the number that will decide if an "s" will be printed.
+ * @param str: the str without an "s".
+ */
+void print_with_s(int numb, char *str);
+
 #endif //UTILITIES_H
