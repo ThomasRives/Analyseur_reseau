@@ -32,8 +32,10 @@ tcp_header_analyze(const u_char *packet, uint length)
 	uint8_t read_header = sizeof(struct tcphdr);
 	uint8_t *tcp_options = (uint8_t *)(packet + read_header);
 	print_tcp_options(read_header, tcp_header->th_off, tcp_options);
-	demult_port(ntohs(tcp_header->th_sport), ntohs(tcp_header->th_dport),
-		packet + tcp_header->th_off * 4, length - tcp_header->th_off * 4);
+	uint length_left = length - tcp_header->th_off * 4;
+	if (length_left > 0)
+		demult_port(ntohs(tcp_header->th_sport), ntohs(tcp_header->th_dport),
+			packet + tcp_header->th_off * 4, length_left);
 }
 
 void
@@ -633,6 +635,14 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint len
 			case PORT_DNS:
 				puts("DNS");
 				dns_analyze(packet, length);
+				return;
+			case PORT_POP:
+				puts("POP3");
+				pop_analyze(packet, length);
+				return;
+			case PORT_IMAP:
+				puts("IMAP");
+				imap_analyze(packet, length);
 				return;
 		}
 		

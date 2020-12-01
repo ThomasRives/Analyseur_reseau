@@ -51,7 +51,7 @@
 #define T_MD 3 /* Mail destination */
 #define T_MF 4 /* Mail forwarder */
 #define T_CNAME 5 /* Canonical name */
-#define T_SOA 6	  /* Start of a zone of authority */
+#define T_SOA 6	/* Start of a zone of authority */
 #define T_MB 7 /* Mailbox domain name */
 #define T_MG 8 /* Mail group member */
 #define T_MR 9 /* Mail rename domain name */

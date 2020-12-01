@@ -67,7 +67,7 @@ telnet_analyze(const u_char *packet, uint length)
 	uint i = 0;
 	if (packet[0] != IAC)
 	{
-		printf("Option data: ");
+		printf("Data: ");
 		for (; i < length && packet[i] != IAC; i++)
 			printf("%c", packet[i]);
 
@@ -128,4 +128,18 @@ dns_analyze(const u_char *packet, uint length)
 	
 	for(uint i = 0; i < nb_auth; i++)
 		index += print_aut_answ(packet + index, packet);
+}
+
+void
+pop_analyze(const u_char *packet, uint length)
+{
+	printf_as_str(packet, length);
+	puts("");
+}
+
+void
+imap_analyze(const u_char *packet, uint length)
+{
+	printf_as_str(packet, length);
+	puts("");
 }

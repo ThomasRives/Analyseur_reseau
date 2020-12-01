@@ -19,9 +19,20 @@ err_n_die(int syserr, const char *msg, ...)
 void
 printf_as_str(const u_char *data, uint length)
 {
-	printf("%.*s", length, data);
+	for (uint i = 0; i < length; i++)
+		switch(data[i])
+		{
+			case '\r':
+				printf("\\r");
+				break;
+			case '\n':
+				printf("\\n\n");
+				break;
+			default:
+				printf("%c", data[i]);
+				break;
+		}
 }
-
 void
 print_with_s(int numb, char* str)
 {
