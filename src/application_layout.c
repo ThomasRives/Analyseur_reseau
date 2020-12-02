@@ -37,26 +37,8 @@ smtp_analyze(const u_char *packet, uint length)
 void
 ftp_analyze(const u_char *packet, uint length)
 {
-	for(uint i = 0; i < length;)
-	{
-		if( i >= length - 3)
-		{
-			printf("%c%c", packet[i], packet[i + 1]);
-			break;
-		}
-
-		if(!is_digit(packet[i]) ||
-			(i + 1 < length && !is_digit(packet[i + 1])) ||
-			(i + 2 < length && !is_digit(packet[i + 2]))
-		)
-		{
-			i += print_until_rn(&packet[i]);
-			continue;
-		}
-
-		printf_ftp_command(&packet[i]);
-		i += print_until_rn(&packet[i]);
-	}
+	printf_as_str(packet, length);
+	puts("");
 }
 
 void

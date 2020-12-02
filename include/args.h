@@ -36,4 +36,11 @@ void parseArgs(int argc, char **argv, Options *options);
  */
 void printHelp(void);
 
+/**
+ * @brief Free all the allocated memory for options.
+ * 
+ * @param options: the options.
+ */
+void free_args(Options options);
+
 #endif //ARGS_H

@@ -29,7 +29,7 @@ main(int argc, char *argv[])
 		NULL_CHECK(read_on = pcap_open_live(interface->name, BUFSIZ,
 											0, 10000, error)
 				  );
-				  
+
 	if (options.filter_exp)
 	{
 		CHECK(pcap_compile(read_on, &filterprog, options.filter_exp, 0, network_mask));
@@ -38,7 +38,11 @@ main(int argc, char *argv[])
 
 	pcap_loop(read_on, 0, got_packet, (u_char *)&options);
 
+	if (options.filter_exp)
+		pcap_freecode(&filterprog);
+		
 	pcap_close(read_on);
 	free(interface);
+	free_args(options);
 	return 0;
 }

@@ -9,7 +9,6 @@
 #include "bootp.h"
 #include "telnet.h"
 #include "tlv_analyzer.h"
-#include "ftp.h"
 #include "dns.h"
 #include "utilities.h"
 

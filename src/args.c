@@ -15,7 +15,7 @@ void parseArgs(int argc, char **argv, Options *options)
 	{
 		{"interface",    required_argument, 0,  'i' },
 		{"offline_file", required_argument, 0,  'o' },
-		{"filter",       no_argument, 0,  'f' },
+		{"filter",       required_argument, 0,  'f' },
 		{"verbose",      required_argument, 0,  'v' },
 		{"usable",   no_argument, 0,  'u' },
 		{"help",         no_argument, 0,  'h' },
@@ -23,18 +23,26 @@ void parseArgs(int argc, char **argv, Options *options)
 	};
 
 	int long_index = 0;
+	size_t len_optarg;
 	while ((opt = getopt_long_only(argc, argv,"",
 				long_options, &long_index )) != -1)
 		switch (opt)
 		{
 			case 'i':
-				options->interface = optarg;
+				len_optarg = strlen(optarg);
+				options->interface = calloc(len_optarg + 1, sizeof(char));
+				memcpy(options->interface, optarg, len_optarg);
 				break;
 			case 'o':
-				options->offline_file = optarg;
+				len_optarg = strlen(optarg);
+				options->offline_file = calloc(len_optarg + 1, sizeof(char));
+				memcpy(options->offline_file, optarg, len_optarg);
 				break;
 			case 'f':
-				options->filter_exp = optarg;
+				fflush(stdout);
+				len_optarg = strlen(optarg);
+				options->filter_exp = calloc(len_optarg + 1, sizeof(char));
+				memcpy(options->filter_exp, optarg, len_optarg);
 				break;
 			case 'v':
 				options->verbose = atoi(optarg);
@@ -71,4 +79,17 @@ printHelp(void) {
 	stderr
 	);
 	exit(ERROR_ARGS);
+}
+
+void
+free_args(Options options)
+{
+	if(options.interface)
+		free(options.interface);
+
+	if(options.offline_file)
+		free(options.offline_file);
+
+	if(options.filter_exp)
+		free(options.filter_exp);
 }
