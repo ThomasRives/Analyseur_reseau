@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include <string.h>
+#include "color.h"
 
 #define NULL_CHECK(op) do{if((op) == NULL) err_n_die(1, #op);}while(0)
 #define CHECK(op) do{if((op) == -1) err_n_die(1, #op);}while(0)
