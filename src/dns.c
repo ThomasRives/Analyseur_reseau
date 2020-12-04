@@ -492,3 +492,29 @@ print_aut_answ(const u_char *answ, const u_char *packet)
 
 	return byte_read;
 }
+
+int
+print_add_rec(const u_char *add_rec, const u_char *packet)
+{
+	printf("Additional RRs:\n");
+	printf("\tName: ");
+	uint byte_read = complete_dns_name(add_rec, UINT16_MAX, packet);
+
+	uint16_t type = ntohs(*(uint16_t *)(add_rec + byte_read));
+	print_dns_type(type);
+	byte_read += sizeof(uint16_t);
+
+	print_dns_class(ntohs(*(uint16_t *)(add_rec + byte_read)));
+	byte_read += sizeof(uint16_t);
+
+	printf("\tTTL: %i\n", ntohl(*(uint32_t *)(add_rec + byte_read)));
+	byte_read += sizeof(uint32_t);
+
+	uint data_len = ntohs(*(uint16_t *)(add_rec + byte_read));
+	byte_read += sizeof(uint16_t);
+
+	printf("\tData length: %i\n", data_len);
+
+	print_dns_ans_data(type, add_rec + byte_read, data_len, packet);
+	return byte_read + data_len;
+}

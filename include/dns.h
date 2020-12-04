@@ -207,6 +207,15 @@ int print_dns_answer(const u_char *answ, const u_char *packet);
 int print_aut_answ(const u_char *answ, const u_char *packet);
 
 /**
+ * @brief Print an additional record in a dns packet.
+ * 
+ * @param add_rec: the additionnal record to read.
+ * @param packet: the packet.
+ * @return the length of the authoritative add_recer.
+ */
+int print_add_rec(const u_char *add_rec, const u_char *packet);
+
+/**
  * @brief Print the type as a DNS type.
  * 
  * @param type: the type to print.
@@ -232,7 +241,7 @@ void print_dns_class(uint16_t class);
 uint complete_dns_name(const u_char *name, uint name_len, const u_char *packet);
 
 /**
- * @brief Print the DNS data (depends of type).
+ * @brief Print a DNS data (depends of type).
  * 
  * @param type: the type of the answer.
  * @param data: a pointer to the data to print.
