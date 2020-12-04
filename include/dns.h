@@ -173,6 +173,14 @@ struct soa {
 };
 
 /**
+ * @brief Print the content of a DNS packet.
+ * 
+ * @param packet: the packet himself.
+ * @param length: the packet length.
+ */
+void dns_analyze(const u_char *packet, uint length);
+
+/**
  * @brief Print the control informations of a DNS packet.
  * 
  * @param ctrl: the control bits.

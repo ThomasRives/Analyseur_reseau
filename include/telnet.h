@@ -1,8 +1,14 @@
 #ifndef TELNET_H
 #define TELNET_H
-#include <stdio.h>
-#include <arpa/telnet.h>
-#include <stdint.h>
+#include "application_layout.h"
+
+/**
+ * @brief Print the content of an telnet packet.
+ * 
+ * @param packet: the packet himself.
+ * @param length: the packet length.
+ */
+void telnet_analyze(const u_char *packet, uint length);
 
 /**
  * @brief Print the given command as a telnet command.
