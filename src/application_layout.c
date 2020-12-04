@@ -102,14 +102,17 @@ dns_analyze(const u_char *packet, uint length)
 	printf("Number of \"additional\" entries: %d\n", nb_add);
 
 	index += sizeof(struct dnshdr);
-	for(uint i = 0; i < nb_quest; i++)
+	uint i;
+	for(i = 0; i < nb_quest; i++)
 		index += print_dns_query(packet + index, packet);
 		
-	for(uint i = 0; i < nb_answ; i++)
+	for(i = 0; i < nb_answ; i++)
 		index += print_dns_answer(packet + index, packet);
 	
-	for(uint i = 0; i < nb_auth; i++)
+	for(i = 0; i < nb_auth; i++)
 		index += print_aut_answ(packet + index, packet);
+	for(i = 0; i < nb_add; i++)
+		index += print_add_rec(packet + index, packet);
 }
 
 void
