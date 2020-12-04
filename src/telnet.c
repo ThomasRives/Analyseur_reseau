@@ -1,6 +1,42 @@
 #include "telnet.h"
 
 void
+telnet_analyze(const u_char *packet, uint length)
+{
+	if(length == 0)
+		return;
+	uint i = 0;
+	if (packet[0] != IAC)
+	{
+		printf("Data: ");
+		for (; i < length && packet[i] != IAC; i++)
+			printf("%c", packet[i]);
+
+		puts("");
+	}
+	i++;
+
+	for (; i < length; i++)
+	{
+		print_telnet_command(packet[i]);
+		if(++i >= length)
+			return;
+		print_telnet_suboption(packet[i]);
+
+		if(++i >= length)
+			return;
+		else if(packet[i] == IAC)
+			continue;
+
+		printf("\tOption data: ");
+		for (; i < length && packet[i] != IAC; i++)
+			printf("%2.x",packet[i]);
+
+		puts("");
+	}
+}
+
+void
 print_telnet_command(uint8_t command)
 {
 	printf("Command: ");

@@ -1,8 +1,6 @@
 #ifndef BOOTP_H
 #define BOOTP_H
-#include <stdio.h>
-#include <netinet/in.h>
-#include <netinet/ether.h>
+#include "application_layout.h"
 
 struct bootphdr
 {
@@ -85,6 +83,13 @@ struct bootphdr
 #define NETBIOS_SCOPE 47
 #define NETBIOS 44
 #define NETBIOS_NODE_TYPE 46
+
+/**
+ * @brief Analyze the bootp header of the packet.
+ * 
+ * @param packet: the packet himself.
+ */
+void bootp_analyze(const u_char *packet);
 
 /**
  * @brief Determinate the vendor length.

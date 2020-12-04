@@ -1,6 +1,36 @@
 #include "dns.h"
 #include "utilities.h"
 
+void
+dns_analyze(const u_char *packet, uint length)
+{
+	(void)length;
+	uint index = 0;
+	struct dnshdr *dns_hdr = (struct dnshdr *)packet;
+	printf("Id: %x\n", ntohs(dns_hdr->id));
+	print_dns_ctrl(dns_hdr->ctrl);
+	uint nb_quest = ntohs(dns_hdr->qst_count);
+	uint nb_answ = ntohs(dns_hdr->answ_count);
+	uint nb_auth = ntohs(dns_hdr->auth_count);
+	uint nb_add = ntohs(dns_hdr->add_count);
+	printf("Number of question entries: %d\n", nb_quest);
+	printf("Number of answer entries: %d\n", nb_answ);
+	printf("Number of \"Authority\" entries: %d\n", nb_auth);
+	printf("Number of \"additional\" entries: %d\n", nb_add);
+
+	index += sizeof(struct dnshdr);
+	uint i;
+	for(i = 0; i < nb_quest; i++)
+		index += print_dns_query(packet + index, packet);
+		
+	for(i = 0; i < nb_answ; i++)
+		index += print_dns_answer(packet + index, packet);
+	
+	for(i = 0; i < nb_auth; i++)
+		index += print_aut_answ(packet + index, packet);
+	for(i = 0; i < nb_add; i++)
+		index += print_add_rec(packet + index, packet);
+}
 
 void
 print_dns_ctrl(uint16_t ctrl)

@@ -6,74 +6,17 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <arpa/telnet.h>
+#include <netinet/ether.h>
 #include "bootp.h"
 #include "telnet.h"
 #include "tlv_analyzer.h"
 #include "dns.h"
 #include "utilities.h"
-
-/**
- * @brief Analyze the bootp header of the packet.
- * 
- * @param packet: the packet himself.
- */
-void bootp_analyze(const u_char *packet);
-
-/**
- * @brief Print the content of an SMTP packet.
- * 
- * @param packet: the packet himself.
- * @param length: the packet length.
- */
-void smtp_analyze(const u_char *packet, uint length);
-
-/**
- * @brief Print the content of an telnet packet.
- * 
- * @param packet: the packet himself.
- * @param length: the packet length.
- */
-void telnet_analyze(const u_char *packet, uint length);
-
-/**
- * @brief Print the content of a ftp packet.
- * 
- * @param packet: the packet himself.
- * @param length: the packet length.
- */
-void ftp_analyze(const u_char *packet, uint length);
-
-/**
- * @brief Print the content of a http packet.
- * 
- * @param packet: the packet himself.
- * @param length: the packet length.
- */
-void http_analyze(const u_char *packet, uint length);
-
-/**
- * @brief Print the content of a DNS packet.
- * 
- * @param packet: the packet himself.
- * @param length: the packet length.
- */
-void dns_analyze(const u_char *packet, uint length);
-
-/**
- * @brief Print the content of a POP packet.
- * 
- * @param packet: the packet himself.
- * @param length: the packet length.
- */
-void pop_analyze(const u_char *packet, uint length);
-
-/**
- * @brief Print the content of a IMAP packet.
- * 
- * @param packet: the packet himself.
- * @param length: the packet length.
- */
-void imap_analyze(const u_char *packet, uint length);
+#include "smtp.h"
+#include "ftp.h"
+#include "http.h"
+#include "imap.h"
+#include "pop.h"
 
 /*
 Port|UDP|TCP|decription
