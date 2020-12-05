@@ -17,6 +17,7 @@
 #include "http.h"
 #include "imap.h"
 #include "pop.h"
+#include "sctp.h"
 
 /*
 Port|UDP|TCP|decription
