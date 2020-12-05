@@ -85,6 +85,21 @@ struct abort_chunk {
 	uint32_t error_causes;
 };
 
+struct shutdown_chunk {
+	uint32_t cumultiv_tsn_ack;
+};
+
+#define SEND_ID 1
+#define SEND_REC_INIT 2
+#define SEND_REC_COOKIE 3
+#define SEND_OUT_RESS 4
+#define ADDR_NOT_RES 5
+#define UNREC_CHUNK 6
+#define MANDAT_PARAM 7
+#define INIT_ACK_ORIGINATOR 8
+#define DATA_NO_USER 9
+#define SEND_REC_COOK_ECH 10
+
 struct auth_chunk {
 	uint16_t shared_key_id;
 	uint16_t hmac_id;
@@ -121,6 +136,15 @@ struct reconf_resp_param {
 	uint32_t resp_seq_nb;
 	uint32_t res;
 };
+
+/* Result code */
+#define S_NTD 0 /* Success - Nothing to do */
+#define S_PERF 1 /* Success - Performed */
+#define DENIED 2
+#define WRONG_SSN 3 /* Error - Wrong SSN */
+#define REQ_IN_PROG 4 /* Error - Request already in progress */
+#define BAD_SEQ_NUMB 5 /* Error - Bad Sequence Number */
+#define IN_PROG 6	   /* In progress */
 
 struct add_out_req_param {
 	uint32_t req_seq_nb;
