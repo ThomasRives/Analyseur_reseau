@@ -22,6 +22,7 @@
 #define PORT_DNS 53
 #define PORT_POP 110
 #define PORT_IMAP 143
+#define PORT_LDAP 389
 
 /**
  * @brief Demultiplex the port used.
