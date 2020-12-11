@@ -14,7 +14,7 @@
 #define SACK 3	/* Selective acknowledgement */
 #define HEARTBEAT 4	/* Heartbeat request */
 #define HEARTBEAT_ACK 5	/* Heartbeat acknowledgement */
-#define ABORT 6	/* Abort */
+#define SCTP_ABORT 6	/* Abort */
 #define SHUTDOWN 7	/* Shutdown */
 #define SHUTDOWN_ACK 8	/* Shutdown acknowledgement */
 #define ERROR 9	/* Operation error */
@@ -148,7 +148,6 @@ struct reconf_resp_param {
 
 struct add_out_req_param {
 	uint32_t req_seq_nb;
-	uint16_t req_seq_nb;
 	uint16_t nb_new_stream;
 	uint16_t reserved;
 };
@@ -168,7 +167,7 @@ struct data_chunk {
 	uint8_t *data;
 };
 
-struct forward_tsn_chunk {
+struct forward_tsn_chunk_mod {
 	uint32_t new_cum_tsn;
 	/* Streams ids */
 };
