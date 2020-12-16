@@ -17,7 +17,14 @@ err_n_die(int syserr, const char *msg, ...)
 }
 
 void
-printf_as_str(const u_char *data, uint length)
+print_hex(const u_char *data, uint length)
+{
+	for(uint i = 0; i < length; i++)
+		printf("%x", *(data + i);
+}
+
+void
+print_as_str(const u_char *data, uint length)
 {
 	for (uint i = 0; i < length; i++)
 		switch(data[i])

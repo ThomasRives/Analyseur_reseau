@@ -45,20 +45,20 @@ struct sctp_hdr {
 /**
  * @brief This structure represent the header of an SCTP chunck.
  */
-struct chunck_hdr {
+struct chunk_hdr {
 	uint8_t type;		/**< Type of the chunck */
 	uint8_t flags;		/**< flags of the chunck */
 	uint16_t length;	/**< length of the chunck */
 };
 
-struct data_chunck {
+struct data_chunk {
 	uint32_t tsn;
 	uint16_t stream_id;
 	uint16_t stream_seq_nb;
 	uint32_t payload_prot_id;
 };
 
-struct init_chunck {
+struct init_chunk {
 	uint32_t init_tag;
 	uint32_t adv_rec_win;
 	uint16_t nb_outbound_streams;
@@ -66,13 +66,14 @@ struct init_chunck {
 	uint32_t initial_TSN;
 };
 
-struct init_chunck_param {
+struct init_chunk_param {
 	uint16_t type;
 	uint16_t length;
 };
 
 #define PARAM_IPV4 5
 #define PARAM_IPV6 6
+#define PARAM_COOKIE 7
 #define PARAM_LIFE_SPAN 9
 #define PARAM_HOSTNAME 11
 #define PARAM_SUP_ADDR 12
@@ -224,20 +225,41 @@ void sctp_read_chunks(const u_char *packet, uint length);
  * @param ch_hdr: the header of the chunck.
  * @param packet: : the packet himself (beggin at the first chunk).
  */
-void print_sctp_chunk(struct chunck_hdr ch_hdr, const u_char *packet);
+void print_sctp_chunk(struct chunk_hdr ch_hdr, const u_char *packet);
 
 /**
  * @brief Print the content of a data chunk.
  * 
  * @param packet: the packet himself (beggin at the chunk).
  */
-void print_sctp_chunck_data(const u_char *packet);
+void print_sctp_chunk_data(const u_char *packet);
 
 /**
- * @brief Print the content of a data chunk.
+ * @brief Print the content of an initialisation chunk.
  * 
  * @param packet: the packet himself (beggin at the chunk).
  */
-void print_sctp_chunck_init(const u_char *packet);
+void print_sctp_chunk_init(const u_char *packet);
+
+/**
+ * @brief Print the content of a initialisation ACK chunk.
+ * 
+ * @param packet: the packet himself (beggin at the chunk).
+ */
+void print_sctp_chunk_init_ack(const u_char *packet);
+
+/**
+ * @brief Print the content of a SACK chunk.
+ * 
+ * @param packet: the packet himself (beggin at the chunk).
+ */
+void print_sctp_chunk_sack(const u_char *packet);
+
+/**
+ * @brief Print the content of a heartbeat chunk.
+ * 
+ * @param packet: the packet himself (beggin at the chunk).
+ */
+void print_sctp_chunk_heartbeat(const u_char *packet);
 
 #endif //SCTP_H

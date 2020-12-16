@@ -23,12 +23,20 @@
 noreturn void err_n_die(int syserr, const char *msg, ...);
 
 /**
+ * @brief Print the content in hexa.
+ * 
+ * @param data: the data to print.
+ * @param length: the length of the data.
+ */
+void print_hex(const u_char *data, uint length);
+
+/**
  * @brief print the datas as a string.
  * 
  * @param data: the data to print.
  * @param length: the length of the data to print.
  */
-void printf_as_str(const u_char *data, uint length);
+void print_as_str(const u_char *data, uint length);
 
 /**
  * @brief print a message with or without an "s" depending on the number given.
