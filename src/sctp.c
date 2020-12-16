@@ -38,71 +38,88 @@ print_sctp_chunk(struct chunk_hdr ch_hdr, const u_char *packet)
 	switch(ch_hdr.type)
 	{
 		case DATA:
-			printf("payload data (%u)\n", ch_hdr.type);
+			puts("payload data (0)");
 			print_sctp_chunk_data(packet);
 			break;
 		case INIT:
-			printf("initialisation (%u)\n", ch_hdr.type);
+			puts("initialisation (1)");
 			print_sctp_chunk_init(packet);
 			break;
 		case INIT_ACK:
-			printf("Initialization ACK (%u)\n", ch_hdr.type);
+			puts("Initialization ACK (2)");
 			print_sctp_chunk_init_ack(packet);
 			break;
 		case SACK:
-			printf("Heartbeat chunk (%u)\n", ch_hdr.type);
-			print_sctp_chunk_heartbeat(packet);
+			puts("Heartbeat chunk (3)");
+			print_sctp_chunk_sack(packet);
 			break;
 		case HEARTBEAT:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Heartbeat (4)");
+			print_sctp_chunk_heartbeat(packet);
 			break;
 		case HEARTBEAT_ACK:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Heartbeat ack (5)");
+			print_sctp_chunk_ack_heartbeat(packet);
 			break;
 		case SCTP_ABORT:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Abort (6)");
+			if (ch_hdr.flags & FLAG_T)
+				puts("\t\tSender sent Verification Tag");
+			printf("\t\tLength: %u\n", ch_hdr.length);
+			printf("\t\tError cause(s): %x\n", *(uint32_t *)packet);
 			break;
 		case SHUTDOWN:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Shutdown (7)");
+			printf("\t\tLength: %u\n", ch_hdr.length);
+			printf("\t\tLast TSN received: %x", *(uint32_t *)packet);
 			break;
 		case SHUTDOWN_ACK:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Shutdown ACK (8)");
+			printf("\t\tLength: %u\n", ch_hdr.length);
 			break;
-		case ERROR:
-			printf(" (%u)\n", ch_hdr.type);
+		case CHUNK_ERROR:
+			puts(" (9)");
+			printf("\t\tLength: %u\n", ch_hdr.length);
+			//TODO
 			break;
 		case COOKIE_ECHO:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Cookie echo (10)");
+			printf("\t\tLength: %u\n", ch_hdr.length);
+			print_as_str(packet, ch_hdr.length - sizeof(uint32_t));
 			break;
 		case COOKIE_ACK:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Cookie ACK (11)");
+			printf("\t\tLength: %u\n", ch_hdr.length);
 			break;
 		case SHUTDOWN_COMPLETE:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Shutdown complete (14)");
+			if(ch_hdr.flags & FLAG_T)
+				puts("\t\tSender didn't have a TCB");
+			printf("\t\tLength: %u\n", ch_hdr.length);
 			break;
 		case AUTH:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Authentification chunk (15)");
 			break;
 		case I_DATA:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Interleaving data (64)");
 			break;
 		case ASCONF_ACK:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("address reconfiguration ACK (128)");
 			break;
 		case RE_CONFIG:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Reconfiguration  (130)");
 			break;
 		case PAD:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Padding (132)");
 			break;
 		case FORWARD_TSN:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Forward TSN (192)");
 			break;
 		case ASCONF:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Address reconfiguration (193)");
 			break;
 		case I_FORWARD_TSN:
-			printf(" (%u)\n", ch_hdr.type);
+			puts("Forward TSN with support for interleaving (194)");
 			break;
 		default:
 			puts("Unknown type of chunk...");
@@ -159,11 +176,13 @@ print_sctp_chunk_init(const u_char *packet)
 	{
 		param = (struct init_chunk_param *)(packet + len);
 		printf("\tParam n° %u\n", param_nb);
+		printf("\t\tLength: %u\n", param->length);
 		printf("\t\tType: ");
 		switch(param->type)
 		{
 			case PARAM_IPV4:
 				printf("List all IPv4 addresses (%u):\n", param->type);
+				printf("\t\tLength: %u\n", param->length);
 				for (uint i = 0; i < param->length; i += sizeof(struct in_addr))
 				{
 					printf("\t\t%s\n", inet_ntoa(*(struct in_addr *)(param_payload + i)));
@@ -180,7 +199,7 @@ print_sctp_chunk_init(const u_char *packet)
 				}
 				break;
 			case PARAM_COOKIE:
-				puts("Cookie sent");
+				puts("Cookie sent (%u)\n");
 				print_hex(param_payload,param->length);
 				break;
 			case PARAM_LIFE_SPAN:
@@ -262,10 +281,23 @@ print_sctp_chunk_heartbeat(const u_char *packet)
 {
 	struct chunk_hdr *ch_hdr = (struct chunk_hdr *)packet;
 	printf("\tLength: %u\n", ch_hdr->length);
-	struct heartbeat_chunk *hb_ch;
-	for (uint off = sizeof(struct chunk_hdr); off < ch_hdr->length;)
-	{
-		hb_ch = (struct heartbeat_chunk *)(packet + off);
-		
-	}
+	struct heartbeat_chunk *hb_ch = (struct heartbeat_chunk *)
+		(packet + sizeof(struct chunk_hdr));
+	puts("\tParameter type: heartbeat info (1)");
+	printf("\tLength: %u\n", hb_ch->length);
+	puts("\tHeartbeat info:");
+	print_hex(hb_ch->info, hb_ch->length);
+}
+
+void
+print_sctp_chunk_ack_heartbeat(const u_char *packet)
+{
+	struct chunk_hdr *ch_hdr = (struct chunk_hdr *)packet;
+	printf("\tLength: %u\n", ch_hdr->length);
+	struct heartbeat_chunk_ack *hb_ch = (struct heartbeat_chunk_ack *)
+		(packet + sizeof(struct chunk_hdr));
+	puts("\tParameter type: heartbeat ack (1)");
+	printf("\tLength: %u\n", hb_ch->length);
+	puts("\tHeartbeat info:");
+	print_hex(hb_ch->info, hb_ch->length);
 }
