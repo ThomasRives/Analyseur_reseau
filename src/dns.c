@@ -457,6 +457,9 @@ print_dns_class(uint16_t class)
 		case CL_IN:
 			puts("Internet");
 			break;
+		case CL_CSNET:
+			puts("Csnet");
+			break;
 		case CL_CH:
 			puts("Chaos");
 			break;

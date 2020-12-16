@@ -13,6 +13,7 @@
 #include "ipv6.h"
 #include "arp.h"
 #include "rarp.h"
+#include "sctp.h"
 
 #define VERS_MASK 0xf0000000
 #define TRAF_CLASS_MASK 0x0ff00000

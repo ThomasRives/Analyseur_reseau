@@ -36,6 +36,11 @@ ipv4_header_analyze(const u_char *packet, uint length)
 		case IPPROTO_IPV6:
 			puts("IPv6");
 			break;
+		case IPPROTO_SCTP:
+			puts("SCTP");
+			sctp_analayze(packet + ip_header->ihl * 4,
+				length - ip_header->ihl * 4);
+			break;
 		default:
 			puts("Not supported");
 	}

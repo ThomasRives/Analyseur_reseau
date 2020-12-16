@@ -109,6 +109,7 @@
 /* Class */
 #define CL_RESERVED 0
 #define CL_IN 1 /* Internet */
+#define CL_CSNET 2 /* Csnet */
 #define CL_CH 3 /* Chaos */
 #define CL_HS 4 /* Hesiod */
 #define CL_ANY 255 /* QCLASS only */

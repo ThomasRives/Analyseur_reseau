@@ -90,7 +90,6 @@ struct sack_chunk {
 struct heartbeat_chunk {
 	uint16_t param_type;
 	uint16_t length;
-	char *info;
 };
 
 struct heartbeat_chunk_ack {
@@ -129,10 +128,10 @@ void sctp_read_chunks(const u_char *packet, uint length);
 /**
  * @brief Print the content of a sctp chunk.
  * 
- * @param ch_hdr: the header of the chunck.
  * @param packet: : the packet himself (beggin at the first chunk).
+ * @return the size of the read chunk.
  */
-void print_sctp_chunk(struct chunk_hdr ch_hdr, const u_char *packet);
+uint print_sctp_chunk(const u_char *packet);
 
 /**
  * @brief Print the content of a data chunk.
