@@ -51,12 +51,24 @@ struct chunck_hdr {
 	uint16_t length;	/**< length of the chunck */
 };
 
+struct data_chunck {
+	uint32_t tsn;
+	uint16_t stream_id;
+	uint16_t stream_seq_nb;
+	uint32_t payload_prot_id;
+};
+
 struct init_chunck {
 	uint32_t init_tag;
 	uint32_t adv_rec_win;
 	uint16_t nb_outbound_streams;
 	uint16_t nb_inbound_streams;
 	uint32_t initial_TSN;
+};
+
+struct init_chunck_param {
+	uint16_t type;
+	uint16_t length;
 };
 
 #define PARAM_IPV4 5
@@ -197,5 +209,35 @@ struct stream_res_msg_id {
  * @param length: the length of the packet.
  */
 void sctp_analayze(const u_char *packet, uint length);
+
+/**
+ * @brief Read the chunks of an sctp packet
+ * 
+ * @param packet: the packet himself (beggin at the first chunk).
+ * @param length: the length of the packet.
+ */
+void sctp_read_chunks(const u_char *packet, uint length);
+
+/**
+ * @brief Print the content of a sctp chunk.
+ * 
+ * @param ch_hdr: the header of the chunck.
+ * @param packet: : the packet himself (beggin at the first chunk).
+ */
+void print_sctp_chunk(struct chunck_hdr ch_hdr, const u_char *packet);
+
+/**
+ * @brief Print the content of a data chunk.
+ * 
+ * @param packet: the packet himself (beggin at the chunk).
+ */
+void print_sctp_chunck_data(const u_char *packet);
+
+/**
+ * @brief Print the content of a data chunk.
+ * 
+ * @param packet: the packet himself (beggin at the chunk).
+ */
+void print_sctp_chunck_init(const u_char *packet);
 
 #endif //SCTP_H

@@ -67,14 +67,14 @@ arp_header_analyze(const u_char *packet)
 		default:
 			puts("Unknown...");
 	}
-	print_arp_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_sha, 1);
-	print_arp_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_spa, 1);
-	print_arp_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_tha, 0);
-	print_arp_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_tpa, 0);
+	arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_sha, 1);
+	arp_print_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_spa, 1);
+	arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_tha, 0);
+	arp_print_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_tpa, 0);
 }
 
 void 
-print_arp_hard_addr(unsigned int hlen, uint8_t *beg_addr, short sender)
+arp_print_hard_addr(unsigned int hlen, uint8_t *beg_addr, short sender)
 {
 	if(sender)
 		printf("Sender hardware address: ");
@@ -89,7 +89,7 @@ print_arp_hard_addr(unsigned int hlen, uint8_t *beg_addr, short sender)
 
 
 void
-print_arp_pro_addr(unsigned int hlen, uint8_t *beg_addr, short sender)
+arp_print_pro_addr(unsigned int hlen, uint8_t *beg_addr, short sender)
 {
 	if(sender)
 		printf("Sender protocol address: ");

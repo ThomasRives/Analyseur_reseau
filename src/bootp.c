@@ -8,9 +8,9 @@ bootp_analyze(const u_char *packet)
 	u_char *vend = malloc(options_size * sizeof(u_char));
 	memcpy(vend, packet + sizeof(struct bootphdr), options_size);
 	printf("OPT LENGTH: %i\n", options_size);
-	print_bootp_op(btphdr->op);
-	print_bootp_htype(btphdr->htype);
-	print_bootp_hlen(btphdr->hlen);
+	bootp_print_op(btphdr->op);
+	bootp_print_htype(btphdr->htype);
+	bootp_print_hlen(btphdr->hlen);
 	printf("Hop count: %u\n", btphdr->hops);
 	printf("Transaction ID: 0x%x\n", ntohl(btphdr->xid));
 	printf("Seconds elapsed: %u\n", ntohs(btphdr->secs));
@@ -18,12 +18,12 @@ bootp_analyze(const u_char *packet)
 	printf("Your IP address: %s\n", inet_ntoa(btphdr->yiaddr));
 	printf("Server IP address: %s\n", inet_ntoa(btphdr->siaddr));
 	printf("Gateway IP address: %s\n", inet_ntoa(btphdr->giaddr));
-	print_bootp_chaddr(btphdr->chaddr, btphdr->hlen);
+	bootp_print_chaddr(btphdr->chaddr, btphdr->hlen);
 	printf("Server name: ");
-	print_bootp_str(btphdr->sname, sizeof(btphdr->sname));
+	bootp_print_str(btphdr->sname, sizeof(btphdr->sname));
 	printf("File name: ");
-	print_bootp_str(btphdr->file, sizeof(btphdr->file));
-	print_bootp_vendor(vend);
+	bootp_print_str(btphdr->file, sizeof(btphdr->file));
+	bootp_print_vendor(vend);
 	free(vend);
 }
 
@@ -41,7 +41,7 @@ uint bootp_option_length(const u_char *vend)
 	return opt_size + size_cook + 1; //+1: do not forget the end !
 }
 
-void print_bootp_op(uint8_t op)
+void bootp_print_op(uint8_t op)
 {
 	printf("Operation: ");
 	switch (op)
@@ -57,7 +57,7 @@ void print_bootp_op(uint8_t op)
 	}
 }
 
-void print_bootp_htype(uint8_t htype)
+void bootp_print_htype(uint8_t htype)
 {
 	printf("Hardware type: ");
 	switch (htype)
@@ -79,7 +79,7 @@ void print_bootp_htype(uint8_t htype)
 	}
 }
 
-void print_bootp_hlen(uint8_t hlen)
+void bootp_print_hlen(uint8_t hlen)
 {
 	printf("Hardware address length: %u", hlen);
 	if (hlen == 6)
@@ -88,7 +88,7 @@ void print_bootp_hlen(uint8_t hlen)
 		puts("");
 }
 
-void print_bootp_chaddr(u_char *chaddr, uint8_t hlen)
+void bootp_print_chaddr(u_char *chaddr, uint8_t hlen)
 {
 	(void)chaddr;
 	(void)hlen;
@@ -104,7 +104,7 @@ void print_bootp_chaddr(u_char *chaddr, uint8_t hlen)
 	}
 }
 
-void print_bootp_str(u_char *str, uint length)
+void bootp_print_str(u_char *str, uint length)
 {
 	uint i;
 	for (i = 0; *str != '\0' && i < length; i++, str++)
@@ -115,7 +115,7 @@ void print_bootp_str(u_char *str, uint length)
 	puts("");
 }
 
-void print_bootp_vendor(u_char *vend)
+void bootp_print_vendor(u_char *vend)
 {
 	if (ntohl(*(uint32_t *)vend) != MAGIC_COOKIE)
 		return;
@@ -151,11 +151,11 @@ void print_bootp_vendor(u_char *vend)
 				break;
 			case OPT_TIME_SERVER:
 				puts("Time server:");
-				print_bootp_opt_lip(next_opt.value, next_opt.length);
+				bootp_print_opt_lip(next_opt.value, next_opt.length);
 				break;
 			case OPT_DOMAIN_SERVER:
 				puts("List of Domain Name System:");
-				print_bootp_opt_lip(next_opt.value, next_opt.length);
+				bootp_print_opt_lip(next_opt.value, next_opt.length);
 				break;
 			case OPT_HOSTNAME:
 				printf("Hostname: ");
@@ -198,14 +198,14 @@ void print_bootp_vendor(u_char *vend)
 				puts("s");
 				break;
 			case OPT_DHCP_TYPE:
-				print_bootp_dhcp_type(*(uint8_t *)next_opt.value);
+				bootp_print_dhcp_type(*(uint8_t *)next_opt.value);
 				break;
 			case OPT_SERV_ID:
 				printf("Server ID: %s\n",
 					inet_ntoa(*(struct in_addr *)next_opt.value));
 				break;
 			case OPT_PARAM_REQ_LIST:
-				print_bootp_par_list(next_opt.length, next_opt.value);
+				bootp_print_par_list(next_opt.length, next_opt.value);
 				break;
 			case OPT_MAX_MSG_SIZE:
 				printf("DHCP Max message size: ");
@@ -246,14 +246,14 @@ void print_bootp_vendor(u_char *vend)
 	}
 }
 
-void print_bootp_opt_lip(u_char *value, uint length)
+void bootp_print_opt_lip(u_char *value, uint length)
 {
 	for (uint i = 0; i < length; i += sizeof(struct in_addr), value += sizeof(struct in_addr))
 		printf("\t%s\n",
 			   inet_ntoa(*(struct in_addr *)value));
 }
 
-void print_bootp_dhcp_type(uint type)
+void bootp_print_dhcp_type(uint type)
 {
 	printf("DHCP message type: ");
 	switch (type)
@@ -284,7 +284,7 @@ void print_bootp_dhcp_type(uint type)
 	}
 }
 
-void print_bootp_par_list(uint length, u_char *value)
+void bootp_print_par_list(uint length, u_char *value)
 {
 	printf("Parameters Request list:\n\t\t");
 	for (uint i = 0; i < length; i++)
