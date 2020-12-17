@@ -2,6 +2,8 @@
 #define HTTP_H
 #include "application_layout.h"
 
+#define PORT_HTTP 80
+
 /**
  * @brief Print the content of a http packet.
  * 

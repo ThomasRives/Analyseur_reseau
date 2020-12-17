@@ -2,6 +2,8 @@
 #define POP_H
 #include "application_layout.h"
 
+#define PORT_POP 110
+
 /**
  * @brief Print the content of a POP packet.
  * 

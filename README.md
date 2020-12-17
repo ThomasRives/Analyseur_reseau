@@ -22,11 +22,8 @@ Notice that the `-o` is optional. If you launch the program with invalid argumen
 
 ## Things to not forget
 
-DHCP: magic-cookie `0x6382 5363`
-
 ## Ideas
 
-When 0.0.0.0 print unknown ?
 
 ## Contributors
 - Thomas Rives

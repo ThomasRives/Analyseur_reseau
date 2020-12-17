@@ -2,6 +2,8 @@
 #define SMTP_H
 #include "application_layout.h"
 
+#define PORT_SMTP 25
+
 /**
  * @brief Print the content of an SMTP packet.
  * 

@@ -2,6 +2,8 @@
 #define TELNET_H
 #include "application_layout.h"
 
+#define PORT_TELNET 23
+
 /**
  * @brief Print the content of an telnet packet.
  * 

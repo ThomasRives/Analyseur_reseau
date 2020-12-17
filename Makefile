@@ -24,7 +24,7 @@ $(foreach lib, $(LIBS), $(shell $(CC) -o $(OBJDIR)/$(lib).o -c $(lib)/$(lib).c $
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	mkdir -p $(BINDIR)
 	$(CC) -o $@ $^ $(CFLAGS) $(LDLIBS)
-	@echo "Linking complete!"
+	@echo "\033[0;32m""Linking complete!""\033[0m"
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	mkdir -p $(OBJDIR)
 	$(CC) -o $@ -c $< $(CFLAGS) -I$(INCLUDE_PATH)
@@ -36,7 +36,7 @@ obj/test.o: src/test.c
 test:
 	@make clean 1>/dev/null
 	@make 1>/dev/null
-	@valgrind -q --leak-check=full ./bin/main -i any -v 1 -o pcap_files/TCP.pcapng
+	@valgrind -q --leak-check=full ./bin/main -i any -v 1 -o pcap_files/IPV6.pcapng
 
 .PHONY: clean test
 clean:

@@ -2,6 +2,9 @@
 #define SCTP_H
 #include "application_layout.h"
 
+#define PORT_SCTP 443
+
+
 #define FLAG_I 0x08 /* SACK chunk should be sent back without delay */
 #define FLAG_U 0x04 /* unordered chunk */
 #define FLAG_B 0x02 /* beginning fragment */

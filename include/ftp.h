@@ -3,6 +3,8 @@
 
 #include "application_layout.h"
 
+#define PORT_FTP 21
+
 /**
  * @brief Print the content of a ftp packet.
  * 

@@ -15,15 +15,6 @@
 #include "icmp.h"
 #include "icmpv6.h"
 
-#define PORT_SMTP 25
-#define PORT_TELNET 23
-#define PORT_FTP 21
-#define PORT_HTTP 80
-#define PORT_DNS 53
-#define PORT_POP 110
-#define PORT_IMAP 143
-#define PORT_SCTP 443
-
 /**
  * @brief Demultiplex the port used.
  * 

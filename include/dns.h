@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <arpa/inet.h>
 
+#define PORT_DNS 53
+
 /* QR */
 #define QR_QUERY 0
 #define QR_REP 1

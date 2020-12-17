@@ -2,6 +2,8 @@
 #define IMAP_H
 #include "application_layout.h"
 
+#define PORT_IMAP 143
+
 /**
  * @brief Print the content of a IMAP packet.
  * 
