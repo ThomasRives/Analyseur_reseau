@@ -10,6 +10,14 @@
 void icmpv6_header_analyze(const u_char *packet, uint length);
 
 /**
+ * @brief Print the type (and the code) of the ICMPv6 packet.
+ * 
+ * @param type: the type of the packet.
+ * @param code: the code associated to the type.
+ */
+void print_icmpv6_type_code(uint8_t type, uint8_t code);
+
+/**
  * @brief Print the icmpv6 code if the type is "Destination Unreachable"
  * 
  * @param code: the code of the icmp packet.

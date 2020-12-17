@@ -4,24 +4,40 @@ void
 icmpv6_header_analyze(const u_char *packet, uint length)
 {
 	struct icmp6_hdr *icmp6_header = (struct icmp6_hdr *)packet;
+	print_icmpv6_type_code(icmp6_header->icmp6_type, icmp6_header->icmp6_code);
+
+	printf("Checksum: 0x%x\n", ntohs(icmp6_header->icmp6_cksum));
+	char buf_adr[INET6_ADDRSTRLEN];
+	inet_ntop(AF_INET6, packet + sizeof(struct icmp6_hdr), 
+		buf_adr, INET6_ADDRSTRLEN);
+	printf("Target address: %s\n", buf_adr);
+	uint bytes_read = sizeof(struct icmp6_hdr) + 16;
+	printf("%x\n", ntohl(*(uint32_t *)packet + bytes_read));
+	(void)length;
+	// print_icmpv6_option(packet + bytes_read, length - bytes_read);
+}
+
+void
+print_icmpv6_type_code(uint8_t type, uint8_t code)
+{
 	printf("Type: ");
-	switch(icmp6_header->icmp6_type)
+	switch(type)
 	{
 		case ICMP6_DST_UNREACH:
 			puts("Destination Unreachable");
-			print_icmp6_dest_unreach_code(icmp6_header->icmp6_code);
+			print_icmp6_dest_unreach_code(code);
 			break;
 		case ICMP6_PACKET_TOO_BIG:
 			puts("Packet Too Big");
-			printf("Code: %i\n", icmp6_header->icmp6_code);
+			printf("Code: %i\n", code);
 			break;
 		case ICMP6_TIME_EXCEEDED:
 			puts("Time Exceeded");
-			print_icmp6_time_exc_code(icmp6_header->icmp6_code);
+			print_icmp6_time_exc_code(code);
 			break;
 		case ICMP6_PARAM_PROB:
 			puts("Parameter Problem");
-			print_icmpv6_par_prob_code(icmp6_header->icmp6_code);
+			print_icmpv6_par_prob_code(code);
 			break;
 		case ICMP6_ECHO_REPLY:
 			puts("Echo Reply");
@@ -52,20 +68,11 @@ icmpv6_header_analyze(const u_char *packet, uint length)
 			break;
 		case ICMP6_ROUTER_RENUMBERING:
 			puts("Router Renumbering");
-			print_icmpv6_rout_rem_code(icmp6_header->icmp6_code);
+			print_icmpv6_rout_rem_code(code);
 			break;
 		default:
 			puts("Unknown...");
 	}
-	printf("Checksum: 0x%x\n", ntohs(icmp6_header->icmp6_cksum));
-	char buf_adr[INET6_ADDRSTRLEN];
-	inet_ntop(AF_INET6, packet + sizeof(struct icmp6_hdr), 
-		buf_adr, INET6_ADDRSTRLEN);
-	printf("Target address: %s\n", buf_adr);
-	uint bytes_read = sizeof(struct icmp6_hdr) + 16;
-	printf("%x\n", ntohl(*(uint32_t *)packet + bytes_read));
-	(void)length;
-	// print_icmpv6_option(packet + bytes_read, length - bytes_read);
 }
 
 void
