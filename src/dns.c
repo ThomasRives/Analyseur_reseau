@@ -2,9 +2,8 @@
 #include "utilities.h"
 
 void
-dns_analyze(const u_char *packet, uint length)
+dns_analyze(const u_char *packet)
 {
-	(void)length;
 	uint index = 0;
 	struct dnshdr *dns_hdr = (struct dnshdr *)packet;
 	printf("Id: %x\n", ntohs(dns_hdr->id));
@@ -28,6 +27,7 @@ dns_analyze(const u_char *packet, uint length)
 	
 	for(i = 0; i < nb_auth; i++)
 		index += print_aut_answ(packet + index, packet);
+		
 	for(i = 0; i < nb_add; i++)
 		index += print_add_rec(packet + index, packet);
 }

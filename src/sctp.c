@@ -69,7 +69,7 @@ print_sctp_chunk(const u_char *packet)
 		case SHUTDOWN:
 			puts("Shutdown (7)");
 			printf("\t\tLength: %u\n", chunk_len);
-			printf("\t\tLast TSN received: %x", ntohl(*(uint32_t *)packet));
+			printf("\t\tLast TSN received: %x\n", ntohl(*(uint32_t *)packet));
 			break;
 		case SHUTDOWN_ACK:
 			puts("Shutdown ACK (8)");
@@ -162,6 +162,7 @@ print_sctp_chunk_data(const u_char *packet)
 					 sizeof(struct data_chunk),
 				 ntohs(ch_hdr->length) - sizeof(struct chunk_hdr) - 
 				 	sizeof(struct data_chunk));
+	puts("");
 }
 
 void
@@ -172,59 +173,66 @@ print_sctp_chunk_init(const u_char *packet)
 	printf("\tLength: %u\n", hdr_len);
 	struct init_chunk *in_ch = 
 		(struct init_chunk *)(packet + sizeof(struct chunk_hdr));
-	printf("\tInitial tag: %u", in_ch->init_tag);
-	printf("\tAdvertised receiver window credit: %u", in_ch->adv_rec_win);
-	printf("\tNumber of outbound streams: %u", in_ch->nb_outbound_streams);
-	printf("\tNumber of inbound streams: %u", in_ch->nb_inbound_streams);
-	printf("\tInitial TSN: %u", in_ch->initial_TSN);
+	printf("\tInitial tag: %u\n", in_ch->init_tag);
+	printf("\tAdvertised receiver window credit: %u\n", in_ch->adv_rec_win);
+	printf("\tNumber of outbound streams: %u\n", in_ch->nb_outbound_streams);
+	printf("\tNumber of inbound streams: %u\n", in_ch->nb_inbound_streams);
+	printf("\tInitial TSN: %u\n", in_ch->initial_TSN);
 
 	struct init_chunk_param *param;
 	uint param_nb = 1;
 	const u_char *param_payload = (const u_char *)
 		packet + sizeof(struct chunk_hdr) + sizeof(struct init_chunk_param);
-
+	
 	for (uint len = sizeof(struct chunk_hdr) + sizeof(struct init_chunk);
-		 len < ch_hdr->length;)
+		 len < hdr_len;)
 	{
 		param = (struct init_chunk_param *)(packet + len);
 		printf("\tParam n° %u\n", param_nb);
-		printf("\t\tLength: %u\n", param->length);
+		uint param_len = ntohs(param->length);
+		uint param_type = ntohs(param->type);
+		uint data_beg = 2 * sizeof(uint16_t);
+		printf("\t\tLength: %u\n", param_len);
 		printf("\t\tType: ");
-		switch(param->type)
+		switch(param_type)
 		{
 			case PARAM_IPV4:
-				printf("List all IPv4 addresses (%u):\n", param->type);
-				printf("\t\tLength: %u\n", param->length);
-				for (uint i = 0; i < param->length; i += sizeof(struct in_addr))
+				printf("List all IPv4 addresses (%u):\n", param_type);
+				printf("\t\tLength: %u\n", param_len);
+				for (uint i = data_beg; i < param_len;
+					i += sizeof(uint32_t))
 				{
-					printf("\t\t%s\n", inet_ntoa(*(struct in_addr *)(param_payload + i)));
+					printf("\t\t%s\n", inet_ntoa(*(struct in_addr *)
+						((u_char *)param + i)));
 				}
 				break;
 			case PARAM_IPV6:
-				printf("List all IPv6 addresses (%u):\n", param->type);
-				for (uint i = 0; i < param->length; i += sizeof(struct in_addr))
+				printf("List all IPv6 addresses (%u):\n", param_type);
+				for (uint i = data_beg; i < param_len;
+					i += sizeof(struct in_addr))
 				{
 					char buf_adr[INET6_ADDRSTRLEN];
-					inet_ntop(AF_INET6, param_payload + i, buf_adr,
-						INET6_ADDRSTRLEN);
+					uint32_t addr = ntohl(*(uint32_t *)(param_payload + i));
+					inet_ntop(AF_INET6, &addr, buf_adr,
+							  INET6_ADDRSTRLEN);
 					printf("\t\t%s\n", buf_adr);
 				}
 				break;
 			case PARAM_COOKIE:
 				puts("Cookie sent (%u)\n");
-				print_hex(param_payload,param->length);
+				print_hex(param_payload, param_len);
 				break;
 			case PARAM_LIFE_SPAN:
-				printf("Suggested life-span increment (%u):\n", param->type);
+				printf("Suggested life-span increment (%u):\n", param_type);
 				printf("\t\t%u ms\n", *(uint32_t *)(param_payload));
 				break;
 			case PARAM_HOSTNAME:
-				printf("Hostname (%u)\n", param->type);
+				printf("Hostname (%u)\n", param_type);
 				printf("%s\n", (char *)param_payload);
 				break;
 			case PARAM_SUP_ADDR:
-				printf("List supported addresses (%u):\n", param->type);
-				for(uint i = 0; i < param->length; i += sizeof(uint16_t))
+				printf("List supported addresses (%u):\n", param_type);
+				for (uint i = data_beg; i < param_len; i += sizeof(uint16_t))
 				{
 					switch(*(uint32_t *)(param_payload + i))
 					{
@@ -241,12 +249,13 @@ print_sctp_chunk_init(const u_char *packet)
 				}
 				break;
 			case PARAM_CONGEST:
-				printf("Explicit congestion notification (%u)\n", param->type);
+				printf("Explicit congestion notification (%u)\n", param_type);
 				break;
 			default:
 				puts("Unknown param...");
 				break;
 		}
+		len += param_len;
 	}
 }
 

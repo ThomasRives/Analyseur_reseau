@@ -179,7 +179,7 @@ struct soa {
  * @param packet: the packet himself.
  * @param length: the packet length.
  */
-void dns_analyze(const u_char *packet, uint length);
+void dns_analyze(const u_char *packet);
 
 /**
  * @brief Print the control informations of a DNS packet.

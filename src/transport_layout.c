@@ -32,7 +32,7 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint len
 				return;
 			case PORT_DNS:
 				puts("DNS");
-				dns_analyze(packet, length);
+				dns_analyze(packet);
 				return;
 			case PORT_POP:
 				puts("POP3");

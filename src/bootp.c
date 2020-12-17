@@ -46,14 +46,14 @@ void bootp_print_op(uint8_t op)
 	printf("Operation: ");
 	switch (op)
 	{
-	case BOOTREQUEST:
-		puts("Request (1)");
-		break;
-	case BOOTREPLY:
-		puts("Reply (2)");
-		break;
-	default:
-		puts("Unknown...");
+		case BOOTREQUEST:
+			puts("Request (1)");
+			break;
+		case BOOTREPLY:
+			puts("Reply (2)");
+			break;
+		default:
+			puts("Unknown...");
 	}
 }
 
@@ -98,6 +98,7 @@ void bootp_print_chaddr(u_char *chaddr, uint8_t hlen)
 			   ether_ntoa((const struct ether_addr *)chaddr));
 	else
 	{
+		//TODO check
 		uint64_t first_part_chaddr = ntohl(*(uint64_t *)chaddr);
 		uint64_t second_part_chaddr = ntohl(*(uint64_t *)&chaddr[8]);
 		printf("0x%lx%lx\n", first_part_chaddr, second_part_chaddr);
@@ -115,10 +116,12 @@ void bootp_print_str(u_char *str, uint length)
 	puts("");
 }
 
-void bootp_print_vendor(u_char *vend)
+void
+bootp_print_vendor(u_char *vend)
 {
 	if (ntohl(*(uint32_t *)vend) != MAGIC_COOKIE)
 		return;
+	
 
 	vend += sizeof(uint32_t);
 	puts("Options:");
