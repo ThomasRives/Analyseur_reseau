@@ -11,6 +11,13 @@
 void tcp_header_analyze(const u_char *packet, uint length);
 
 /**
+ * @brief Print the tcp flags.
+ * 
+ * @param flags: the flags in the packet.
+ */
+void print_tcp_flags(uint8_t flags);
+
+/**
  * @brief Print TCP options.
  * 
  * @param read_header: the number of bytes already read.

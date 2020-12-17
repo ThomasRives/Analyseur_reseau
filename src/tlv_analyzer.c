@@ -43,21 +43,8 @@ tlv_translate_icmpv6(const u_char *packet)
 void print_value_nb(uint length, u_char *value)
 {
 	u_char value_nb[sizeof(uint64_t)] = {0};
-	//u_char *value_nb = calloc(1, sizeof(unsigned long long));
-	//Invert bytes order
 	for(uint i = 0; i < length; i++)
 		value_nb[i] = value[length - i - 1];
 
 	printf("%llu", *(unsigned long long *)value_nb);
-	//free(value_nb);
-}
-
-void
-print_value_str(uint length, u_char *value)
-{
-	u_char *buf = malloc((length + 1) * sizeof(u_char));
-	NULL_CHECK(memcpy(buf, value, length + 1));
-	buf[length] = '\0';
-	printf("%s", buf);
-	free(buf);
 }

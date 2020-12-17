@@ -36,9 +36,6 @@ print_as_str(const u_char *data, uint length)
 			case '\n':
 				printf("\\n\n");
 				break;
-			case '\t':
-				printf("\\t\t");
-				break;
 			default:
 				printf("%c", data[i]);
 				break;

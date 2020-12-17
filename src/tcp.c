@@ -10,31 +10,37 @@ tcp_header_analyze(const u_char *packet, uint length)
 	printf("Acknowledge: %u\n", ntohl(tcp_header->th_ack));
 	printf("Data offset: %u octets\n", tcp_header->th_off * 4);
 
-	printf("Used flag:");
-	if (tcp_header->th_flags & TH_FIN)
-		printf(" Finish");
-	if (tcp_header->th_flags & TH_SYN)
-		printf(" Synchronize");
-	if (tcp_header->th_flags & TH_RST)
-		printf(" Reset");
-	if (tcp_header->th_flags & TH_PUSH)
-		printf(" Push");
-	if (tcp_header->th_flags & TH_ACK)
-		printf(" Ack");
-	if (tcp_header->th_flags & TH_URG)
-		printf(" Urgent");
-	puts("");
+	print_tcp_flags(tcp_header->th_flags);
 
-	printf("Window: %u\n", tcp_header->th_win);
+	printf("Window: %u\n", ntohs(tcp_header->th_win));
 	printf("Checksum: 0x%x\n", ntohs(tcp_header->th_sum));
 	printf("Urgent pointer: %u\n", tcp_header->th_urp);
 	uint8_t read_header = sizeof(struct tcphdr);
 	uint8_t *tcp_options = (uint8_t *)(packet + read_header);
 	print_tcp_options(read_header, tcp_header->th_off, tcp_options);
 	uint length_left = length - tcp_header->th_off * 4;
+	
 	if (length_left > 0)
 		demult_port(ntohs(tcp_header->th_sport), ntohs(tcp_header->th_dport),
 			packet + tcp_header->th_off * 4, length_left);
+}
+
+void
+print_tcp_flags(uint8_t flags)
+{
+	puts("Used flags:");
+	if (flags & TH_FIN)
+		puts("\tFinish");
+	if (flags & TH_SYN)
+		puts("\tSynchronize");
+	if (flags & TH_RST)
+		puts("\tReset");
+	if (flags & TH_PUSH)
+		puts("\tPush");
+	if (flags & TH_ACK)
+		puts("\tAck");
+	if (flags & TH_URG)
+		puts("\tUrgent");
 }
 
 void
@@ -56,7 +62,8 @@ print_tcp_options(uint8_t read_header, uint8_t off, uint8_t *tcp_options)
 				printf("Maximum segment size: %i\n", *(uint8_t *)(next_tlv.value));
 				break;
 			case TCPOPT_WINDOW:
-				printf("Window scale: %i\n", *(uint16_t *)(next_tlv.value) & 0x00ff);
+				printf("Window scale: %i\n", 
+					ntohs(*(uint16_t *)(next_tlv.value) & 0x00ff));
 				break;
 			case TCPOPT_SACK_PERMITTED:
 				puts("Segment ACK Permitted");

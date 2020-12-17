@@ -4,62 +4,69 @@ void
 ipv6_header_analyze(const u_char *packet, uint length)
 {
 	struct ip6_hdr *ipv6_header = (struct ip6_hdr *)packet;
-	struct ipv6_f32_parse f32_bits = parse_f32_ipv6(ntohl(ipv6_header->ip6_flow));
+	struct ipv6_f32_parse f32_bits = parse_f32_ipv6(
+		ntohl(ipv6_header->ip6_flow));
 	printf("Version: %i\n", f32_bits.version);
 	printf("Trafic class: %x\n", f32_bits.tc);
 	printf("ID: 0x%x\n", f32_bits.id);
 	printf("Length: %i\n", ntohs(ipv6_header->ip6_plen));
 
 	printf("Hop limit: %i\n", ipv6_header->ip6_hlim);
+
 	char buf_adr[INET6_ADDRSTRLEN];
 	inet_ntop(AF_INET6, &ipv6_header->ip6_src, buf_adr, INET6_ADDRSTRLEN);
 	printf("Source address: %s\n", buf_adr);
 	inet_ntop(AF_INET6, &ipv6_header->ip6_dst, buf_adr, INET6_ADDRSTRLEN);
 	printf("Destination address: %s\n", buf_adr);
 
+	ipv6_analyze_next_header(packet + sizeof(struct ip6_hdr),
+							 length - sizeof(struct ip6_hdr),
+							 ipv6_header->ip6_nxt);
+}
+
+void
+ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head)
+{
 	printf("Next header: ");
-	switch (ipv6_header->ip6_nxt)
+	switch (nxt_head)
 	{
-		case 0:
+		case IPV6_HOP_BY_HOP:
 			puts("Hop-by-hop Options Header (0)");
 			break;
-		case 6:
+		case IPV6_TCP:
 			puts("TCP (6)");
-			tcp_header_analyze(packet + sizeof(struct ip6_hdr),
-				length - sizeof(struct ip6_hdr));
+			tcp_header_analyze(packet, len);
 			break;
-		case 17:
+		case IPV6_UDP:
 			puts("UDP (17)");
-			udp_header_analyze(packet + sizeof(struct ip6_hdr),
-				length - sizeof(struct ip6_hdr));
+			udp_header_analyze(packet, len);
 			break;
-		case 41:
+		case IPV6_ENCAPS_V6_HEADER:
 			puts("Encapsulated IPv6 Header (41)");
 			break;
-		case 43:
+		case IPV6_ROUTING_HEADER:
 			puts("Routing Header (43)");
 			break;
-		case 44:
+		case IPV6_FRAG_HEADER:
 			puts("Fragment Header (44)");
 			break;
-		case 46:
+		case IPV6_RES_RSV:
 			puts("Resource ReSerVation Protocol (46)");
 			break;
-		case 50:
+		case IPV6_SEC_PAYL:
 			puts("Encapsulating Security Payload (50)");
 			break;
-		case 51:
+		case IPV6_AUTH_HEADER:
 			puts("Authentication Header (51)");
 			break;
-		case 58:
+		case IPV6_ICMPV6:
 			puts("ICMPv6 (58)");
-			icmpv6_header_analyze(packet + sizeof(struct ip6_hdr), 
-				length - sizeof(struct ip6_hdr));
+			icmpv6_header_analyze(packet, len);
 			break;
-		case 59:
+		case IPV6_NO:
 			puts("No next header (59)");
 			break;
-		case 60:
+		case IPV6_DEST_OPT_HEADER:
 			puts("Destination Options Header (60)");
 			break;
 		default:
