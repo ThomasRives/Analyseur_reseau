@@ -4,8 +4,26 @@ void
 arp_header_analyze(const u_char *packet)
 {
 	struct ether_arp *arp_hdr = (struct ether_arp *)packet;
+	arp_print_hard_type(ntohs(arp_hdr->ea_hdr.ar_hrd));
+
+	arp_print_prot_type(ntohs(arp_hdr->ea_hdr.ar_pro));
+
+	printf("Hardware Address Length: %i\n", arp_hdr->ea_hdr.ar_hln);
+	printf("Protocol Address Length: %i\n", arp_hdr->ea_hdr.ar_pln);
+
+	arp_print_op(ntohs(arp_hdr->ea_hdr.ar_op));
+
+	arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_sha, 1);
+	arp_print_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_spa, 1);
+	arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_tha, 0);
+	arp_print_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_tpa, 0);
+}
+
+void
+arp_print_hard_type(unsigned int hard_type)
+{
 	printf("Hardware type: ");
-	switch (ntohs(arp_hdr->ea_hdr.ar_hrd))
+	switch (hard_type)
 	{
 		case ARPHRD_ETHER:
 			puts("Ethernet (1)");
@@ -19,8 +37,13 @@ arp_header_analyze(const u_char *packet)
 		default:
 			puts("Not supported...");
 	}
+}
+
+void
+arp_print_prot_type(uint prot_type)
+{
 	printf("Protocol type: ");
-	switch(ntohs(arp_hdr->ea_hdr.ar_pro))
+	switch (prot_type)
 	{
 		case ETHERTYPE_IPV6:
 			puts("IPV6");
@@ -37,11 +60,13 @@ arp_header_analyze(const u_char *packet)
 		default:
 			puts("Unknown type...");
 	}
+}
 
-	printf("Hardware Address Length: %i\n", arp_hdr->ea_hdr.ar_hln);
-	printf("Protocol Address Length: %i\n", arp_hdr->ea_hdr.ar_pln);
+void
+arp_print_op(uint op)
+{
 	printf("Operation: ");
-	switch (ntohs(arp_hdr->ea_hdr.ar_op))
+	switch (op)
 	{
 		case ARPOP_REQUEST:
 			puts("ARP Request (1)");
@@ -67,10 +92,6 @@ arp_header_analyze(const u_char *packet)
 		default:
 			puts("Unknown...");
 	}
-	arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_sha, 1);
-	arp_print_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_spa, 1);
-	arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_tha, 0);
-	arp_print_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_tpa, 0);
 }
 
 void 

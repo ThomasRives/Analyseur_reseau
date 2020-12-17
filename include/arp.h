@@ -10,6 +10,27 @@
 void arp_header_analyze(const u_char *packet);
 
 /**
+ * @brief Print the hardware type for an ARP packet.
+ * 
+ * @param hard_type: the integer corresponding to the hardware type.
+ */
+void arp_print_hard_type(uint hard_type);
+
+/**
+ * @brief Print the protocol type for an ARP packet.
+ * 
+ * @param prot_type: the integer corresponding to the protocol type.
+ */
+void arp_print_prot_type(uint prot_type);
+
+/**
+ * @brief Print the operation for an ARP packet.
+ * 
+ * @param op: the integer corresponding to the operation.
+ */
+void arp_print_op(uint op);
+
+/**
  * @brief Print the hardware address in an ARP header.
  * 
  * @param hlen: the hardware address length.

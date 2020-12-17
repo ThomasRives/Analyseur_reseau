@@ -56,8 +56,7 @@ void parseArgs(int argc, char **argv, Options *options)
 				exit(ERROR_ARGS);
 		}
 
-	if (argc < 7 ||
-  		options->interface == NULL ||
+	if (options->interface == NULL ||
 		options->verbose < 1 || options->verbose > 3)
 	{
 		printHelp();
