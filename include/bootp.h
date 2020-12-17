@@ -18,6 +18,7 @@ struct bootphdr
 	u_char chaddr[16]; /* client hardware address */
 	u_char sname[64];	 /* server host name */
 	u_char file[128];	 /* boot file name */
+	u_char vend;         /* first char of the vendor */ 
 };
 
 /*
@@ -84,20 +85,15 @@ struct bootphdr
 #define NETBIOS 44
 #define NETBIOS_NODE_TYPE 46
 
+#define END_OPT 1
+#define NOT_END_OPT 0
+
 /**
  * @brief Analyze the bootp header of the packet.
  * 
  * @param packet: the packet himself.
  */
 void bootp_analyze(const u_char *packet);
-
-/**
- * @brief Determinate the vendor length.
- * 
- * @param vend: a pointer to the vendor.
- * @return the length of bootp options.
- */
-uint bootp_option_length(const u_char *vend);
 
 /**
  * @brief Print the operation of a bootp packet.
@@ -142,6 +138,14 @@ void bootp_print_str(u_char *str, uint length);
  * @param vend: a pointer to the beginning of the vendor.
  */
 void bootp_print_vendor(u_char *vend);
+
+/**
+ * @brief Print an option of the bootp vendor.
+ * 
+ * @param opt: the tlv of the option.
+ * @return an interger that indicate if there is other options.
+ */
+int bootp_print_opt_tlv(struct tlv opt);
 
 /**
  * @brief Print the Domain servers.

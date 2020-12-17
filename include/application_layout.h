@@ -7,9 +7,9 @@
 #include <arpa/inet.h>
 #include <arpa/telnet.h>
 #include <netinet/ether.h>
+#include "tlv_analyzer.h"
 #include "bootp.h"
 #include "telnet.h"
-#include "tlv_analyzer.h"
 #include "dns.h"
 #include "utilities.h"
 #include "smtp.h"

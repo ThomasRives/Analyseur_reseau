@@ -189,6 +189,20 @@ void dns_analyze(const u_char *packet);
 void dns_print_ctrl(uint16_t ctrl);
 
 /**
+ * @brief Print the type of operation of the packet.
+ * 
+ * @param op: the operation.
+ */
+void dns_type_of_req(uint16_t op);
+
+/**
+ * @brief Print the reply of the packet.
+ * 
+ * @param rcode: the reply code.
+ */
+void dns_rcode(uint16_t rcode);
+
+/**
  * @brief Print a query in a dns packet.
  * 
  * @param query: the query to read.

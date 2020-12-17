@@ -4,45 +4,68 @@
 void
 dns_analyze(const u_char *packet)
 {
-	uint index = 0;
 	struct dnshdr *dns_hdr = (struct dnshdr *)packet;
 	printf("Id: %x\n", ntohs(dns_hdr->id));
-	dns_print_ctrl(dns_hdr->ctrl);
+	dns_print_ctrl(ntohs(dns_hdr->ctrl));
+
 	uint nb_quest = ntohs(dns_hdr->qst_count);
 	uint nb_answ = ntohs(dns_hdr->answ_count);
 	uint nb_auth = ntohs(dns_hdr->auth_count);
 	uint nb_add = ntohs(dns_hdr->add_count);
+
 	printf("Number of question entries: %d\n", nb_quest);
 	printf("Number of answer entries: %d\n", nb_answ);
 	printf("Number of \"Authority\" entries: %d\n", nb_auth);
 	printf("Number of \"additional\" entries: %d\n", nb_add);
 
-	index += sizeof(struct dnshdr);
-	uint i;
-	for(i = 0; i < nb_quest; i++)
+	uint index = sizeof(struct dnshdr);
+
+	for(uint i = 0; i < nb_quest; i++)
 		index += dns_print_query(packet + index, packet);
 		
-	for(i = 0; i < nb_answ; i++)
+	for(uint i = 0; i < nb_answ; i++)
 		index += dns_print_answer(packet + index, packet);
 	
-	for(i = 0; i < nb_auth; i++)
+	for(uint i = 0; i < nb_auth; i++)
 		index += print_aut_answ(packet + index, packet);
 		
-	for(i = 0; i < nb_add; i++)
+	for(uint i = 0; i < nb_add; i++)
 		index += print_add_rec(packet + index, packet);
 }
 
 void
 dns_print_ctrl(uint16_t ctrl)
 {
-	ctrl = ntohs(ctrl);
 	if((ctrl & QR) == QR_QUERY)
 		puts("Type: Query");
 	else
 		puts("Type: Response");
-	
+
+	dns_type_of_req(ctrl & OPCODE);
+
+	if ((ctrl & QR) != QR_QUERY && (ctrl & AA) == AA)
+		puts("Authoritative Answer");
+	if((ctrl & TC) == TC)
+		puts("Troncated message");
+	else
+		puts("Not troncate");
+
+	if((ctrl & RD) == RD)
+		puts("Ask recursivity");
+	if ((ctrl & QR) != QR_QUERY && (ctrl & RA) == RA)
+		puts("Recursivity authorized");
+
+	if((ctrl & QR) == QR_QUERY)
+		return;
+
+	dns_rcode(ctrl & RCODE);
+}
+
+void
+dns_type_of_req(uint16_t op)
+{
 	printf("Type of request: ");
-	switch(ctrl & OPCODE)
+	switch(op)
 	{
 		case OP_QUERY:
 			puts("Standard request");
@@ -65,22 +88,13 @@ dns_print_ctrl(uint16_t ctrl)
 		default:
 			puts("Unknown...");
 	}
-	if ((ctrl & QR) != QR_QUERY && (ctrl & AA) == AA)
-		puts("Authoritative Answer");
-	if((ctrl & TC) == TC)
-		puts("Troncated message");
-	else
-		puts("Not troncate");
-	if((ctrl & RD) == RD)
-		puts("Ask recursivity");
-	if ((ctrl & QR) != QR_QUERY && (ctrl & RA) == RA)
-		puts("Recursivity authorized");
+}
 
-	if((ctrl & QR) == QR_QUERY)
-		return;
-
+void
+dns_rcode(uint16_t rcode)
+{
 	printf("RCode: ");
-	switch(ctrl & RCODE)
+	switch(rcode)
 	{
 		case RC_NE:
 			puts("No Error");
@@ -499,7 +513,7 @@ complete_dns_name(const u_char *name, uint name_len, const u_char *packet)
 		printf(".");
 	}
 	puts("\b ");
-	return byte_r + 1;
+	return byte_r + sizeof(uint8_t);
 }
 
 void

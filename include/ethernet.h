@@ -16,4 +16,13 @@
  */
 void analyze_ethernet_hearder(const u_char *packet, uint len);
 
+/**
+ * @brief Analyze the protocol used and analyze it.
+ * 
+ * @param packet: the packet (begin at the protocol).
+ * @param len: the length of the packet.
+ * @param prot: the protocol used.
+ */
+void ethernet_demult_prot(const u_char *packet, uint len, uint16_t prot);
+
 #endif //ETHER_H
