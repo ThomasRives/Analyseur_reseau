@@ -12,26 +12,22 @@ got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 }
 
 void
-print_packet(uint pack_length, const uint16_t *packet)
+print_packet(uint pack_length, const u_char *packet)
 {
 	static int nb_pack = 0;
 	nb_pack++;
-	uint i = 0;
 
 	printf("___Packet number %i___\n", nb_pack);
 	printf("Packet's length: %i\n\n", pack_length);
 	
-	while(i < pack_length)
+	for(uint i = 0; i < pack_length; i++)
 	{
 		if(i%8 == 0)
-			puts("");
-			
-		if(i%2 == 0)
-			printf("%.2x", ntohs(*(packet + i/2)) >> 8);
-		else
-			printf("%.2x ", ntohs(*(packet + (i - 1)/2)) & 0x00ff);
+			printf("\n");
+		else if(i%4 == 0)
+			printf(" ");
 
-		i++;
+		printf("%.2x ", *(packet + i));
 	}
 
 	printf("\n\n");

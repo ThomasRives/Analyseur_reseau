@@ -109,6 +109,7 @@
 /* Class */
 #define CL_RESERVED 0
 #define CL_IN 1 /* Internet */
+#define CL_CSNET 2 /* Csnet */
 #define CL_CH 3 /* Chaos */
 #define CL_HS 4 /* Hesiod */
 #define CL_ANY 255 /* QCLASS only */
@@ -178,14 +179,14 @@ struct soa {
  * @param packet: the packet himself.
  * @param length: the packet length.
  */
-void dns_analyze(const u_char *packet, uint length);
+void dns_analyze(const u_char *packet);
 
 /**
  * @brief Print the control informations of a DNS packet.
  * 
  * @param ctrl: the control bits.
  */
-void print_dns_ctrl(uint16_t ctrl);
+void dns_print_ctrl(uint16_t ctrl);
 
 /**
  * @brief Print a query in a dns packet.
@@ -194,7 +195,7 @@ void print_dns_ctrl(uint16_t ctrl);
  * @param packet: the packet.
  * @return lentgh of the query.
  */
-int print_dns_query(const u_char *query, const u_char *packet);
+int dns_print_query(const u_char *query, const u_char *packet);
 
 /**
  * @brief Print an answer in a dns packet.
@@ -203,7 +204,7 @@ int print_dns_query(const u_char *query, const u_char *packet);
  * @param packet: the packet.
  * @return the length of the answer.
  */
-int print_dns_answer(const u_char *answ, const u_char *packet);
+int dns_print_answer(const u_char *answ, const u_char *packet);
 
 /**
  * @brief Print an authoritative answer in a dns packet.

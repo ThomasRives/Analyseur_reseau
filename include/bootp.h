@@ -104,21 +104,21 @@ uint bootp_option_length(const u_char *vend);
  * 
  * @param op: the operation of the bootp packet.
  */
-void print_bootp_op(uint8_t op);
+void bootp_print_op(uint8_t op);
 
 /**
  * @brief Print the harware type of a bootp packet.
  * 
  * @param htype: the code of the hardware type.
  */
-void print_bootp_htype(uint8_t htype);
+void bootp_print_htype(uint8_t htype);
 
 /**
  * @brief Print the harware address length of a bootp packet.
  * 
  * @param htype: the length of the hardware address.
  */
-void print_bootp_hlen(uint8_t hlen);
+void bootp_print_hlen(uint8_t hlen);
 
 /**
  * @brief Print the client hardware address.
@@ -126,7 +126,7 @@ void print_bootp_hlen(uint8_t hlen);
  * @param chaddr: the hardware address of the client.
  * @param hlen: the length of the address.
  */
-void print_bootp_chaddr(u_char *chaddr, uint8_t hlen);
+void bootp_print_chaddr(u_char *chaddr, uint8_t hlen);
 
 /**
  * @brief Print the content of a data as a string.
@@ -134,14 +134,14 @@ void print_bootp_chaddr(u_char *chaddr, uint8_t hlen);
  * @param str: the data to print as a string.
  * @param length: the length of the string.
  */
-void print_bootp_str(u_char *str, uint length);
+void bootp_print_str(u_char *str, uint length);
 
 /**
  * @brief Print the vendor of a bootp packet
  * 
  * @param vend: a pointer to the beginning of the vendor.
  */
-void print_bootp_vendor(u_char *vend);
+void bootp_print_vendor(u_char *vend);
 
 /**
  * @brief Print the Domain servers.
@@ -149,14 +149,14 @@ void print_bootp_vendor(u_char *vend);
  * @param value: the value containing the domain servers.
  * @param length: the length of the option.
  */
-void print_bootp_opt_lip(u_char *value, uint length);
+void bootp_print_opt_lip(u_char *value, uint length);
 
 /**
  * @brief Print the dhcp type of a bootp packet.
  * 
  * @param type: the type of the dhcp message.
  */
-void print_bootp_dhcp_type(uint type);
+void bootp_print_dhcp_type(uint type);
 
 /**
  * @brief Print the dhcp type of a bootp packet.
@@ -164,6 +164,6 @@ void print_bootp_dhcp_type(uint type);
  * @param length: the length of the value.
  * @param value: a pointer to the value.
  */
-void print_bootp_par_list(uint length, u_char *value);
+void bootp_print_par_list(uint length, u_char *value);
 
 #endif //BOOTP_H

@@ -3,7 +3,7 @@
 
 void analyze_ethernet_hearder(const u_char *packet, uint len)
 {
-	print_packet(len, (uint16_t *)packet);
+	print_packet(len, packet);
 	struct ether_header *eth_header = (struct ether_header *)packet;
 
 	printf("destination host : %s\n",

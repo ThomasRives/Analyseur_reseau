@@ -2,13 +2,12 @@
 #include "utilities.h"
 
 void
-dns_analyze(const u_char *packet, uint length)
+dns_analyze(const u_char *packet)
 {
-	(void)length;
 	uint index = 0;
 	struct dnshdr *dns_hdr = (struct dnshdr *)packet;
 	printf("Id: %x\n", ntohs(dns_hdr->id));
-	print_dns_ctrl(dns_hdr->ctrl);
+	dns_print_ctrl(dns_hdr->ctrl);
 	uint nb_quest = ntohs(dns_hdr->qst_count);
 	uint nb_answ = ntohs(dns_hdr->answ_count);
 	uint nb_auth = ntohs(dns_hdr->auth_count);
@@ -21,19 +20,20 @@ dns_analyze(const u_char *packet, uint length)
 	index += sizeof(struct dnshdr);
 	uint i;
 	for(i = 0; i < nb_quest; i++)
-		index += print_dns_query(packet + index, packet);
+		index += dns_print_query(packet + index, packet);
 		
 	for(i = 0; i < nb_answ; i++)
-		index += print_dns_answer(packet + index, packet);
+		index += dns_print_answer(packet + index, packet);
 	
 	for(i = 0; i < nb_auth; i++)
 		index += print_aut_answ(packet + index, packet);
+		
 	for(i = 0; i < nb_add; i++)
 		index += print_add_rec(packet + index, packet);
 }
 
 void
-print_dns_ctrl(uint16_t ctrl)
+dns_print_ctrl(uint16_t ctrl)
 {
 	ctrl = ntohs(ctrl);
 	if((ctrl & QR) == QR_QUERY)
@@ -142,7 +142,7 @@ print_dns_ctrl(uint16_t ctrl)
 }
 
 int
-print_dns_query(const u_char *query, const u_char *packet)
+dns_print_query(const u_char *query, const u_char *packet)
 {
 	printf("Query:\n");
 	printf("\tName: ");
@@ -157,7 +157,7 @@ print_dns_query(const u_char *query, const u_char *packet)
 }
 
 int
-print_dns_answer(const u_char *answ, const u_char *packet)
+dns_print_answer(const u_char *answ, const u_char *packet)
 {
 	printf("Answers:\n");
 	printf("\tName: ");
@@ -456,6 +456,9 @@ print_dns_class(uint16_t class)
 			break;
 		case CL_IN:
 			puts("Internet");
+			break;
+		case CL_CSNET:
+			puts("Csnet");
 			break;
 		case CL_CH:
 			puts("Chaos");
