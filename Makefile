@@ -38,6 +38,15 @@ test:
 	@make 1>/dev/null
 	@valgrind -q --leak-check=full ./bin/main -i any -v 1 -o pcap_files/rarp_request.cap
 
+test1:
+	@valgrind -q --leak-check=full ./bin/main -i any -v 1 -o pcap_files/rarp_request.cap
+
+test2:
+	@valgrind -q --leak-check=full ./bin/main -i any -v 2 -o pcap_files/rarp_request.cap
+
+test3:
+	@valgrind -q --leak-check=full ./bin/main -i any -v 3 -o pcap_files/rarp_request.cap
+
 .PHONY: clean test
 clean:
 	rm -rf obj/*.o
