@@ -2,6 +2,25 @@
 #define ICMP_H
 #include "transport_layout.h"
 
+#define ICMP_PHOTURIS 40
+#define ICMP_EXP 41
+#define ICMP_EXT_ECHO 42
+#define ICMP_EXT_ECHO_REP 43
+
+#define ICMP_NORM_ROUT_ADV 0
+#define ICMP_NOT_ROUT_COMMON_TRAF 16
+
+#define ICMP_PARAMPROB_POINT_ERR 0
+#define ICMP_PARAMPROB_BADLEN 2
+
+#define ICMP_PHOT_BAD_PSI 0
+#define ICMP_PHOT_AUTH_FAIL 1
+#define ICMP_PHOT_DECOMP_FAIL 2
+#define ICMP_PHOT_DECRYP_FAIL 3
+#define ICMP_PHOT_
+#define ICMP_PHOT_
+
+
 /**
  * @brief Analyze the ICMP header of the packet.
  * 
