@@ -132,10 +132,11 @@ void sctp_read_chunks(const u_char *packet, uint length);
 /**
  * @brief Print the content of a sctp chunk.
  * 
- * @param packet: : the packet himself (beggin at the first chunk).
+ * @param packet: the packet himself (beggin at the first chunk).
+ * @param first_only: indicate if print only the first chunk type.
  * @return the size of the read chunk.
  */
-uint print_sctp_chunk(const u_char *packet);
+uint print_sctp_chunk(const u_char *packet, int first_only);
 
 /**
  * @brief Print the content of a data chunk.

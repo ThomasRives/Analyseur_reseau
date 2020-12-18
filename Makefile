@@ -10,7 +10,7 @@ SOURCES  :=	$(wildcard $(SRCDIR)/*.c)
 INCLUDES :=	$(wildcard $(INCLUDE_PATH)/*.h)
 OBJECTS  :=	$(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 LIBS :=
-FILE := pop-ssl.pcapng
+FILE := UDP.pcapng
 
 # Update include path
 INCLUDE_PATH := $(INCLUDE_PATH) $(foreach lib_path, $(LIBS), ./$(lib_path))

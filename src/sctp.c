@@ -6,8 +6,7 @@ sctp_analayze(const u_char *packet, uint length, int verbose)
 	struct sctp_hdr *header = (struct sctp_hdr *)packet;
 	if(verbose == 2)
 	{
-		printf("Source port: %u\t", ntohs(header->src_prt));
-		printf("Destination port: %u\n", ntohs(header->dest_prt));
+		print_sctp_chunk(packet + sizeof(struct sctp_hdr), 1);
 		return;
 	}
 	
@@ -27,46 +26,65 @@ sctp_read_chunks(const u_char *packet, uint length)
 	for (uint pack_off = 0; pack_off < length;
 		 pack_off += sizeof(struct chunk_hdr), nb_chunk++)
 	{
+		struct chunk_hdr *ch_hdr = (struct chunk_hdr *)(packet + pack_off);
+		uint chunk_len = ntohs(ch_hdr->length); 
+		if(chunk_len == 0)//to stop because it's a padding.
+			break;
 		printf("Chunk n° %u:\n", nb_chunk);
-
-		pack_off +=  print_sctp_chunk(packet);
+		printf("\t\t");
+		pack_off +=  print_sctp_chunk(packet + pack_off, 0);
 	}
 }
 
 uint
-print_sctp_chunk(const u_char *packet)
+print_sctp_chunk(const u_char *packet, int first_only)
 {
 	struct chunk_hdr *ch_hdr = (struct chunk_hdr *)packet;
-	printf("\tChunk type: ");
-	uint chunk_len = ntohs(ch_hdr->length);
+	uint chunk_len = ntohs(ch_hdr->length);//to stop because it's a padding.
+	
+	printf("Chunk type: ");
 	switch(ch_hdr->type)
 	{
 		case DATA:
 			puts("payload data (0)");
+			if (first_only)
+				return 0;
 			print_sctp_chunk_data(packet);
 			break;
 		case INIT:
 			puts("initialisation (1)");
+			if(first_only)
+				return 0;
 			print_sctp_chunk_init(packet);
 			break;
 		case INIT_ACK:
 			puts("Initialization ACK (2)");
+			if(first_only)
+				return 0;
 			print_sctp_chunk_init_ack(packet);
 			break;
 		case SACK:
 			puts("Selective acknowledgment (3)");
+			if(first_only)
+				return 0;
 			print_sctp_chunk_sack(packet);
 			break;
 		case HEARTBEAT:
 			puts("Heartbeat (4)");
+			if (first_only)
+				return 0;
 			print_sctp_chunk_heartbeat(packet);
 			break;
 		case HEARTBEAT_ACK:
 			puts("Heartbeat ACK (5)");
+			if (first_only)
+				return 0;
 			print_sctp_chunk_ack_heartbeat(packet);
 			break;
 		case SCTP_ABORT:
 			puts("Abort (6)");
+			if(first_only)
+				return 0;
 			if (ch_hdr->flags & FLAG_T)
 				puts("\t\tSender sent Verification Tag");
 			printf("\t\tLength: %u\n", chunk_len);
@@ -74,63 +92,91 @@ print_sctp_chunk(const u_char *packet)
 			break;
 		case SHUTDOWN:
 			puts("Shutdown (7)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
-			printf("\t\tLast TSN received: %x\n", ntohl(*(uint32_t *)packet));
+			packet += sizeof(struct chunk_hdr);
+			printf("\t\tLast TSN received: %u\n", ntohl(*(uint32_t *)packet));
 			break;
 		case SHUTDOWN_ACK:
 			puts("Shutdown ACK (8)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		case CHUNK_ERROR:
-			puts(" (9)");
+			puts("ERROR (9)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
-			//TODO
 			break;
 		case COOKIE_ECHO:
 			puts("Cookie echo (10)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			print_as_str(packet, chunk_len - sizeof(uint32_t));
 			break;
 		case COOKIE_ACK:
 			puts("Cookie ACK (11)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		case SHUTDOWN_COMPLETE:
 			puts("Shutdown complete (14)");
+			if (first_only)
+				return 0;
 			if(ch_hdr->flags & FLAG_T)
 				puts("\t\tSender didn't have a TCB");
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		case AUTH:
 			puts("Authentification chunk (15)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		case I_DATA:
 			puts("Interleaving data (64)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		case ASCONF_ACK:
 			puts("address reconfiguration ACK (128)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		case RE_CONFIG:
 			puts("Reconfiguration  (130)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		case PAD:
 			puts("Padding (132)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		case FORWARD_TSN:
 			puts("Forward TSN (192)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		case ASCONF:
 			puts("Address reconfiguration (193)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		case I_FORWARD_TSN:
 			puts("Forward TSN with support for interleaving (194)");
+			if (first_only)
+				return 0;
 			printf("\t\tLength: %u\n", chunk_len);
 			break;
 		default:
