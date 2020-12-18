@@ -1,6 +1,6 @@
 #ifndef SCTP_H
 #define SCTP_H
-#include "application_layout.h"
+#include "transport_layout.h"
 
 #define PORT_SCTP 443
 
@@ -44,7 +44,7 @@ struct sctp_hdr {
 	uint16_t dest_prt;	/**<Destination port */
 	uint32_t verif_tag; /**<Verification tag*/
 	uint32_t checksum;	/**<Checksum */
-};
+} __attribute__((packed));
 
 /**
  * @brief This structure represent the header of an SCTP chunck.
@@ -53,14 +53,14 @@ struct chunk_hdr {
 	uint8_t type;		/**< Type of the chunck */
 	uint8_t flags;		/**< flags of the chunck */
 	uint16_t length;	/**< length of the chunck */
-};
+} __attribute__((packed));
 
 struct data_chunk {
 	uint32_t tsn;
 	uint16_t stream_id;
 	uint16_t stream_seq_nb;
 	uint32_t payload_prot_id;
-};
+} __attribute__((packed));
 
 struct init_chunk {
 	uint32_t init_tag;
@@ -68,12 +68,12 @@ struct init_chunk {
 	uint16_t nb_outbound_streams;
 	uint16_t nb_inbound_streams;
 	uint32_t initial_TSN;
-};
+} __attribute__((packed));
 
 struct init_chunk_param {
 	uint16_t type;
 	uint16_t length;
-};
+} __attribute__((packed));
 
 #define PARAM_IPV4 5
 #define PARAM_IPV6 6
@@ -88,18 +88,18 @@ struct sack_chunk {
 	uint32_t adv_rec_win;
 	uint16_t nb_gap_ack;
 	uint16_t nb_dup_tsn;
-};
+} __attribute__((packed));
 
 struct heartbeat_chunk {
 	uint16_t param_type;
 	uint16_t length;
-};
+} __attribute__((packed));
 
 struct heartbeat_chunk_ack {
 	uint16_t param_type;
 	uint16_t length;
 	u_char *info;
-};
+} __attribute__((packed));
 
 #define SEND_ID 1
 #define SEND_REC_INIT 2
@@ -117,8 +117,9 @@ struct heartbeat_chunk_ack {
  * 
  * @param packet: the packet himself.
  * @param length: the length of the packet.
+ * @param verbose: the verbose given by the user.
  */
-void sctp_analayze(const u_char *packet, uint length);
+void sctp_analayze(const u_char *packet, uint length, int verbose);
 
 /**
  * @brief Read the chunks of an sctp packet

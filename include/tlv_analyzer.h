@@ -14,7 +14,7 @@ struct tlv {
 	uint type;
 	uint length;
 	uint8_t *value;
-};
+} __attribute__((packed));
 
 /**
  * @brief Get the next TLV structure in the tcp packet
@@ -31,14 +31,6 @@ struct tlv tlv_translate_tcp(uint8_t *packet);
  * @return a structure with all the informations given by the packet
  */
 struct tlv tlv_translate_bootp(uint8_t *packet);
-
-/**
- * @brief Get the next TLV structure in the icmp6 packet
- * 
- * @param packet: the packet to analyze
- * @return a structure with all the informations given by the packet
- */
-struct tlv tlv_translate_icmpv6(const u_char *packet);
 
 /**
  * @brief Print the value if it's an integer.

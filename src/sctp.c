@@ -1,10 +1,16 @@
 #include "sctp.h"
 
 void
-sctp_analayze(const u_char *packet, uint length)
+sctp_analayze(const u_char *packet, uint length, int verbose)
 {
-	(void)length;
 	struct sctp_hdr *header = (struct sctp_hdr *)packet;
+	if(verbose == 2)
+	{
+		printf("Source port: %u\t", ntohs(header->src_prt));
+		printf("Destination port: %u\n", ntohs(header->dest_prt));
+		return;
+	}
+	
 	printf("Source port: %u\n", ntohs(header->src_prt));
 	printf("Destination port: %u\n", ntohs(header->dest_prt));
 	printf("Verification tag: 0x%x\n", ntohl(header->verif_tag));

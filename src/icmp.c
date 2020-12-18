@@ -1,21 +1,26 @@
 #include "icmp.h"
 
 void
-icmp_header_analyze(const u_char *packet)
+icmp_header_analyze(const u_char *packet, int verbose)
 {
 	struct icmphdr *icmp_header = (struct icmphdr *)packet;
+	if(verbose == 2)
+	{
+		printf("Identifier: 0x%x\n", icmp_header->un.echo.id);
+		return;
+	}
 
 	print_icmp_type_code(icmp_header->type, icmp_header->code);
 	printf("Checksum: 0x%x\n", ntohs(icmp_header->checksum));
 	printf("Identifier: 0x%x\n", icmp_header->un.echo.id);
 	printf("Sequence number: %i\n", ntohs(icmp_header->un.echo.sequence));
 
-	char buf[100] = {0};
-	struct tm ts;
-	time_t time = *(uint32_t *)(packet + sizeof(struct icmphdr));
-	ts = *localtime(&time);
-	strftime(buf, sizeof(buf), "%Y %m %d %H:%M:%S %Z", &ts);
-	printf("Timestamps: %s\n", buf);
+	// char buf[100] = {0};
+	// struct tm ts;
+	// time_t time = *(uint32_t *)(packet + sizeof(struct icmphdr));
+	// ts = *localtime(&time);
+	// strftime(buf, sizeof(buf), "%Y %m %d %H:%M:%S %Z", &ts);
+	// printf("Timestamps: %s\n", buf);
 }
 
 void
@@ -38,17 +43,17 @@ print_icmp_type_code(uint8_t type, uint8_t code)
 			puts("Redirect (change route)");
 			print_icmp_dest_unreach_code(code);
 			break;
-		case 6:
+		case ICMP_ALTER_HOST_ADDR:
 			puts("Alternate Host Address");
 			break;
 		case ICMP_ECHO:
 			puts("Echo Request");
 			break;
-		case 9:
+		case ICMP_ROUTER_ADV:
 			puts("Router Advertisement");
 			print_icmp_rout_ad_code(code);
 			break;
-		case 10:
+		case ICMP_ROUT_SOLICI:
 			puts("Router Solicitation");
 			break;
 		case ICMP_TIME_EXCEEDED:
@@ -77,17 +82,17 @@ print_icmp_type_code(uint8_t type, uint8_t code)
 		case ICMP_ADDRESSREPLY:
 			puts("Address Mask Reply");
 			break;
-		case 40:
+		case ICMP_PHOTURIS:
 			puts("Photuris");
 			print_icmp_photuris_code(code);
 			break;
-		case 41:
+		case ICMP_EXP:
 			puts("ICMP messages utilized by experimental mobility protocols");
 			break;
-		case 42:
+		case ICMP_EXT_ECHO:
 			puts("Extended Echo Request");
 			break;
-		case 43:
+		case ICMP_EXT_ECHO_REP:
 			puts("Extended Echo Reply");
 			print_icmp_ext_ech_rep_code(code);
 			break;
@@ -153,7 +158,7 @@ print_icmp_dest_unreach_code(uint8_t code)
 			puts("Precedence cutoff in effect");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -176,7 +181,7 @@ print_icmp_redirect_code(uint8_t code)
 			puts("Redirect Datagram for the Type of Service and Host");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -186,14 +191,14 @@ print_icmp_rout_ad_code(uint8_t code)
 	printf("Code: ");
 	switch (code)
 	{
-		case 0:
+		case ICMP_NORM_ROUT_ADV:
 			puts("Normal router advertisement");
 			break;
-		case 16:
+		case ICMP_NOT_ROUT_COMMON_TRAF:
 			puts("Does not route common traffic");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -210,7 +215,7 @@ print_icmp_time_exc_code(uint8_t code)
 			puts("Fragment Reassembly Time Exceeded");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -220,17 +225,17 @@ print_icmp_par_prob_code(uint8_t code)
 	printf("Code: ");
 	switch (code)
 	{
-		case 0:
+		case ICMP_PARAMPROB_POINT_ERR:
 			puts("Pointer indicates the error");
 			break;
 		case ICMP_PARAMPROB_OPTABSENT:
 			puts("Missing a Required Option");
 			break;
-		case 2:
+		case ICMP_PARAMPROB_BADLEN:
 			puts("Bad Length");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -240,26 +245,26 @@ print_icmp_photuris_code(uint8_t code)
 	printf("Code: ");
 	switch (code)
 	{
-		case 0:
+		case ICMP_PHOT_BAD_PSI:
 			puts("Bad SPI");
 			break;
-		case 1:
+		case ICMP_PHOT_AUTH_FAIL:
 			puts("Authentication Failed");
 			break;
-		case 2:
+		case ICMP_PHOT_DECOMP_FAIL:
 			puts("Decompression Failed");
 			break;
-		case 3:
+		case ICMP_PHOT_DECRYP_FAIL:
 			puts("Decryption Failed");
 			break;
-		case 4:
+		case ICMP_PHOT_NEED_AUTHENT:
 			puts("Need Authentication");
 			break;
-		case 5:
+		case ICMP_PHOT_NEED_AUTHORIZ:
 			puts("Need Authorization");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -269,19 +274,19 @@ print_icmp_ext_ech_rep_code(uint8_t code)
 	printf("Code: ");
 	switch (code)
 	{
-		case 1:
+		case ICMP_EER_MALFORMED_REQ:
 			puts("Malformed Query");
 			break;
-		case 2:
+		case ICMP_EER_NO_INT:
 			puts("No Such Interface");
 			break;
-		case 3:
+		case ICMP_EER_NO_TABLE:
 			puts("No Such Table Entry");
 			break;
-		case 4:
+		case ICMP_EER_MULT_INT:
 			puts("Multiple Interfaces Satisfy Query");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }

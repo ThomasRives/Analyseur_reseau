@@ -1,28 +1,38 @@
 #include "tcp.h"
 
 void
-tcp_header_analyze(const u_char *packet, uint length)
+tcp_header_analyze(const u_char *packet, uint length, int verbose)
 {
 	struct tcphdr *tcp_header = (struct tcphdr *)packet;
-	printf("Source port: %u\n", ntohs(tcp_header->th_sport));
-	printf("Destination port: %u\n", ntohs(tcp_header->th_dport));
-	printf("Sequence number: %u\n", ntohl(tcp_header->th_seq));
-	printf("Acknowledge: %u\n", ntohl(tcp_header->th_ack));
-	printf("Data offset: %u octets\n", tcp_header->th_off * 4);
+	if(verbose == 2)
+	{
+		printf("Source port: %u\t", ntohs(tcp_header->th_sport));
+		printf("Destination port: %u\n", ntohs(tcp_header->th_dport));
+	}
+	else if(verbose == 3)
+	{
+		printf("Source port: %u\n", ntohs(tcp_header->th_sport));
+		printf("Destination port: %u\n", ntohs(tcp_header->th_dport));
+		printf("Sequence number: %u\n", ntohl(tcp_header->th_seq));
+		printf("Acknowledge: %u\n", ntohl(tcp_header->th_ack));
+		printf("Data offset: %u octets\n", tcp_header->th_off * 4);
 
-	print_tcp_flags(tcp_header->th_flags);
+		print_tcp_flags(tcp_header->th_flags);
 
-	printf("Window: %u\n", ntohs(tcp_header->th_win));
-	printf("Checksum: 0x%x\n", ntohs(tcp_header->th_sum));
-	printf("Urgent pointer: %u\n", tcp_header->th_urp);
-	uint8_t read_header = sizeof(struct tcphdr);
-	uint8_t *tcp_options = (uint8_t *)(packet + read_header);
-	print_tcp_options(read_header, tcp_header->th_off, tcp_options);
+		printf("Window: %u\n", ntohs(tcp_header->th_win));
+		printf("Checksum: 0x%x\n", ntohs(tcp_header->th_sum));
+		printf("Urgent pointer: %u\n", tcp_header->th_urp);
+		uint8_t read_header = sizeof(struct tcphdr);
+		uint8_t *tcp_options = (uint8_t *)(packet + read_header);
+		print_tcp_options(read_header, tcp_header->th_off, tcp_options);
+	}
 	uint length_left = length - tcp_header->th_off * 4;
 	
 	if (length_left > 0)
 		demult_port(ntohs(tcp_header->th_sport), ntohs(tcp_header->th_dport),
-			packet + tcp_header->th_off * 4, length_left);
+			packet + tcp_header->th_off * 4, length_left, verbose);
+	else if(verbose == 1)
+		puts("");
 }
 
 void

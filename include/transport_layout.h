@@ -22,7 +22,8 @@
  * @param port: the destination port used in the communication.
  * @param packet: the packet himself.
  * @param length: the length of the packet.
+ * @param verbose: the verbose given by the user.
  */
-void demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint length);
+void demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint length, int verbose);
 
 #endif //TRANSPORT_LAYOUT_H

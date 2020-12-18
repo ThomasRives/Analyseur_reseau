@@ -1,22 +1,33 @@
 #include "arp.h"
 
 void
-arp_header_analyze(const u_char *packet)
+arp_header_analyze(const u_char *packet, int verbose)
 {
 	struct ether_arp *arp_hdr = (struct ether_arp *)packet;
-	arp_print_hard_type(ntohs(arp_hdr->ea_hdr.ar_hrd));
 
-	arp_print_prot_type(ntohs(arp_hdr->ea_hdr.ar_pro));
+	if(verbose == 2)
+	{
+		arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_sha, 1);
+		arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_tha, 0);
+	}
+	else
+	{
+		arp_print_hard_type(ntohs(arp_hdr->ea_hdr.ar_hrd));
 
-	printf("Hardware Address Length: %i\n", arp_hdr->ea_hdr.ar_hln);
-	printf("Protocol Address Length: %i\n", arp_hdr->ea_hdr.ar_pln);
+		arp_print_prot_type(ntohs(arp_hdr->ea_hdr.ar_pro));
 
-	arp_print_op(ntohs(arp_hdr->ea_hdr.ar_op));
+		printf("Hardware Address Length: %i\n", arp_hdr->ea_hdr.ar_hln);
+		printf("Protocol Address Length: %i\n", arp_hdr->ea_hdr.ar_pln);
 
-	arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_sha, 1);
-	arp_print_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_spa, 1);
-	arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_tha, 0);
-	arp_print_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_tpa, 0);
+		arp_print_op(ntohs(arp_hdr->ea_hdr.ar_op));
+
+		arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_sha, 1);
+		puts("");
+		arp_print_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_spa, 1);
+		arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_tha, 0);
+		puts("");
+		arp_print_pro_addr(arp_hdr->ea_hdr.ar_pln * 8, arp_hdr->arp_tpa, 0);
+	}
 }
 
 void
@@ -46,16 +57,16 @@ arp_print_prot_type(uint prot_type)
 	switch (prot_type)
 	{
 		case ETHERTYPE_IPV6:
-			puts("IPV6");
+			print_bg_blue("IPV6", 1);
 			break;
 		case ETHERTYPE_IP:
-			puts("IPV4");
+			print_bg_green("IPV4", 1);
 			break;
 		case ETHERTYPE_ARP:
-			puts("ARP");
+			print_bg_cyan("ARP", 1);
 			break;
 		case ETHERTYPE_REVARP:
-			puts("RARP");
+			print_bg_cyan("RARP", 1);
 			break;
 		default:
 			puts("Unknown type...");
@@ -103,9 +114,9 @@ arp_print_hard_addr(unsigned int hlen, uint8_t *beg_addr, short sender)
 		printf("Target hardware address: ");
 
 	if(hlen != (ETH_ALEN * 8))
-		puts("Unknown type of address");
+		printf("Unknown type of address");
 	else
-		printf("%s\n", ether_ntoa((const struct ether_addr *)beg_addr));
+		printf("%s", ether_ntoa((const struct ether_addr *)beg_addr));
 }
 
 

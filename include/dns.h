@@ -141,7 +141,7 @@ struct dnshdr {
 	uint16_t answ_count; /**< Answer count */
 	uint16_t auth_count; /**< Authorithy count */
 	uint16_t add_count; /**< Additional count */
-};
+} __attribute__((packed));
 
 /**
  * @brief Decribe ressource record format.
@@ -153,7 +153,7 @@ struct ressource_record {
 	uint32_t TTL; /**< Time To Live */
 	uint16_t Rdata_length; /**< Length of the data */
 	uint8_t *Rdata; /**< The data itself */
-};
+} __attribute__((packed));
 
 /**
  * @brief Describe query format.
@@ -162,7 +162,7 @@ struct query {
 	uint8_t *query_name; /**< The name of the query */
 	uint16_t type; /**< Type of the query */
 	uint16_t classe; /**< Classe of the query */
-};
+} __attribute__((packed));
 
 /**
  * @brief Describe a SOA
@@ -173,15 +173,16 @@ struct soa {
 	uint32_t retry;
 	uint32_t expire;
 	uint32_t min_ttl;
-};
+} __attribute__((packed));
 
 /**
  * @brief Print the content of a DNS packet.
  * 
  * @param packet: the packet himself.
  * @param length: the packet length.
+ * @param verbose: the verbose given by the user.
  */
-void dns_analyze(const u_char *packet);
+void dns_analyze(const u_char *packet, int verbose);
 
 /**
  * @brief Print the control informations of a DNS packet.

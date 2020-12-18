@@ -34,7 +34,7 @@ main(int argc, char *argv[])
 		CHECK(pcap_setfilter(read_on, &filterprog));
 	}
 
-	pcap_loop(read_on, 0, got_packet, (u_char *)&options);
+	pcap_loop(read_on, 0, got_packet, (u_char *)&options.verbose);
 
 	if (options.filter_exp)
 		pcap_freecode(&filterprog);

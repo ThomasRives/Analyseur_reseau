@@ -18,8 +18,8 @@ struct bootphdr
 	u_char chaddr[16]; /* client hardware address */
 	u_char sname[64];	 /* server host name */
 	u_char file[128];	 /* boot file name */
-	u_char vend;         /* first char of the vendor */ 
-};
+	u_char vend;         /* first char of the vendor */
+} __attribute__((packed));
 
 /*
  * UDP port numbers, server and client.
@@ -92,8 +92,9 @@ struct bootphdr
  * @brief Analyze the bootp header of the packet.
  * 
  * @param packet: the packet himself.
+ * @param verbose: the verbose given by the user.
  */
-void bootp_analyze(const u_char *packet);
+void bootp_analyze(const u_char *packet, int verbose);
 
 /**
  * @brief Print the operation of a bootp packet.

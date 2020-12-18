@@ -6,8 +6,9 @@
  * @brief analyze the ARP header of the packet.
  * 
  * @param packet: the packet that will be analyzed.
+ * @param verbose: the verbose given by the user.
  */
-void arp_header_analyze(const u_char *packet);
+void arp_header_analyze(const u_char *packet, int verbose);
 
 /**
  * @brief Print the hardware type for an ARP packet.

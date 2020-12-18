@@ -2,9 +2,15 @@
 #include "utilities.h"
 
 void
-dns_analyze(const u_char *packet)
+dns_analyze(const u_char *packet, int verbose)
 {
 	struct dnshdr *dns_hdr = (struct dnshdr *)packet;
+
+	if(verbose == 2)
+	{
+		printf("Id: %x\n", ntohs(dns_hdr->id));
+		return;
+	}
 	printf("Id: %x\n", ntohs(dns_hdr->id));
 	dns_print_ctrl(ntohs(dns_hdr->ctrl));
 
@@ -176,16 +182,21 @@ dns_print_answer(const u_char *answ, const u_char *packet)
 	printf("Answers:\n");
 	printf("\tName: ");
 	uint byte_read = complete_dns_name(answ, UINT16_MAX, packet);
+
 	uint16_t type = ntohs(*(uint16_t *)(answ + byte_read));
 	print_dns_type(type);
 	byte_read += sizeof(uint16_t);
+
 	print_dns_class(ntohs(*(uint16_t *)(answ + byte_read)));
 	byte_read += sizeof(uint16_t);
+
 	printf("\tTTL: %i\n", ntohl(*(uint32_t *)(answ + byte_read)));
 	byte_read += sizeof(uint32_t);
+
 	uint data_len = ntohs(*(uint16_t *)(answ + byte_read));
-	byte_read += sizeof(uint16_t);
 	printf("\tData length: %i\n", data_len);
+	byte_read += sizeof(uint16_t);
+
 	print_dns_ans_data(type, answ + byte_read, data_len, packet);
 
 	return byte_read + data_len;
@@ -500,7 +511,8 @@ complete_dns_name(const u_char *name, uint name_len, const u_char *packet)
 			uint16_t ptr_name = ntohs((*(uint16_t *)(name + byte_r)));
 			if((ptr_name & PT_N) == PT_N)
 			{
-				complete_dns_name(packet + (ptr_name & N_DECL), UINT16_MAX, packet);
+				complete_dns_name(packet + (ptr_name & N_DECL), 
+					UINT16_MAX, packet);
 				return byte_r + sizeof(uint16_t);
 			}
 		}
@@ -509,8 +521,8 @@ complete_dns_name(const u_char *name, uint name_len, const u_char *packet)
 
 		printf("%.*s", next_point, name + byte_r + sizeof(uint8_t));
 
-		byte_r += sizeof(uint8_t) + next_point;
 		printf(".");
+		byte_r += sizeof(uint8_t) + next_point;
 	}
 	puts("\b ");
 	return byte_r + sizeof(uint8_t);
@@ -536,7 +548,7 @@ print_dns_ans_data(uint16_t type, const u_char *data, uint16_t data_len, const u
 			complete_dns_name(data, data_len, packet);
 			break;
 		case T_CNAME:
-			printf("\tCNAME: ");
+			printf("\tCNAME (Canonical Name): ");
 			complete_dns_name(data, data_len, packet);
 			break;
 		case T_PTR:
@@ -552,10 +564,7 @@ print_dns_ans_data(uint16_t type, const u_char *data, uint16_t data_len, const u
 		case T_TXT:
 			txt_len = *(uint8_t *)data;
 			printf("\tTXT length: %i\n", txt_len);
-			printf("\tText: ");
-			for (uint i = 0; i < txt_len; i++)
-				printf("%c", *(data + i + sizeof(uint8_t)));
-			puts("");
+			printf("\tText: %.*s\n", txt_len, data + sizeof(uint8_t));
 			break;
 		case T_AAAA:
 			inet_ntop(AF_INET6, (void *)data, buf_adr, INET6_ADDRSTRLEN);

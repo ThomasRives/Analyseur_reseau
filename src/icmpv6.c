@@ -1,20 +1,24 @@
 #include "icmpv6.h"
 
 void
-icmpv6_header_analyze(const u_char *packet, uint length)
+icmpv6_header_analyze(const u_char *packet, int verbose)
 {
 	struct icmp6_hdr *icmp6_header = (struct icmp6_hdr *)packet;
+	char buf_adr[INET6_ADDRSTRLEN];
+	inet_ntop(AF_INET6, packet + sizeof(struct icmp6_hdr),
+			  buf_adr, INET6_ADDRSTRLEN);
+	if(verbose == 2)
+	{
+		printf("Target address: %s\n", buf_adr);
+		return;
+	}
+	
 	print_icmpv6_type_code(icmp6_header->icmp6_type, icmp6_header->icmp6_code);
 
 	printf("Checksum: 0x%x\n", ntohs(icmp6_header->icmp6_cksum));
-	char buf_adr[INET6_ADDRSTRLEN];
-	inet_ntop(AF_INET6, packet + sizeof(struct icmp6_hdr), 
-		buf_adr, INET6_ADDRSTRLEN);
 	printf("Target address: %s\n", buf_adr);
 	uint bytes_read = sizeof(struct icmp6_hdr) + 16;
 	printf("%x\n", ntohl(*(uint32_t *)packet + bytes_read));
-	(void)length;
-	// print_icmpv6_option(packet + bytes_read, length - bytes_read);
 }
 
 void
@@ -96,20 +100,20 @@ print_icmp6_dest_unreach_code(uint8_t code)
 		case ICMP6_DST_UNREACH_NOPORT:
 			puts("Bad port");
 			break;
-		case 5:
+		case ICMP6_SRC_ADDR_FAIL:
 			puts("Source address failed ingress/egress policy");
 			break;
-		case 6:
+		case ICMP6_REJ_ROUTE_DST:
 			puts("Reject route to destination");
 			break;
-		case 7:
+		case ICMP6_ERR_SRC_ROUT:
 			puts("Error in Source Routing Header");
 			break;
-		case 8:
+		case ICMP6_HEADER_TOO_LONG:
 			puts("Headers too long");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -126,7 +130,7 @@ print_icmp6_time_exc_code(uint8_t code)
 			puts("Fragment reassembly time exceeded");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -145,32 +149,32 @@ print_icmpv6_par_prob_code(uint8_t code)
 		case ICMP6_PARAMPROB_OPTION:
 			puts("Unrecognized IPv6 option");
 			break;
-		case 3:
+		case ICMP6_PARAMPROB_INC:
 			puts("IPv6 First Fragment has incomplete IPv6 Header Chain");
 			break;
-		case 4:
+		case ICMP6_PARAMPROB_UP_LAY:
 			puts("SR Upper-layer Header Error");
 			break;
-		case 5:
+		case ICMP6_PARAMPROB_UNREC_NXT_HEAD:
 			puts("Unrecognized Next Header type encountered by intermediate node");
 			break;
-		case 6:
+		case ICMP6_PARAMPROB_EXT_TOO_BIG:
 			puts("Extension header too big");
 			break;
-		case 7:
+		case ICMP6_PARAMPROB_EXT_CHAIN_TL:
 			puts("Extension header chain too long");
 			break;
-		case 8:
+		case ICMP6_PARAMPROB_TOO_MNY_EXT:
 			puts("Too many extension headers");
 			break;
-		case 9:
+		case ICMP6_PARAMPROB_TOO_MNY_OPT:
 			puts("Too many options in extension header");
 			break;
-		case 10:
+		case ICMP6_PARAMPROB_OPT_TOO_BIG:
 			puts("Option too big");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -180,52 +184,16 @@ print_icmpv6_rout_rem_code(uint8_t code)
 	printf("Code: ");
 	switch (code)
 	{
-		case 0:
+		case ICMP6_ROUTREM_RENUMB_COMM:
 			puts("Router Renumbering Command");
 			break;
-		case 1:
+		case ICMP6_ROUTREM_RENUMB_RES:
 			puts("Router Renumbering Result");
 			break;
-		case 255:
+		case ICMP6_ROUTREM_SEQ_NUM_RES:
 			puts("Sequence Number Reset");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
-	}
-}
-
-void
-print_icmpv6_option(const u_char *packet, uint length)
-{
-	puts("ICMPv6 options:");
-	for(uint i = 0; i < length;)
-	{
-		struct tlv next_tlv = tlv_translate_icmpv6(packet + i);
-		switch (next_tlv.type)
-		{
-			case ND_OPT_SOURCE_LINKADDR:
-				// puts("");
-				break;
-			case ND_OPT_TARGET_LINKADDR:
-				// puts("");
-				break;
-			case ND_OPT_PREFIX_INFORMATION:
-				// puts("");
-				break;
-			case ND_OPT_REDIRECTED_HEADER:
-				// puts("");
-				break;
-			case ND_OPT_MTU:
-				// puts("");
-				break;
-			case ND_OPT_RTR_ADV_INTERVAL:
-				// puts("");
-				break;
-			case ND_OPT_HOME_AGENT_INFO:
-				// puts("");
-				break;
-		}
-		i += next_tlv.length;
-		free(next_tlv.value);
+			puts("Unknown...");
 	}
 }
