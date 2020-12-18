@@ -22,7 +22,11 @@ ipv4_header_analyze(const u_char *packet, uint length, int verbose)
 		ipv4_print_flags(ip_header->frag_off & IPV4_FLAGS);
 		printf("Fragment offset: %u\n", ip_header->frag_off & IPV4_FRAG_OFF);
 		printf("Time to live: %u\n", ip_header->ttl);
-		printf("Checksum : 0x%x\n", ntohs(ip_header->check));
+		uint16_t checksum = ntohs(ip_header->check);
+		if(checksum)
+			printf("Checksum : 0x%x\n", ntohs(ip_header->check));
+		else
+			puts("No checksum");
 		printf("Source address : %s\n", inet_ntoa(*(struct in_addr *)&ip_header->saddr));
 		printf("Destination address: %s\n", inet_ntoa(*(struct in_addr *)&ip_header->daddr));
 		printf("IHL: %u bytes\n", ip_header->ihl*4);

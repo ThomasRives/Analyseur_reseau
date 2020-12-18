@@ -6,11 +6,12 @@ icmp_header_analyze(const u_char *packet, int verbose)
 	struct icmphdr *icmp_header = (struct icmphdr *)packet;
 	if(verbose == 2)
 	{
-		printf("Identifier: 0x%x\n", icmp_header->un.echo.id);
+		printf("___%i____\n", icmp_header->type);
+		print_icmp_type_code(icmp_header->type, icmp_header->code, verbose);
 		return;
 	}
 
-	print_icmp_type_code(icmp_header->type, icmp_header->code);
+	print_icmp_type_code(icmp_header->type, icmp_header->code, verbose);
 	printf("Checksum: 0x%x\n", ntohs(icmp_header->checksum));
 	printf("Identifier: 0x%x\n", icmp_header->un.echo.id);
 	printf("Sequence number: %i\n", ntohs(icmp_header->un.echo.sequence));
@@ -24,7 +25,7 @@ icmp_header_analyze(const u_char *packet, int verbose)
 }
 
 void
-print_icmp_type_code(uint8_t type, uint8_t code)
+print_icmp_type_code(uint8_t type, uint8_t code, int verbose)
 {
 	printf("Type: ");
 	switch (type)
@@ -34,14 +35,16 @@ print_icmp_type_code(uint8_t type, uint8_t code)
 			break;
 		case ICMP_DEST_UNREACH:
 			puts("Destination Unreachable");
-			print_icmp_dest_unreach_code(code);
+			if (verbose == 3)
+				print_icmp_dest_unreach_code(code);
 			break;
 		case ICMP_SOURCE_QUENCH:
 			puts("Source Quench");
 			break;
 		case ICMP_REDIRECT:
 			puts("Redirect (change route)");
-			print_icmp_dest_unreach_code(code);
+			if (verbose == 3)
+				print_icmp_dest_unreach_code(code);
 			break;
 		case ICMP_ALTER_HOST_ADDR:
 			puts("Alternate Host Address");
@@ -51,18 +54,21 @@ print_icmp_type_code(uint8_t type, uint8_t code)
 			break;
 		case ICMP_ROUTER_ADV:
 			puts("Router Advertisement");
-			print_icmp_rout_ad_code(code);
+			if (verbose == 3)
+				print_icmp_rout_ad_code(code);
 			break;
 		case ICMP_ROUT_SOLICI:
 			puts("Router Solicitation");
 			break;
 		case ICMP_TIME_EXCEEDED:
 			puts("Time Exceeded");
-			print_icmp_time_exc_code(code);
+			if (verbose == 3)
+				print_icmp_time_exc_code(code);
 			break;
 		case ICMP_PARAMETERPROB:
 			puts("Parameter Problem");
-			print_icmp_par_prob_code(code);
+			if (verbose == 3)
+				print_icmp_par_prob_code(code);
 			break;
 		case ICMP_TIMESTAMP:
 			puts("Timestamp Request");
@@ -84,7 +90,8 @@ print_icmp_type_code(uint8_t type, uint8_t code)
 			break;
 		case ICMP_PHOTURIS:
 			puts("Photuris");
-			print_icmp_photuris_code(code);
+			if (verbose == 3)
+				print_icmp_photuris_code(code);
 			break;
 		case ICMP_EXP:
 			puts("ICMP messages utilized by experimental mobility protocols");
@@ -94,7 +101,8 @@ print_icmp_type_code(uint8_t type, uint8_t code)
 			break;
 		case ICMP_EXT_ECHO_REP:
 			puts("Extended Echo Reply");
-			print_icmp_ext_ech_rep_code(code);
+			if (verbose == 3)
+				print_icmp_ext_ech_rep_code(code);
 			break;
 		default:
 			puts("Unknown...");

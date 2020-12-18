@@ -42,8 +42,9 @@ void icmp_header_analyze(const u_char *packet, int verbose);
  * 
  * @param type: the type of the icmp packet.
  * @param code: the code of the icmp packet.
+ * @param verbose: the verbose given by the user.
  */
-void print_icmp_type_code(uint8_t type, uint8_t code);
+void print_icmp_type_code(uint8_t type, uint8_t code, int verbose);
 
 /**
  * @brief Print the icmp code if the type is "Destination Unreachable"

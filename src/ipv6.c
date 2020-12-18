@@ -24,7 +24,7 @@ ipv6_header_analyze(const u_char *packet, uint length, int verbose)
 	else
 	{
 		printf("Version: %i\n", f32_bits.version);
-		printf("Trafic class: %x\n", f32_bits.tc);
+		printf("Trafic class: 0x%x\n", f32_bits.tc);
 		printf("ID: 0x%x\n", f32_bits.id);
 		printf("Length: %i\n", ntohs(ipv6_header->ip6_plen));
 		printf("Hop limit: %i\n", ipv6_header->ip6_hlim);
@@ -63,7 +63,7 @@ ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head,
 			if (verbose < 3)
 				printf(" ");
 			else
-				print_bg_yellow(" (17)", 1);
+				puts(" (17)");
 			udp_header_analyze(packet, len, verbose);
 			break;
 		case IPV6_ENCAPS_V6_HEADER:
@@ -94,7 +94,7 @@ ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head,
 			else if (verbose == 2)
 				printf(" ");
 			else
-				print_bg_red(" (58)", 1);
+				puts(" (58)");
 			icmpv6_header_analyze(packet, verbose);
 			break;
 		case IPV6_NO:
