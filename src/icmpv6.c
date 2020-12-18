@@ -1,15 +1,21 @@
 #include "icmpv6.h"
 
 void
-icmpv6_header_analyze(const u_char *packet, uint length)
+icmpv6_header_analyze(const u_char *packet, uint length, int verbose)
 {
 	struct icmp6_hdr *icmp6_header = (struct icmp6_hdr *)packet;
+	char buf_adr[INET6_ADDRSTRLEN];
+	inet_ntop(AF_INET6, packet + sizeof(struct icmp6_hdr),
+			  buf_adr, INET6_ADDRSTRLEN);
+	if(verbose == 2)
+	{
+		printf("Target address: %s\n", buf_adr);
+		return;
+	}
+	
 	print_icmpv6_type_code(icmp6_header->icmp6_type, icmp6_header->icmp6_code);
 
 	printf("Checksum: 0x%x\n", ntohs(icmp6_header->icmp6_cksum));
-	char buf_adr[INET6_ADDRSTRLEN];
-	inet_ntop(AF_INET6, packet + sizeof(struct icmp6_hdr), 
-		buf_adr, INET6_ADDRSTRLEN);
 	printf("Target address: %s\n", buf_adr);
 	uint bytes_read = sizeof(struct icmp6_hdr) + 16;
 	printf("%x\n", ntohl(*(uint32_t *)packet + bytes_read));

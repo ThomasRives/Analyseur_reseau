@@ -180,8 +180,9 @@ struct soa {
  * 
  * @param packet: the packet himself.
  * @param length: the packet length.
+ * @param verbose: the verbose given by the user.
  */
-void dns_analyze(const u_char *packet);
+void dns_analyze(const u_char *packet, int verbose);
 
 /**
  * @brief Print the control informations of a DNS packet.

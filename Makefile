@@ -36,7 +36,7 @@ obj/test.o: src/test.c
 test:
 	@make clean 1>/dev/null
 	@make 1>/dev/null
-	@valgrind -q --leak-check=full ./bin/main -i any -v 1 -o pcap_files/rarp_request.cap
+	@valgrind -q --leak-check=full ./bin/main -i any -v 3 -o pcap_files/rarp_request.cap
 
 .PHONY: clean test
 clean:

@@ -92,8 +92,9 @@ struct bootphdr
  * @brief Analyze the bootp header of the packet.
  * 
  * @param packet: the packet himself.
+ * @param verbose: the verbose given by the user.
  */
-void bootp_analyze(const u_char *packet);
+void bootp_analyze(const u_char *packet, int verbose);
 
 /**
  * @brief Print the operation of a bootp packet.

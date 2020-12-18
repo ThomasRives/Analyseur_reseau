@@ -28,14 +28,14 @@
 #define ICMP_EER_NO_TABLE 3
 #define ICMP_EER_MULT_INT 4
 
-
 /**
  * @brief Analyze the ICMP header of the packet.
  * 
  * @param packet: the packet himself.
  * @param length: the packet length.
+ * @param verbose: the verbose given by the user.
  */
-void icmp_header_analyze(const u_char *packet);
+void icmp_header_analyze(const u_char *packet, int verbose);
 
 /**
  * @brief Print the type/code informations for icmp.

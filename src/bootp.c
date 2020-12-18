@@ -1,9 +1,14 @@
 #include "bootp.h"
 
 void
-bootp_analyze(const u_char *packet)
+bootp_analyze(const u_char *packet, int verbose)
 {
 	struct bootphdr *btphdr = (struct bootphdr *)packet;
+	if(verbose == 2)
+	{
+		bootp_print_op(btphdr->op);
+		return;
+	}
 
 	bootp_print_op(btphdr->op);
 	bootp_print_htype(btphdr->htype);

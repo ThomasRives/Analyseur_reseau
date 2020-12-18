@@ -2,9 +2,15 @@
 #include "utilities.h"
 
 void
-dns_analyze(const u_char *packet)
+dns_analyze(const u_char *packet, int verbose)
 {
 	struct dnshdr *dns_hdr = (struct dnshdr *)packet;
+
+	if(verbose == 2)
+	{
+		printf("Id: %x\n", ntohs(dns_hdr->id));
+		return;
+	}
 	printf("Id: %x\n", ntohs(dns_hdr->id));
 	dns_print_ctrl(ntohs(dns_hdr->ctrl));
 

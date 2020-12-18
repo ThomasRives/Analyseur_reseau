@@ -21,13 +21,14 @@
 #define ICMP6_ROUTREM_RENUMB_RES 1
 #define ICMP6_ROUTREM_SEQ_NUM_RES 255
 
-
 /**
  * @brief Analyze the ICMPv6 header of the packet.
  * 
  * @param packet: the packet himself.
+ * @param length: the length of the packet.
+ * @param verbose: the verbose given by the user.
  */
-void icmpv6_header_analyze(const u_char *packet, uint length);
+void icmpv6_header_analyze(const u_char *packet, uint length, int verbose);
 
 /**
  * @brief Print the type (and the code) of the ICMPv6 packet.

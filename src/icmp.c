@@ -1,9 +1,14 @@
 #include "icmp.h"
 
 void
-icmp_header_analyze(const u_char *packet)
+icmp_header_analyze(const u_char *packet, int verbose)
 {
 	struct icmphdr *icmp_header = (struct icmphdr *)packet;
+	if(verbose == 2)
+	{
+		printf("Identifier: 0x%x\n", icmp_header->un.echo.id);
+		return;
+	}
 
 	print_icmp_type_code(icmp_header->type, icmp_header->code);
 	printf("Checksum: 0x%x\n", ntohs(icmp_header->checksum));

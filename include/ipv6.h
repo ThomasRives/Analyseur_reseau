@@ -31,8 +31,9 @@ struct ipv6_f32_parse
  *
  * @param packet: the packet you want to analyze.
  * @param length: the packet length.
+ * @param verbose: the verbose given by the user.
  */
-void ipv6_header_analyze(const u_char *packet, uint length);
+void ipv6_header_analyze(const u_char *packet, uint length, int verbose);
 
 /**
  * @brief Analyze the next header of the packet.
@@ -40,8 +41,10 @@ void ipv6_header_analyze(const u_char *packet, uint length);
  * @param packet: the packet (begin at the next protocol).
  * @param len: the length of the packet.
  * @param nxt_head: the next header type.
+ * @param verbose: the verbose given by the user.
  */
-void ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head);
+void ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head,
+	int verbose);
 
 /**
  * @brief Parse the first 32 bits of IPv6 header.

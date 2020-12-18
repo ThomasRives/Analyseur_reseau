@@ -1,31 +1,47 @@
 #include "ipv6.h"
 
 void 
-ipv6_header_analyze(const u_char *packet, uint length)
+ipv6_header_analyze(const u_char *packet, uint length, int verbose)
 {
 	struct ip6_hdr *ipv6_header = (struct ip6_hdr *)packet;
 	struct ipv6_f32_parse f32_bits = parse_f32_ipv6(
 		ntohl(ipv6_header->ip6_flow));
-	printf("Version: %i\n", f32_bits.version);
-	printf("Trafic class: %x\n", f32_bits.tc);
-	printf("ID: 0x%x\n", f32_bits.id);
-	printf("Length: %i\n", ntohs(ipv6_header->ip6_plen));
 
-	printf("Hop limit: %i\n", ipv6_header->ip6_hlim);
+	char buf_adr1[INET6_ADDRSTRLEN];
+	char buf_adr2[INET6_ADDRSTRLEN];
+	inet_ntop(AF_INET6, &ipv6_header->ip6_src, buf_adr1, INET6_ADDRSTRLEN);
+	inet_ntop(AF_INET6, &ipv6_header->ip6_dst, buf_adr2, INET6_ADDRSTRLEN);
+	if(verbose == 1)
+	{
+		printf("Source address: %s ", buf_adr1);
+		printf("Destination address: %s ", buf_adr2);
+	}
+	else if(verbose == 2)
+	{
+		printf("Source address: %s\t", buf_adr1);
+		printf("Destination address: %s\n", buf_adr2);
+	}
+	else
+	{
+		printf("Version: %i\n", f32_bits.version);
+		printf("Trafic class: %x\n", f32_bits.tc);
+		printf("ID: 0x%x\n", f32_bits.id);
+		printf("Length: %i\n", ntohs(ipv6_header->ip6_plen));
+		printf("Hop limit: %i\n", ipv6_header->ip6_hlim);
 
-	char buf_adr[INET6_ADDRSTRLEN];
-	inet_ntop(AF_INET6, &ipv6_header->ip6_src, buf_adr, INET6_ADDRSTRLEN);
-	printf("Source address: %s\n", buf_adr);
-	inet_ntop(AF_INET6, &ipv6_header->ip6_dst, buf_adr, INET6_ADDRSTRLEN);
-	printf("Destination address: %s\n", buf_adr);
+		printf("Source address: %s\n", buf_adr1);
+		printf("Destination address: %s\n", buf_adr2);
+	}
 
 	ipv6_analyze_next_header(packet + sizeof(struct ip6_hdr),
 							 length - sizeof(struct ip6_hdr),
-							 ipv6_header->ip6_nxt);
+							 ipv6_header->ip6_nxt,
+							 verbose);
 }
 
 void
-ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head)
+ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head,
+	int verbose)
 {
 	printf("Next header: ");
 	switch (nxt_head)
@@ -34,12 +50,22 @@ ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head)
 			puts("Hop-by-hop Options Header (0)");
 			break;
 		case IPV6_TCP:
-			puts("TCP (6)");
-			tcp_header_analyze(packet, len);
+			if(verbose == 1)
+				print_bg_green("TCP ", 0);
+			else if(verbose == 2)
+				print_bg_green("TCP\t", 0);
+			else
+				print_bg_green("TCP (6)", 1);
+			tcp_header_analyze(packet, len, verbose);
 			break;
 		case IPV6_UDP:
-			puts("UDP (17)");
-			udp_header_analyze(packet, len);
+			if (verbose == 1)
+				print_bg_yellow("UDP ", 0);
+			else if (verbose == 2)
+				print_bg_yellow("UDP\t", 0);
+			else
+				print_bg_yellow("UDP (17)", 1);
+			udp_header_analyze(packet, len, verbose);
 			break;
 		case IPV6_ENCAPS_V6_HEADER:
 			puts("Encapsulated IPv6 Header (41)");
@@ -60,8 +86,13 @@ ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head)
 			puts("Authentication Header (51)");
 			break;
 		case IPV6_ICMPV6:
-			puts("ICMPv6 (58)");
-			icmpv6_header_analyze(packet, len);
+			if (verbose == 1)
+				print_bg_red("ICMPv6 ", 0);
+			else if (verbose == 2)
+				print_bg_red("ICMPv6\t", 0);
+			else
+				print_bg_red("ICMPv6 (58)", 1);
+			icmpv6_header_analyze(packet, len, verbose);
 			break;
 		case IPV6_NO:
 			puts("No next header (59)");

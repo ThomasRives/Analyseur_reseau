@@ -7,8 +7,9 @@
  * 
  * @param packet: the packet himself.
  * @param length: the packet length.
+ * @param verbose: the verbose given by the user.
  */
-void tcp_header_analyze(const u_char *packet, uint length);
+void tcp_header_analyze(const u_char *packet, uint length, int verbose);
 
 /**
  * @brief Print the tcp flags.

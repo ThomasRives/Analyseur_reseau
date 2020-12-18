@@ -7,7 +7,8 @@
  * 
  * @param packet: the packet himself.
  * @param length: the packet length.
+ * @param verbose: the verbose given by the user.
  */
-void udp_header_analyze(const u_char *packet, uint length);
+void udp_header_analyze(const u_char *packet, uint length, int verbose);
 
 #endif //UDP_H

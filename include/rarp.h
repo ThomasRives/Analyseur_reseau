@@ -9,7 +9,8 @@
  * It's just named differently to clarify the code.
  * 
  * @param packet: the packet that will be analyzed.
+ * @param verbose: the verbose given by the user.
  */
-void rarp_header_analyze(const u_char *packet);
+void rarp_header_analyze(const u_char *packet, int verbose);
 
 #endif //RARP_H

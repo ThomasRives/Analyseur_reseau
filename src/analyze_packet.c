@@ -5,10 +5,11 @@
 void
 got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 {
-	Options options = *(Options *)args;
-	(void)options;
-	(void)header;
-	analyze_ethernet_hearder(packet, header->len);
+	int verbose = *(int *)args;
+	printf("%i\n", verbose);
+	if(verbose == 3)
+		print_packet(header->len, packet);
+	analyze_ethernet_hearder(packet, header->len, verbose);
 }
 
 void

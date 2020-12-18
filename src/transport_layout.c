@@ -2,7 +2,8 @@
 #include "tlv_analyzer.h"
 
 void
-demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint length)
+demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, 
+	uint length, int verbose)
 {
 	uint16_t port = port_src;
 	printf("\nProtocole: ");
@@ -11,35 +12,53 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet, uint len
 		{
 			case PORT_BOOTPS:
 			case PORT_BOOTPC:
-				print_i_bg_blue("Bootp", 1);
-				bootp_analyze(packet);
+				if(verbose == 1 || verbose == 3)
+					print_i_bg_blue("Bootp", 1);
+				else
+					print_i_bg_blue("Bootp\t", 0);
+				bootp_analyze(packet, verbose);
 				return;
 			case PORT_SMTP:
 				print_i_bg_purple("SMTP", 1);
+				if (verbose != 3)
+					return;
 				smtp_analyze(packet, length);
 				return;
 			case PORT_TELNET:
 				print_i_bg_white("Telnet", 1);
+				if (verbose != 3)
+					return;
 				telnet_analyze(packet, length);
 				return;
 			case PORT_FTP:
 				print_i_bg_yellow("FTP", 1);
+				if (verbose != 3)
+					return;
 				ftp_analyze(packet, length);
 				return;
 			case PORT_HTTP:
-				print_i_bg_green("HTTP", 1);
+				print_i_bg_white("Telnet", 1);
+				if (verbose != 3)
+					return;
 				http_analyze(packet, length);
 				return;
 			case PORT_DNS:
-				print_i_bg_cyan("DNS", 1);
-				dns_analyze(packet);
+				if (verbose == 1 || verbose == 3)
+					print_i_bg_cyan("DNS", 1);
+				else
+					print_i_bg_cyan("DNS\t", 0);
+				dns_analyze(packet, verbose);
 				return;
 			case PORT_POP:
 				print_i_bg_black("POP3", 1);
+				if (verbose != 3)
+					return;
 				pop_analyze(packet, length);
 				return;
 			case PORT_IMAP:
 				print_i_bg_red("IMAP", 1);
+				if (verbose != 3)
+					return;
 				imap_analyze(packet, length);
 				return;
 		}

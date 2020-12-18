@@ -117,8 +117,9 @@ struct heartbeat_chunk_ack {
  * 
  * @param packet: the packet himself.
  * @param length: the length of the packet.
+ * @param verbose: the verbose given by the user.
  */
-void sctp_analayze(const u_char *packet, uint length);
+void sctp_analayze(const u_char *packet, uint length, int verbose);
 
 /**
  * @brief Read the chunks of an sctp packet

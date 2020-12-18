@@ -13,8 +13,9 @@
  * 
  * @param packet: the packet himself.
  * @param len: the length of the packet.
+ * @param verbose: the verbose given by the user.
  */
-void analyze_ethernet_hearder(const u_char *packet, uint len);
+void analyze_ethernet_hearder(const u_char *packet, uint len, int verbose);
 
 /**
  * @brief Analyze the protocol used and analyze it.
@@ -22,7 +23,9 @@ void analyze_ethernet_hearder(const u_char *packet, uint len);
  * @param packet: the packet (begin at the protocol).
  * @param len: the length of the packet.
  * @param prot: the protocol used.
+ * @param verbose: the verbose given by the user.
  */
-void ethernet_demult_prot(const u_char *packet, uint len, uint16_t prot);
+void ethernet_demult_prot(const u_char *packet, uint len, uint16_t prot, 
+	int verbose);
 
 #endif //ETHER_H

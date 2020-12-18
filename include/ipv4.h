@@ -26,8 +26,9 @@
  *
  * @param packet: the packet you want to analyze.
  * @param length: the packet length.
+ * @param verbose: the verbose given by the user.
  */
-void ipv4_header_analyze(const u_char *packet, uint length);
+void ipv4_header_analyze(const u_char *packet, uint length, int verbose);
 
 /**
  * @brief Print the field "type of service" of the packet.
@@ -49,7 +50,9 @@ void ipv4_print_flags(uint8_t flags);
  * @param packet: the packet (begin at the protocol).
  * @param len: the length of the packet.
  * @param prot: the protocol used.
+ * @param verbose: the verbose given by the user.
  */
-void ipv4_demult_prot(const u_char *packet, uint len, uint8_t prot);
+void ipv4_demult_prot(const u_char *packet, uint len, uint8_t prot, 
+	int verbose);
 
 #endif //IPV4_H

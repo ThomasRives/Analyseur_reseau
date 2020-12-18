@@ -1,23 +1,38 @@
 #include "ipv4.h"
 
 void
-ipv4_header_analyze(const u_char *packet, uint length)
+ipv4_header_analyze(const u_char *packet, uint length, int verbose)
 {
 	struct iphdr *ip_header = (struct iphdr *)packet;
-	printf("IHL: %u bytes\n", ip_header->ihl*4);
-	ipv4_tos(ip_header->tos);
-	printf("Total length: %u\n", ntohs(ip_header->tot_len));
-	printf("Packet's ID: 0x%x\n", ntohs(ip_header->id));
-	ipv4_print_flags(ip_header->frag_off & IPV4_FLAGS);
-	printf("Fragment offset: %u\n", ip_header->frag_off & IPV4_FRAG_OFF);
-	printf("Time to live: %u\n", ip_header->ttl);
-	printf("Checksum : 0x%x\n", ntohs(ip_header->check));
-	printf("Source address : %s\n", inet_ntoa(*(struct in_addr *)&ip_header->saddr));
-	printf("Destination address: %s\n", inet_ntoa(*(struct in_addr *)&ip_header->daddr));
+	if(verbose == 1)
+	{
+		printf("Source address : %s ", inet_ntoa(*(struct in_addr *)&ip_header->saddr));
+		printf("Destination address: %s ", inet_ntoa(*(struct in_addr *)&ip_header->daddr));
+	}
+	else if(verbose == 2)
+	{
+		printf("Source address : %s\t", inet_ntoa(*(struct in_addr *)&ip_header->saddr));
+		printf("Destination address: %s\n", inet_ntoa(*(struct in_addr *)&ip_header->daddr));
+	}
+	else
+	{
+		ipv4_tos(ip_header->tos);
+		printf("Total length: %u\n", ntohs(ip_header->tot_len));
+		printf("Packet's ID: 0x%x\n", ntohs(ip_header->id));
+		ipv4_print_flags(ip_header->frag_off & IPV4_FLAGS);
+		printf("Fragment offset: %u\n", ip_header->frag_off & IPV4_FRAG_OFF);
+		printf("Time to live: %u\n", ip_header->ttl);
+		printf("Checksum : 0x%x\n", ntohs(ip_header->check));
+		printf("Source address : %s\n", inet_ntoa(*(struct in_addr *)&ip_header->saddr));
+		printf("Destination address: %s\n", inet_ntoa(*(struct in_addr *)&ip_header->daddr));
+		printf("IHL: %u bytes\n", ip_header->ihl*4);
+	}
+	
 
 	ipv4_demult_prot(packet + ip_header->ihl * 4,
 					 length - ip_header->ihl * 4,
-					 ip_header->protocol);
+					 ip_header->protocol,
+					 verbose);
 }
 
 void
@@ -92,34 +107,75 @@ ipv4_print_flags(uint8_t flags)
 }
 
 void
-ipv4_demult_prot(const u_char *packet, uint len, uint8_t prot)
+ipv4_demult_prot(const u_char *packet, uint len, uint8_t prot, int verbose)
 {
 	printf("Protocol used: ");
 	switch (prot) 
 	{
 		case IPPROTO_TCP:
-			print_bg_green("TCP", 0);
-			printf(" (%i)\n", prot);
-			tcp_header_analyze(packet, len);
+			if(verbose == 1)
+				print_bg_green("TCP ", 0);
+			else if(verbose == 2)
+				print_bg_green("TCP\t", 0);
+			else
+			{
+				print_bg_green("TCP", 0);
+				printf(" (%i)\n", prot);
+			}
+			tcp_header_analyze(packet, len, verbose);
 			break;
 		case IPPROTO_UDP:
-			print_bg_yellow("UDP", 0);
-			printf(" (%i)\n", prot);
-			udp_header_analyze(packet, len);
+			if (verbose == 1)
+				print_bg_yellow("UDP ", 0);
+			else if (verbose == 2)
+				print_bg_yellow("UDP\t", 0);
+			else
+			{
+				print_bg_yellow("UDP", 0);
+				printf(" (%i)\n", prot);
+			}
+			udp_header_analyze(packet, len, verbose);
 			break;
 		case IPPROTO_ICMP:
-			print_bg_red("ICMP", 0);
-			printf(" (%i)\n", prot);
-			icmp_header_analyze(packet);
+			if (verbose == 1)
+			{
+				print_bg_red("ICMP ", 1);
+				return;
+			}
+			else if (verbose == 2)
+				print_bg_red("ICMP\t", 0);
+			else
+			{
+				print_bg_red("ICMP", 0);
+				printf(" (%i)\n", prot);
+			}
+			icmp_header_analyze(packet, verbose);
 			break;
 		case IPPROTO_IPV6:
-			print_bg_blue("IPv6", 0);
-			printf(" (%i)\n", prot);
+			if (verbose == 1)
+				print_bg_blue("IPv6 ", 0);
+			else if (verbose == 2)
+				print_bg_blue("IPv6\t", 0);
+			else
+			{
+				print_bg_blue("IPv6", 0);
+				printf(" (%i)\n", prot);
+			}
 			break;
 		case IPPROTO_SCTP:
-			print_bg_purple("SCTP", 0);
-			printf(" (%i)\n", prot);
-			sctp_analayze(packet, len);
+			if (verbose == 1)
+			{
+				print_bg_purple("SCTP", 1);
+				return;
+			}
+			else if (verbose == 2)
+				print_bg_purple("SCTP\t", 0);
+			else
+			{
+				print_bg_purple("SCTP", 0);
+				printf(" (%i)\n", prot);
+			}
+			sctp_analayze(packet, len, verbose);
 			break;
 		default:
 			puts("Not supported");
