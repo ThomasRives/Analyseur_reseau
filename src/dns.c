@@ -542,7 +542,7 @@ print_dns_ans_data(uint16_t type, const u_char *data, uint16_t data_len, const u
 			complete_dns_name(data, data_len, packet);
 			break;
 		case T_CNAME:
-			printf("\tCNAME: ");
+			printf("\tCNAME (Canonical Name): ");
 			complete_dns_name(data, data_len, packet);
 			break;
 		case T_PTR:
@@ -558,10 +558,7 @@ print_dns_ans_data(uint16_t type, const u_char *data, uint16_t data_len, const u
 		case T_TXT:
 			txt_len = *(uint8_t *)data;
 			printf("\tTXT length: %i\n", txt_len);
-			printf("\tText: ");
-			for (uint i = 0; i < txt_len; i++)
-				printf("%c", *(data + i + sizeof(uint8_t)));
-			puts("");
+			printf("\tText: %.*s\n", txt_len, data + sizeof(uint8_t));
 			break;
 		case T_AAAA:
 			inet_ntop(AF_INET6, (void *)data, buf_adr, INET6_ADDRSTRLEN);

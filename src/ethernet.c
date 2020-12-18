@@ -37,7 +37,7 @@ ethernet_demult_prot(const u_char *packet, uint len, uint16_t prot)
 			arp_header_analyze(packet);
 			break;
 		case ETHERTYPE_REVARP:
-			print_bg_white("RARP", 1);
+			print_bg_cyan("RARP", 1);
 			rarp_header_analyze(packet);
 			break;
 		default:

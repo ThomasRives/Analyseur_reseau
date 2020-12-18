@@ -96,20 +96,20 @@ print_icmp6_dest_unreach_code(uint8_t code)
 		case ICMP6_DST_UNREACH_NOPORT:
 			puts("Bad port");
 			break;
-		case 5:
+		case ICMP6_SRC_ADDR_FAIL:
 			puts("Source address failed ingress/egress policy");
 			break;
-		case 6:
+		case ICMP6_REJ_ROUTE_DST:
 			puts("Reject route to destination");
 			break;
-		case 7:
+		case ICMP6_ERR_SRC_ROUT:
 			puts("Error in Source Routing Header");
 			break;
-		case 8:
+		case ICMP6_HEADER_TOO_LONG:
 			puts("Headers too long");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -126,7 +126,7 @@ print_icmp6_time_exc_code(uint8_t code)
 			puts("Fragment reassembly time exceeded");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -145,32 +145,32 @@ print_icmpv6_par_prob_code(uint8_t code)
 		case ICMP6_PARAMPROB_OPTION:
 			puts("Unrecognized IPv6 option");
 			break;
-		case 3:
+		case ICMP6_PARAMPROB_INC:
 			puts("IPv6 First Fragment has incomplete IPv6 Header Chain");
 			break;
-		case 4:
+		case ICMP6_PARAMPROB_UP_LAY:
 			puts("SR Upper-layer Header Error");
 			break;
-		case 5:
+		case ICMP6_PARAMPROB_UNREC_NXT_HEAD:
 			puts("Unrecognized Next Header type encountered by intermediate node");
 			break;
-		case 6:
+		case ICMP6_PARAMPROB_EXT_TOO_BIG:
 			puts("Extension header too big");
 			break;
-		case 7:
+		case ICMP6_PARAMPROB_EXT_CHAIN_TL:
 			puts("Extension header chain too long");
 			break;
-		case 8:
+		case ICMP6_PARAMPROB_TOO_MNY_EXT:
 			puts("Too many extension headers");
 			break;
-		case 9:
+		case ICMP6_PARAMPROB_TOO_MNY_OPT:
 			puts("Too many options in extension header");
 			break;
-		case 10:
+		case ICMP6_PARAMPROB_OPT_TOO_BIG:
 			puts("Option too big");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -180,17 +180,17 @@ print_icmpv6_rout_rem_code(uint8_t code)
 	printf("Code: ");
 	switch (code)
 	{
-		case 0:
+		case ICMP6_ROUTREM_RENUMB_COMM:
 			puts("Router Renumbering Command");
 			break;
-		case 1:
+		case ICMP6_ROUTREM_RENUMB_RES:
 			puts("Router Renumbering Result");
 			break;
-		case 255:
+		case ICMP6_ROUTREM_SEQ_NUM_RES:
 			puts("Sequence Number Reset");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 

@@ -10,12 +10,12 @@ icmp_header_analyze(const u_char *packet)
 	printf("Identifier: 0x%x\n", icmp_header->un.echo.id);
 	printf("Sequence number: %i\n", ntohs(icmp_header->un.echo.sequence));
 
-	char buf[100] = {0};
-	struct tm ts;
-	time_t time = *(uint32_t *)(packet + sizeof(struct icmphdr));
-	ts = *localtime(&time);
-	strftime(buf, sizeof(buf), "%Y %m %d %H:%M:%S %Z", &ts);
-	printf("Timestamps: %s\n", buf);
+	// char buf[100] = {0};
+	// struct tm ts;
+	// time_t time = *(uint32_t *)(packet + sizeof(struct icmphdr));
+	// ts = *localtime(&time);
+	// strftime(buf, sizeof(buf), "%Y %m %d %H:%M:%S %Z", &ts);
+	// printf("Timestamps: %s\n", buf);
 }
 
 void

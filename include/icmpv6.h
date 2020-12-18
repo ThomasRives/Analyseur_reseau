@@ -2,6 +2,26 @@
 #define ICMPV6_H
 #include "transport_layout.h"
 
+#define ICMP6_SRC_ADDR_FAIL 5
+#define ICMP6_REJ_ROUTE_DST 6
+#define ICMP6_ERR_SRC_ROUT 7
+#define ICMP6_HEADER_TOO_LONG 8
+
+
+/* Code */
+#define ICMP6_PARAMPROB_INC 3
+#define ICMP6_PARAMPROB_UP_LAY 4
+#define ICMP6_PARAMPROB_UNREC_NXT_HEAD 5
+#define ICMP6_PARAMPROB_EXT_TOO_BIG 6
+#define ICMP6_PARAMPROB_EXT_CHAIN_TL 7
+#define ICMP6_PARAMPROB_TOO_MNY_EXT 8
+#define ICMP6_PARAMPROB_TOO_MNY_OPT 9
+#define ICMP6_PARAMPROB_OPT_TOO_BIG 10
+#define ICMP6_ROUTREM_RENUMB_COMM 0
+#define ICMP6_ROUTREM_RENUMB_RES 1
+#define ICMP6_ROUTREM_SEQ_NUM_RES 255
+
+
 /**
  * @brief Analyze the ICMPv6 header of the packet.
  * 

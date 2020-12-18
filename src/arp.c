@@ -46,16 +46,16 @@ arp_print_prot_type(uint prot_type)
 	switch (prot_type)
 	{
 		case ETHERTYPE_IPV6:
-			puts("IPV6");
+			print_bg_blue("IPV6", 1);
 			break;
 		case ETHERTYPE_IP:
-			puts("IPV4");
+			print_bg_green("IPV4", 1);
 			break;
 		case ETHERTYPE_ARP:
-			puts("ARP");
+			print_bg_cyan("ARP", 1);
 			break;
 		case ETHERTYPE_REVARP:
-			puts("RARP");
+			print_bg_cyan("RARP", 1);
 			break;
 		default:
 			puts("Unknown type...");
