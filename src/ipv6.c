@@ -86,7 +86,12 @@ ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head,
 			break;
 		case IPV6_ICMPV6:
 			print_bg_red("ICMPv6", 0);
-			if (verbose < 3)
+			if(verbose == 1)
+			{
+				puts("");
+				return;
+			}
+			else if (verbose == 2)
 				printf(" ");
 			else
 				print_bg_red(" (58)", 1);

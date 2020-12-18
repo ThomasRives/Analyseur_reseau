@@ -2,9 +2,9 @@
 #include "color.h"
 
 void
-print_bg_black(char *txt, int new_line)
+print_b_blue(char *txt, int new_line)
 {
-	printf(BG_BLACK "%s" COLOR_BG_OFF, txt);
+	printf(B_BLUE "%s" COLOR_OFF, txt);
 	if(new_line)
 		puts("");
 }
@@ -68,7 +68,7 @@ print_bg_white(char *txt, int new_line)
 void
 print_i_bg_black(char *txt, int new_line)
 {
-	printf(BG_I_BLACK "%s" COLOR_BG_OFF, txt);
+	printf(BG_I_BLACK WHITE "%s" COLOR_BG_OFF COLOR_OFF, txt);
 	if(new_line)
 		puts("");
 }
@@ -122,9 +122,9 @@ print_i_bg_cyan(char *txt, int new_line)
 }
 
 void
-print_i_bg_white(char *txt, int new_line)
+print_b_green(char *txt, int new_line)
 {
-	printf(BG_I_WHITE "%s" COLOR_BG_OFF, txt);
+	printf(B_GREEN "%s" COLOR_OFF, txt);
 	if(new_line)
 		puts("");
 }

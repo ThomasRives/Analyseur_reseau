@@ -80,7 +80,7 @@
  * 
  * @param txt: the text.
  */
-void print_bg_black(char *txt, int new_line);
+void print_b_blue(char *txt, int new_line);
 
 /**
  * @brief Print the text with a red background.
@@ -185,6 +185,6 @@ void print_i_bg_cyan(char *txt, int new_line);
  * 
  * @param txt: the text.
  */
-void print_i_bg_white(char *txt, int new_line);
+void print_b_green(char *txt, int new_line);
 
 #endif //COLOR_H

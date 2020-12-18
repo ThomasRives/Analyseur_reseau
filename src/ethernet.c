@@ -15,18 +15,18 @@ analyze_ethernet_hearder(const u_char *packet, uint len, int verbose)
 	{
 		print_bg_red("Ethernet", 0);
 		printf(" ");
-		printf("destination host : %s\t",
-			   ether_ntoa((const struct ether_addr *)eth_header->ether_dhost));
-		printf("source host: %s\n",
+		printf("Source host: %s\t",
 			   ether_ntoa((const struct ether_addr *)eth_header->ether_shost));
+		printf("Destination host : %s\n",
+			   ether_ntoa((const struct ether_addr *)eth_header->ether_dhost));
 	}
 	else if(verbose == 3)
 	{
 		printf("Protocol: ");
 		print_bg_red("Ethernet", 1);
-		printf("destination host : %s\n",
+		printf("Destination host : %s\n",
 			ether_ntoa((const struct ether_addr *)eth_header->ether_dhost));
-		printf("source host: %s\n",
+		printf("Source host: %s\n",
 			ether_ntoa((const struct ether_addr *)eth_header->ether_shost));
 		puts("");
 	}
@@ -70,7 +70,10 @@ void ethernet_demult_prot(const u_char *packet, uint len, uint16_t prot,
 				print_bg_cyan("ARP", 0);
 				printf(" ");
 				if(verbose == 1)
+				{
+					puts("");
 					return;
+				}
 			}
 			else
 				print_bg_cyan("ARP", 1);
@@ -82,7 +85,10 @@ void ethernet_demult_prot(const u_char *packet, uint len, uint16_t prot,
 				print_bg_cyan("RARP", 0);
 				printf(" ");
 				if(verbose == 1)
+				{
+					puts("");
 					return;
+				}
 			}
 			else
 				print_bg_cyan("RARP", 1);

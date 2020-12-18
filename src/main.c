@@ -18,7 +18,8 @@ main(int argc, char *argv[])
 	struct bpf_program filterprog;
 	char error[PCAP_ERRBUF_SIZE];
 	parseArgs(argc,argv, &options);
-	check_selected_interface(options.interface);
+	if(options.interface != NULL)
+		check_selected_interface(options.interface);
 
 	CHECK(pcap_lookupnet(options.interface, &network_number, &network_mask, error));
 

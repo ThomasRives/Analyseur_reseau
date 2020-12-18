@@ -5,6 +5,10 @@
 void
 got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 {
+	static int nb_pack = 0;
+	nb_pack++;
+	printf("\n___Packet number %i___", nb_pack);
+
 	int verbose = *(int *)args;
 	if(verbose == 3)
 		print_packet(header->len, packet);
@@ -14,10 +18,6 @@ got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 void
 print_packet(uint pack_length, const u_char *packet)
 {
-	static int nb_pack = 0;
-	nb_pack++;
-
-	printf("___Packet number %i___\n", nb_pack);
 	printf("Packet's length: %i\n\n", pack_length);
 	
 	for(uint i = 0; i < pack_length; i++)

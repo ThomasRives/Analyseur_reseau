@@ -20,7 +20,10 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
 						return;
 				}
 				else
-					print_i_bg_blue("Bootp ", 0);
+				{
+					print_i_bg_blue("Bootp", 0);
+					printf(" ");
+				}
 				bootp_analyze(packet, verbose);
 				return;
 			case PORT_SMTP:
@@ -30,7 +33,7 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
 				smtp_analyze(packet, length);
 				return;
 			case PORT_TELNET:
-				print_i_bg_white("Telnet", 1);
+				print_b_green("Telnet", 1);
 				if (verbose != 3)
 					return;
 				telnet_analyze(packet, length);
@@ -42,7 +45,7 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
 				ftp_analyze(packet, length);
 				return;
 			case PORT_HTTP:
-				print_i_bg_white("Telnet", 1);
+				print_b_green("HTTP", 1);
 				if (verbose != 3)
 					return;
 				http_analyze(packet, length);
@@ -55,11 +58,14 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
 						return;
 				}
 				else
-					print_i_bg_cyan("DNS ", 0);
+				{
+					print_i_bg_cyan("DNS", 0);
+					printf(" ");
+				}
 				dns_analyze(packet, verbose);
 				return;
 			case PORT_POP:
-				print_i_bg_black("POP3", 1);
+				print_i_bg_black("POP", 1);
 				if (verbose != 3)
 					return;
 				pop_analyze(packet, length);

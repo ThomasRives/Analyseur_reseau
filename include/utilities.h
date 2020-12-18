@@ -47,4 +47,12 @@ void print_as_str(const u_char *data, uint length);
  */
 void print_with_s(int numb, char *str);
 
+/**
+ * @brief Print the given time (in s) as (x hour(s), y minute(s), z seconde(s)).
+ * 
+ * @param msg: message to print before the translation.
+ * @param time: time to translate in secondes.
+ */
+void print_hms(char *msg, uint time);
+
 #endif //UTILITIES_H

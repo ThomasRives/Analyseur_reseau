@@ -8,7 +8,10 @@ dns_analyze(const u_char *packet, int verbose)
 
 	if(verbose == 2)
 	{
-		printf("Id: %x\n", ntohs(dns_hdr->id));
+		if ((ntohs(dns_hdr->ctrl) & QR) == QR_QUERY)
+			puts("Type: Query");
+		else
+			puts("Type: Response");
 		return;
 	}
 	printf("Id: %x\n", ntohs(dns_hdr->id));
@@ -112,7 +115,7 @@ dns_rcode(uint16_t rcode)
 			puts("Server Failure");
 			break;
 		case RC_NALE_ERR:
-			puts("Name Error");
+			puts("No such name");
 			break;
 		case RC_NOT_IMP:
 			puts("Not Implemented");
@@ -190,7 +193,7 @@ dns_print_answer(const u_char *answ, const u_char *packet)
 	print_dns_class(ntohs(*(uint16_t *)(answ + byte_read)));
 	byte_read += sizeof(uint16_t);
 
-	printf("\tTTL: %i\n", ntohl(*(uint32_t *)(answ + byte_read)));
+	print_hms("\tTTL:", ntohl(*(uint32_t *)(answ + byte_read)));
 	byte_read += sizeof(uint32_t);
 
 	uint data_len = ntohs(*(uint16_t *)(answ + byte_read));
@@ -216,7 +219,7 @@ print_aut_answ(const u_char *answ, const u_char *packet)
 	print_dns_class(ntohs(*(uint16_t *)(answ + byte_read)));
 	byte_read += sizeof(uint16_t);
 
-	printf("\tTTL: %i\n", ntohl(*(uint32_t *)(answ + byte_read)));
+	print_hms("\tTTL:", ntohl(*(uint32_t *)(answ + byte_read)));
 	byte_read += sizeof(uint32_t);
 
 	uint data_len = ntohs(*(uint16_t *)(answ + byte_read));
@@ -249,7 +252,7 @@ print_aut_answ(const u_char *answ, const u_char *packet)
 	byte_read += sizeof(uint32_t);
 
 	uint32_t min_ttl = ntohl(*(uint32_t *)(answ + byte_read));
-	printf("\tMinimum TTL: %u", min_ttl);
+	print_hms("\tMinimum TTL:", min_ttl);
 	print_with_s(min_ttl / 3600, "hour");
 	byte_read += sizeof(uint32_t);
 
@@ -270,7 +273,7 @@ print_add_rec(const u_char *add_rec, const u_char *packet)
 	print_dns_class(ntohs(*(uint16_t *)(add_rec + byte_read)));
 	byte_read += sizeof(uint16_t);
 
-	printf("\tTTL: %i\n", ntohl(*(uint32_t *)(add_rec + byte_read)));
+	print_hms("\tTTL:", ntohl(*(uint32_t *)(add_rec + byte_read)));
 	byte_read += sizeof(uint32_t);
 
 	uint data_len = ntohs(*(uint16_t *)(add_rec + byte_read));

@@ -8,7 +8,9 @@ arp_header_analyze(const u_char *packet, int verbose)
 	if(verbose == 2)
 	{
 		arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_sha, 1);
+		printf("\t");
 		arp_print_hard_addr(arp_hdr->ea_hdr.ar_hln * 8, arp_hdr->arp_tha, 0);
+		puts("");
 	}
 	else
 	{
