@@ -500,7 +500,8 @@ complete_dns_name(const u_char *name, uint name_len, const u_char *packet)
 			uint16_t ptr_name = ntohs((*(uint16_t *)(name + byte_r)));
 			if((ptr_name & PT_N) == PT_N)
 			{
-				complete_dns_name(packet + (ptr_name & N_DECL), UINT16_MAX, packet);
+				complete_dns_name(packet + (ptr_name & N_DECL), 
+					UINT16_MAX, packet);
 				return byte_r + sizeof(uint16_t);
 			}
 		}
@@ -509,8 +510,8 @@ complete_dns_name(const u_char *name, uint name_len, const u_char *packet)
 
 		printf("%.*s", next_point, name + byte_r + sizeof(uint8_t));
 
-		byte_r += sizeof(uint8_t) + next_point;
 		printf(".");
+		byte_r += sizeof(uint8_t) + next_point;
 	}
 	puts("\b ");
 	return byte_r + sizeof(uint8_t);

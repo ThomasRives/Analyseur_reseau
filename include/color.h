@@ -75,4 +75,116 @@
 #define BG_I_CYAN "\033[0;106m"
 #define BG_I_WHITE "\033[0;107m"
 
+/**
+ * @brief Print the text with a black background.
+ * 
+ * @param txt: the text.
+ */
+void print_bg_black(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a red background.
+ * 
+ * @param txt: the text.
+ */
+void print_bg_red(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a green background.
+ * 
+ * @param txt: the text.
+ */
+void print_bg_green(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a yellow background.
+ * 
+ * @param txt: the text.
+ */
+void print_bg_yellow(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a blue background.
+ * 
+ * @param txt: the text.
+ */
+void print_bg_blue(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a purple background.
+ * 
+ * @param txt: the text.
+ */
+void print_bg_purple(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a cyan background.
+ * 
+ * @param txt: the text.
+ */
+void print_bg_cyan(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a white background.
+ * 
+ * @param txt: the text.
+ */
+void print_bg_white(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a black background.
+ * 
+ * @param txt: the text.
+ */
+void print_i_bg_black(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a red background.
+ * 
+ * @param txt: the text.
+ */
+void print_i_bg_red(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a green background.
+ * 
+ * @param txt: the text.
+ */
+void print_i_bg_green(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a yellow background.
+ * 
+ * @param txt: the text.
+ */
+void print_i_bg_yellow(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a blue background.
+ * 
+ * @param txt: the text.
+ */
+void print_i_bg_blue(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a purple background.
+ * 
+ * @param txt: the text.
+ */
+void print_i_bg_purple(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a cyan background.
+ * 
+ * @param txt: the text.
+ */
+void print_i_bg_cyan(char *txt, int new_line);
+
+/**
+ * @brief Print the text with a white background.
+ * 
+ * @param txt: the text.
+ */
+void print_i_bg_white(char *txt, int new_line);
+
 #endif //COLOR_H
