@@ -4,43 +4,43 @@ void
 icmpv6_header_analyze(const u_char *packet, int verbose)
 {
 	struct icmp6_hdr *icmp6_header = (struct icmp6_hdr *)packet;
-	char buf_adr[INET6_ADDRSTRLEN];
-	inet_ntop(AF_INET6, packet + sizeof(struct icmp6_hdr),
-			  buf_adr, INET6_ADDRSTRLEN);
-	if(verbose == 2)
-	{
-		printf("Target address: %s\n", buf_adr);
-		return;
-	}
 	
-	print_icmpv6_type_code(icmp6_header->icmp6_type, icmp6_header->icmp6_code);
+	print_icmpv6_type_code(icmp6_header->icmp6_type, icmp6_header->icmp6_code, 
+		packet, verbose);
 
 	printf("Checksum: 0x%x\n", ntohs(icmp6_header->icmp6_cksum));
-	printf("Target address: %s\n", buf_adr);
-	uint bytes_read = sizeof(struct icmp6_hdr) + 16;
-	printf("%x\n", ntohl(*(uint32_t *)packet + bytes_read));
 }
 
 void
-print_icmpv6_type_code(uint8_t type, uint8_t code)
+print_icmpv6_type_code(uint8_t type, uint8_t code, const u_char *packet, 
+	int verbose)
 {
+	char buf_adr[INET6_ADDRSTRLEN];
 	printf("Type: ");
 	switch(type)
 	{
 		case ICMP6_DST_UNREACH:
 			puts("Destination Unreachable");
+			if(verbose == 2)
+				return;
 			print_icmp6_dest_unreach_code(code);
 			break;
 		case ICMP6_PACKET_TOO_BIG:
 			puts("Packet Too Big");
+			if (verbose == 2)
+				return;
 			printf("Code: %i\n", code);
 			break;
 		case ICMP6_TIME_EXCEEDED:
 			puts("Time Exceeded");
+			if (verbose == 2)
+				return;
 			print_icmp6_time_exc_code(code);
 			break;
 		case ICMP6_PARAM_PROB:
 			puts("Parameter Problem");
+			if (verbose == 2)
+				return;
 			print_icmpv6_par_prob_code(code);
 			break;
 		case ICMP6_ECHO_REPLY:
@@ -63,20 +63,34 @@ print_icmpv6_type_code(uint8_t type, uint8_t code)
 			break;
 		case ND_NEIGHBOR_SOLICIT:
 			puts("Neighbor Solicitation");
+			if (verbose == 2)
+				return;
+			inet_ntop(AF_INET6, packet + sizeof(struct icmp6_hdr),
+					  buf_adr, INET6_ADDRSTRLEN);
+			printf("Target address: %s\n", buf_adr);
 			break;
 		case ND_NEIGHBOR_ADVERT:
 			puts("Neighbor Advertisement");
+			if (verbose == 2)
+				return;
+			inet_ntop(AF_INET6, packet + sizeof(struct icmp6_hdr),
+					  buf_adr, INET6_ADDRSTRLEN);
+			printf("Target address: %s\n", buf_adr);
 			break;
 		case ND_REDIRECT:
 			puts("Redirect Message");
 			break;
 		case ICMP6_ROUTER_RENUMBERING:
 			puts("Router Renumbering");
+			if (verbose == 2)
+				return;
 			print_icmpv6_rout_rem_code(code);
 			break;
 		default:
 			puts("Unknown...");
 	}
+	if (verbose == 2)
+		return;
 }
 
 void

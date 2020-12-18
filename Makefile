@@ -10,7 +10,7 @@ SOURCES  :=	$(wildcard $(SRCDIR)/*.c)
 INCLUDES :=	$(wildcard $(INCLUDE_PATH)/*.h)
 OBJECTS  :=	$(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 LIBS :=
-FILE := UDP.pcapng
+FILE := http.cap
 
 # Update include path
 INCLUDE_PATH := $(INCLUDE_PATH) $(foreach lib_path, $(LIBS), ./$(lib_path))
@@ -39,19 +39,9 @@ test:
 	@make 1>/dev/null
 	@valgrind -q --leak-check=full ./bin/main -v 3 -o pcap_files/$(FILE)
 
-test1:
-	@valgrind -q --leak-check=full ./bin/main -i any -v 1 -o pcap_files/$(FILE)
+run:
+	@./bin/main -v 3 -o pcap_files/$(FILE)
 
-test2:
-	@valgrind -q --leak-check=full ./bin/main -i any -v 2 -o pcap_files/$(FILE)
-
-test3:
-	@valgrind -q --leak-check=full ./bin/main -i any -v 3 -o pcap_files/$(FILE)
-
-verif:
-	make test1
-	make test2
-	make test3
 
 .PHONY: clean test
 clean:

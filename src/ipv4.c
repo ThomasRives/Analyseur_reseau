@@ -1,9 +1,11 @@
 #include "ipv4.h"
 
 void
-ipv4_header_analyze(const u_char *packet, uint length, int verbose)
+ipv4_header_analyze(const u_char *packet, int verbose)
 {
 	struct iphdr *ip_header = (struct iphdr *)packet;
+	uint frag_ip = ntohs(ip_header->frag_off & IPV4_FRAG_OFF);
+	uint len_ip = ntohs(ip_header->tot_len);
 	if(verbose == 1)
 	{
 		printf("Src: %s ", inet_ntoa(*(struct in_addr *)&ip_header->saddr));
@@ -17,10 +19,10 @@ ipv4_header_analyze(const u_char *packet, uint length, int verbose)
 	else
 	{
 		ipv4_tos(ip_header->tos);
-		printf("Total length: %u\n", ntohs(ip_header->tot_len));
+		printf("Total length: %u\n", len_ip);
 		printf("Packet's ID: 0x%x\n", ntohs(ip_header->id));
 		ipv4_print_flags(ip_header->frag_off & IPV4_FLAGS);
-		printf("Fragment offset: %u\n", ip_header->frag_off & IPV4_FRAG_OFF);
+		printf("Fragment offset: %u\n", frag_ip);
 		printf("Time to live: %u\n", ip_header->ttl);
 		uint16_t checksum = ntohs(ip_header->check);
 		if(checksum)
@@ -32,9 +34,8 @@ ipv4_header_analyze(const u_char *packet, uint length, int verbose)
 		printf("IHL: %u bytes\n", ip_header->ihl*4);
 	}
 	
-
 	ipv4_demult_prot(packet + ip_header->ihl * 4,
-					 length - ip_header->ihl * 4,
+					 len_ip - frag_ip - ip_header->ihl*4,
 					 ip_header->protocol,
 					 verbose);
 }

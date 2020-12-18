@@ -1,6 +1,6 @@
 # Network Analyzer
 
-TODO: Clean up ICMP and ICMPv6 because switches are TOO HUGE.
+This project is a network analyzer.
 
 ## How to use it
 
@@ -13,16 +13,28 @@ make
 
 Notice that the `-o` is optional. If you launch the program with invalid arguments or with an invalid interface, the help will be printed out (with the list of valid interfaces).
 
+You can also use `make run FILE=name_of_the_file` to launch the offline mode in verbose 3. 
+
 ## Supported packet
 
-## Header done
-- Ethernet
+- ARP
+- BOOTP
+- DNS
+- ETHERNET
+- FTP
+- HTTP
+- ICMP
+- ICMPv6
+- IMAP
 - IPv4
 - IPv6
+- POP
+- RARP
+- SCTP
 
-## Things to not forget
+## Informations
 
-## Ideas
+When I defined a structure, `__attribute__((packed))` was used to tell the compiler to not add padding in it.
 
 
 ## Contributors

@@ -34,8 +34,11 @@ void icmpv6_header_analyze(const u_char *packet, int verbose);
  * 
  * @param type: the type of the packet.
  * @param code: the code associated to the type.
+ * @param packet: the packet himself.
+ * @param verbose: the verbose given by the user.
  */
-void print_icmpv6_type_code(uint8_t type, uint8_t code);
+void print_icmpv6_type_code(uint8_t type, uint8_t code, const u_char *packet,
+	int verbose);
 
 /**
  * @brief Print the icmpv6 code if the type is "Destination Unreachable"

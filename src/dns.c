@@ -208,7 +208,7 @@ dns_print_answer(const u_char *answ, const u_char *packet)
 int
 print_aut_answ(const u_char *answ, const u_char *packet)
 {
-	printf("Authoritative answer:\n");
+	printf("Authoritative nameserver:\n");
 	printf("\tName: ");
 	uint byte_read = complete_dns_name(answ, UINT16_MAX, packet);
 
@@ -227,36 +227,7 @@ print_aut_answ(const u_char *answ, const u_char *packet)
 
 	printf("\tData length: %i\n", data_len);
 
-	printf("\tPrimary name server: ");
-	byte_read += complete_dns_name(answ + byte_read, UINT16_MAX, packet);
-
-	printf("\tResponsible authority's mailbox: ");
-	byte_read += complete_dns_name(answ + byte_read, UINT16_MAX, packet);
-
-	printf("\tSerial Number: %u\n", ntohl(*(uint32_t *)(answ + byte_read)));
-	byte_read += sizeof(uint32_t);
-
-	uint32_t ref_int = ntohl(*(uint32_t *)(answ + byte_read));
-	printf("\tRefresh Interval: %u", ref_int);
-	print_with_s(ref_int / 3600, "hour");
-	byte_read += sizeof(uint32_t);
-
-	uint32_t ret_int = ntohl(*(uint32_t *)(answ + byte_read));
-	printf("\tRetry Interval: %u", ret_int);
-	print_with_s(ret_int / 3600, "hour");
-	byte_read += sizeof(uint32_t);
-
-	uint32_t exp_lim = ntohl(*(uint32_t *)(answ + byte_read));
-	printf("\tExpire limit: %u", exp_lim);
-	print_with_s(exp_lim / (3600 * 24), "day");
-	byte_read += sizeof(uint32_t);
-
-	uint32_t min_ttl = ntohl(*(uint32_t *)(answ + byte_read));
-	print_hms("\tMinimum TTL:", min_ttl);
-	print_with_s(min_ttl / 3600, "hour");
-	byte_read += sizeof(uint32_t);
-
-	return byte_read;
+	return byte_read + data_len;
 }
 
 int

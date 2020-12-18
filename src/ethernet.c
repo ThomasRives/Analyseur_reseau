@@ -62,7 +62,7 @@ void ethernet_demult_prot(const u_char *packet, uint len, uint16_t prot,
 			}
 			else
 				print_bg_green("IPV4", 1);
-			ipv4_header_analyze(packet, len, verbose);
+			ipv4_header_analyze(packet, verbose);
 			break;
 		case ETHERTYPE_ARP:
 			if (verbose < 3)

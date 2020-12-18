@@ -25,10 +25,9 @@
  * @brief analyze the IPV4 header of a packet.
  *
  * @param packet: the packet you want to analyze.
- * @param length: the packet length.
  * @param verbose: the verbose given by the user.
  */
-void ipv4_header_analyze(const u_char *packet, uint length, int verbose);
+void ipv4_header_analyze(const u_char *packet, int verbose);
 
 /**
  * @brief Print the field "type of service" of the packet.
