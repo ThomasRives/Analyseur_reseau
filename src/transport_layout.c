@@ -6,7 +6,8 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
 	uint length, int verbose)
 {
 	uint16_t port = port_src;
-	printf("\nProtocole: ");
+	if(verbose == 3)
+		printf("\nProtocole: ");
 	for(uint i = 0; i < 2;port = port_dst, i++)
 		switch (port)
 		{

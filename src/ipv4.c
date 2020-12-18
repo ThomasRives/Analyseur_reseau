@@ -6,8 +6,8 @@ ipv4_header_analyze(const u_char *packet, uint length, int verbose)
 	struct iphdr *ip_header = (struct iphdr *)packet;
 	if(verbose == 1)
 	{
-		printf("Source address : %s ", inet_ntoa(*(struct in_addr *)&ip_header->saddr));
-		printf("Destination address: %s ", inet_ntoa(*(struct in_addr *)&ip_header->daddr));
+		printf("Src: %s ", inet_ntoa(*(struct in_addr *)&ip_header->saddr));
+		printf("Dest: %s ", inet_ntoa(*(struct in_addr *)&ip_header->daddr));
 	}
 	else if(verbose == 2)
 	{
@@ -109,14 +109,16 @@ ipv4_print_flags(uint8_t flags)
 void
 ipv4_demult_prot(const u_char *packet, uint len, uint8_t prot, int verbose)
 {
-	printf("Protocol used: ");
+	if(verbose == 3)
+		printf("Protocol used: ");
 	switch (prot) 
 	{
 		case IPPROTO_TCP:
-			if(verbose == 1)
-				print_bg_green("TCP ", 0);
-			else if(verbose == 2)
-				print_bg_green("TCP\t", 0);
+			if(verbose < 3)
+			{
+				print_bg_green("TCP", 0);
+				printf(" ");
+			}
 			else
 			{
 				print_bg_green("TCP", 0);
@@ -125,10 +127,11 @@ ipv4_demult_prot(const u_char *packet, uint len, uint8_t prot, int verbose)
 			tcp_header_analyze(packet, len, verbose);
 			break;
 		case IPPROTO_UDP:
-			if (verbose == 1)
-				print_bg_yellow("UDP ", 0);
-			else if (verbose == 2)
-				print_bg_yellow("UDP\t", 0);
+			if (verbose < 3)
+			{
+				print_bg_yellow("UDP", 0);
+				printf(" ");
+			}
 			else
 			{
 				print_bg_yellow("UDP", 0);
@@ -139,11 +142,14 @@ ipv4_demult_prot(const u_char *packet, uint len, uint8_t prot, int verbose)
 		case IPPROTO_ICMP:
 			if (verbose == 1)
 			{
-				print_bg_red("ICMP ", 1);
+				print_bg_red("ICMP", 1);
 				return;
 			}
 			else if (verbose == 2)
-				print_bg_red("ICMP\t", 0);
+			{
+				print_bg_red("ICMP", 0);
+				printf(" ");
+			}
 			else
 			{
 				print_bg_red("ICMP", 0);
@@ -152,10 +158,11 @@ ipv4_demult_prot(const u_char *packet, uint len, uint8_t prot, int verbose)
 			icmp_header_analyze(packet, verbose);
 			break;
 		case IPPROTO_IPV6:
-			if (verbose == 1)
-				print_bg_blue("IPv6 ", 0);
-			else if (verbose == 2)
-				print_bg_blue("IPv6\t", 0);
+			if (verbose < 3)
+			{
+				print_bg_blue("IPv6", 0);
+				printf(" ");
+			}
 			else
 			{
 				print_bg_blue("IPv6", 0);
@@ -169,7 +176,10 @@ ipv4_demult_prot(const u_char *packet, uint len, uint8_t prot, int verbose)
 				return;
 			}
 			else if (verbose == 2)
-				print_bg_purple("SCTP\t", 0);
+			{
+				print_bg_purple("SCTP", 0);
+				printf(" ");
+			}
 			else
 			{
 				print_bg_purple("SCTP", 0);

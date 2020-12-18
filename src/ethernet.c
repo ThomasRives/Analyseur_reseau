@@ -13,7 +13,7 @@ analyze_ethernet_hearder(const u_char *packet, uint len, int verbose)
 	}
 	else if(verbose == 2)
 	{
-		print_bg_red("Ethernet ", 0);
+		print_bg_red("Ethernet", 0);
 		printf(" ");
 		printf("destination host : %s\t",
 			   ether_ntoa((const struct ether_addr *)eth_header->ether_dhost));

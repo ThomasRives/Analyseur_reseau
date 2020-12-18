@@ -13,8 +13,8 @@ ipv6_header_analyze(const u_char *packet, uint length, int verbose)
 	inet_ntop(AF_INET6, &ipv6_header->ip6_dst, buf_adr2, INET6_ADDRSTRLEN);
 	if(verbose == 1)
 	{
-		printf("Source address: %s ", buf_adr1);
-		printf("Destination address: %s ", buf_adr2);
+		printf("Src: %s ", buf_adr1);
+		printf("Dst: %s ", buf_adr2);
 	}
 	else if(verbose == 2)
 	{
@@ -43,28 +43,27 @@ void
 ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head,
 	int verbose)
 {
-	printf("Next header: ");
+	if(verbose == 3)
+		printf("Next header: ");
 	switch (nxt_head)
 	{
 		case IPV6_HOP_BY_HOP:
 			puts("Hop-by-hop Options Header (0)");
 			break;
 		case IPV6_TCP:
-			if(verbose == 1)
-				print_bg_green("TCP ", 0);
-			else if(verbose == 2)
-				print_bg_green("TCP\t", 0);
+			print_bg_green("TCP", 0);
+			if(verbose < 3)
+				printf(" ");
 			else
-				print_bg_green("TCP (6)", 1);
+				puts(" (6)");
 			tcp_header_analyze(packet, len, verbose);
 			break;
 		case IPV6_UDP:
-			if (verbose == 1)
-				print_bg_yellow("UDP ", 0);
-			else if (verbose == 2)
-				print_bg_yellow("UDP\t", 0);
+			print_bg_yellow("UDP", 0);
+			if (verbose < 3)
+				printf(" ");
 			else
-				print_bg_yellow("UDP (17)", 1);
+				print_bg_yellow(" (17)", 1);
 			udp_header_analyze(packet, len, verbose);
 			break;
 		case IPV6_ENCAPS_V6_HEADER:
@@ -86,12 +85,11 @@ ipv6_analyze_next_header(const u_char *packet, uint len, uint8_t nxt_head,
 			puts("Authentication Header (51)");
 			break;
 		case IPV6_ICMPV6:
-			if (verbose == 1)
-				print_bg_red("ICMPv6 ", 0);
-			else if (verbose == 2)
-				print_bg_red("ICMPv6\t", 0);
+			print_bg_red("ICMPv6", 0);
+			if (verbose < 3)
+				printf(" ");
 			else
-				print_bg_red("ICMPv6 (58)", 1);
+				print_bg_red(" (58)", 1);
 			icmpv6_header_analyze(packet, len, verbose);
 			break;
 		case IPV6_NO:
