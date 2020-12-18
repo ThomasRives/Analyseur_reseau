@@ -2,6 +2,9 @@
 #define ICMP_H
 #include "transport_layout.h"
 
+#define ICMP_ALTER_HOST_ADDR 6
+#define ICMP_ROUTER_ADV 9
+#define ICMP_ROUT_SOLICI 10
 #define ICMP_PHOTURIS 40
 #define ICMP_EXP 41
 #define ICMP_EXT_ECHO 42
@@ -17,8 +20,13 @@
 #define ICMP_PHOT_AUTH_FAIL 1
 #define ICMP_PHOT_DECOMP_FAIL 2
 #define ICMP_PHOT_DECRYP_FAIL 3
-#define ICMP_PHOT_
-#define ICMP_PHOT_
+#define ICMP_PHOT_NEED_AUTHENT 4
+#define ICMP_PHOT_NEED_AUTHORIZ 5
+
+#define ICMP_EER_MALFORMED_REQ 1
+#define ICMP_EER_NO_INT 2
+#define ICMP_EER_NO_TABLE 3
+#define ICMP_EER_MULT_INT 4
 
 
 /**

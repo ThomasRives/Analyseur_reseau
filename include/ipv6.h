@@ -24,7 +24,7 @@ struct ipv6_f32_parse
 	short version; /**< Version used */
 	short tc;	   /**< Traffic Class */
 	uint id;	   /**< ID of the packet */
-};
+} __attribute__((packed));
 
 /**
  * @brief analyze the IPV6 header of a packet.

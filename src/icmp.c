@@ -38,17 +38,17 @@ print_icmp_type_code(uint8_t type, uint8_t code)
 			puts("Redirect (change route)");
 			print_icmp_dest_unreach_code(code);
 			break;
-		case 6:
+		case ICMP_ALTER_HOST_ADDR:
 			puts("Alternate Host Address");
 			break;
 		case ICMP_ECHO:
 			puts("Echo Request");
 			break;
-		case 9:
+		case ICMP_ROUTER_ADV:
 			puts("Router Advertisement");
 			print_icmp_rout_ad_code(code);
 			break;
-		case 10:
+		case ICMP_ROUT_SOLICI:
 			puts("Router Solicitation");
 			break;
 		case ICMP_TIME_EXCEEDED:
@@ -153,7 +153,7 @@ print_icmp_dest_unreach_code(uint8_t code)
 			puts("Precedence cutoff in effect");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -176,7 +176,7 @@ print_icmp_redirect_code(uint8_t code)
 			puts("Redirect Datagram for the Type of Service and Host");
 			break;
 		default:
-			puts("\b\b\b\b\b\b      \b\b\b\b\b\b");
+			puts("Unknown...");
 	}
 }
 
@@ -252,7 +252,7 @@ print_icmp_photuris_code(uint8_t code)
 		case ICMP_PHOT_DECRYP_FAIL:
 			puts("Decryption Failed");
 			break;
-		case ICMP_PHOT_NEED_AUTH:
+		case ICMP_PHOT_NEED_AUTHENT:
 			puts("Need Authentication");
 			break;
 		case ICMP_PHOT_NEED_AUTHORIZ:

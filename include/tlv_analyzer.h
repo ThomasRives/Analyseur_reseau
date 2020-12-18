@@ -14,7 +14,7 @@ struct tlv {
 	uint type;
 	uint length;
 	uint8_t *value;
-};
+} __attribute__((packed));
 
 /**
  * @brief Get the next TLV structure in the tcp packet

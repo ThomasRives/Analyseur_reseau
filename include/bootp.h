@@ -18,8 +18,8 @@ struct bootphdr
 	u_char chaddr[16]; /* client hardware address */
 	u_char sname[64];	 /* server host name */
 	u_char file[128];	 /* boot file name */
-	u_char vend;         /* first char of the vendor */ 
-};
+	u_char vend;         /* first char of the vendor */
+} __attribute__((packed));
 
 /*
  * UDP port numbers, server and client.
