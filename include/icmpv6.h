@@ -25,10 +25,9 @@
  * @brief Analyze the ICMPv6 header of the packet.
  * 
  * @param packet: the packet himself.
- * @param length: the length of the packet.
  * @param verbose: the verbose given by the user.
  */
-void icmpv6_header_analyze(const u_char *packet, uint length, int verbose);
+void icmpv6_header_analyze(const u_char *packet, int verbose);
 
 /**
  * @brief Print the type (and the code) of the ICMPv6 packet.
@@ -65,12 +64,5 @@ void print_icmpv6_par_prob_code(uint8_t code);
  * @param code: the code of the icmp packet.
  */
 void print_icmpv6_rout_rem_code(uint8_t code);
-
-/**
- * @brief Print the icmpv6 options.
- * 
- * @param code: the code of the icmp packet.
- */
-void print_icmpv6_option(const u_char *packet, uint length);
 
 #endif //ICMPV6_H

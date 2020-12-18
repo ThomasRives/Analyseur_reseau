@@ -168,6 +168,7 @@ ipv4_demult_prot(const u_char *packet, uint len, uint8_t prot, int verbose)
 				print_bg_blue("IPv6", 0);
 				printf(" (%i)\n", prot);
 			}
+			ipv6_header_analyze(packet, len, verbose);
 			break;
 		case IPPROTO_SCTP:
 			if (verbose == 1)

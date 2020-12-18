@@ -28,18 +28,6 @@ tlv_translate_bootp(uint8_t *packet)
 	return next_tlv;
 }
 
-struct tlv
-tlv_translate_icmpv6(const u_char *packet)
-{
-	struct tlv next_tlv;
-	next_tlv.type = packet[0];
-	next_tlv.length = packet[1] * 8;
-	next_tlv.value = malloc((next_tlv.length + 1) * sizeof(uint8_t));
-	NULL_CHECK(next_tlv.value);
-	NULL_CHECK(memcpy(next_tlv.value, &packet[2], next_tlv.length));
-	return next_tlv;
-}
-
 void print_value_nb(uint length, u_char *value)
 {
 	u_char value_nb[sizeof(uint64_t)] = {0};

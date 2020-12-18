@@ -1,7 +1,7 @@
 #include "icmpv6.h"
 
 void
-icmpv6_header_analyze(const u_char *packet, uint length, int verbose)
+icmpv6_header_analyze(const u_char *packet, int verbose)
 {
 	struct icmp6_hdr *icmp6_header = (struct icmp6_hdr *)packet;
 	char buf_adr[INET6_ADDRSTRLEN];
@@ -19,8 +19,6 @@ icmpv6_header_analyze(const u_char *packet, uint length, int verbose)
 	printf("Target address: %s\n", buf_adr);
 	uint bytes_read = sizeof(struct icmp6_hdr) + 16;
 	printf("%x\n", ntohl(*(uint32_t *)packet + bytes_read));
-	(void)length;
-	// print_icmpv6_option(packet + bytes_read, length - bytes_read);
 }
 
 void
@@ -197,41 +195,5 @@ print_icmpv6_rout_rem_code(uint8_t code)
 			break;
 		default:
 			puts("Unknown...");
-	}
-}
-
-void
-print_icmpv6_option(const u_char *packet, uint length)
-{
-	puts("ICMPv6 options:");
-	for(uint i = 0; i < length;)
-	{
-		struct tlv next_tlv = tlv_translate_icmpv6(packet + i);
-		switch (next_tlv.type)
-		{
-			case ND_OPT_SOURCE_LINKADDR:
-				// puts("");
-				break;
-			case ND_OPT_TARGET_LINKADDR:
-				// puts("");
-				break;
-			case ND_OPT_PREFIX_INFORMATION:
-				// puts("");
-				break;
-			case ND_OPT_REDIRECTED_HEADER:
-				// puts("");
-				break;
-			case ND_OPT_MTU:
-				// puts("");
-				break;
-			case ND_OPT_RTR_ADV_INTERVAL:
-				// puts("");
-				break;
-			case ND_OPT_HOME_AGENT_INFO:
-				// puts("");
-				break;
-		}
-		i += next_tlv.length;
-		free(next_tlv.value);
 	}
 }

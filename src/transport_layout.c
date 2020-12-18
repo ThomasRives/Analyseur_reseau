@@ -14,9 +14,13 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
 			case PORT_BOOTPS:
 			case PORT_BOOTPC:
 				if(verbose == 1 || verbose == 3)
+				{
 					print_i_bg_blue("Bootp", 1);
+					if(verbose == 1)
+						return;
+				}
 				else
-					print_i_bg_blue("Bootp\t", 0);
+					print_i_bg_blue("Bootp ", 0);
 				bootp_analyze(packet, verbose);
 				return;
 			case PORT_SMTP:
@@ -45,9 +49,13 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
 				return;
 			case PORT_DNS:
 				if (verbose == 1 || verbose == 3)
+				{
 					print_i_bg_cyan("DNS", 1);
+					if (verbose == 1)
+						return;
+				}
 				else
-					print_i_bg_cyan("DNS\t", 0);
+					print_i_bg_cyan("DNS ", 0);
 				dns_analyze(packet, verbose);
 				return;
 			case PORT_POP:
@@ -63,6 +71,5 @@ demult_port(uint16_t port_src, uint16_t port_dst, const u_char *packet,
 				imap_analyze(packet, length);
 				return;
 		}
-		
 	puts("Unknown...");
 }

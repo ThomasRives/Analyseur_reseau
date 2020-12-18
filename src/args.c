@@ -56,8 +56,15 @@ void parseArgs(int argc, char **argv, Options *options)
 				exit(ERROR_ARGS);
 		}
 
-	if (options->interface == NULL ||
-		options->verbose < 1 || options->verbose > 3)
+	if (options->offline_file == NULL && options->interface == NULL)
+	{
+		fprintf(stderr, 
+			"If you are using the online mode, an interface is required.");
+		printHelp();
+		exit(ERROR_ARGS);
+	}
+
+	if(options->verbose < 1 || options->verbose > 3)
 	{
 		printHelp();
 		exit(ERROR_ARGS);
