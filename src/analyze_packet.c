@@ -6,7 +6,6 @@ void
 got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 {
 	int verbose = *(int *)args;
-	printf("%i\n", verbose);
 	if(verbose == 3)
 		print_packet(header->len, packet);
 	analyze_ethernet_hearder(packet, header->len, verbose);
