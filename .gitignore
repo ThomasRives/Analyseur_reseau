@@ -53,3 +53,5 @@ dkms.conf
 obj/*
 bin/*
 pcap_files/*
+protocoles.png
+*.vscode

@@ -1,0 +1,21 @@
+#ifndef APPLICATION_LAYOUT_H
+#define APPLICATION_LAYOUT_H
+#include <stdio.h>
+#include <stdint.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <arpa/telnet.h>
+#include <netinet/ether.h>
+#include "tlv_analyzer.h"
+#include "bootp.h"
+#include "telnet.h"
+#include "dns.h"
+#include "utilities.h"
+#include "smtp.h"
+#include "ftp.h"
+#include "http.h"
+#include "imap.h"
+#include "pop.h"
+
+#endif //APPLICATION_LAYOUT_H

@@ -13,10 +13,10 @@
  */
 typedef struct argsOptions
 {
-  char *interface;
-  char *offline_file;
-  char *filter_exp;
-  int verbose;
+	char *interface; /**< Chosen interface */
+	char *offline_file; /**< The file analyzed if the mode online is on */
+	char *filter_exp; /**< The filter to analyze the packet received */
+	int verbose; /**< The level of details desired */
 } Options;
 
 /**
@@ -36,4 +36,11 @@ void parseArgs(int argc, char **argv, Options *options);
  */
 void printHelp(void);
 
-#endif
+/**
+ * @brief Free all the allocated memory for options.
+ * 
+ * @param options: the options.
+ */
+void free_args(Options options);
+
+#endif //ARGS_H
